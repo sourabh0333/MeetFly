@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeetFly brand directions, round 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;600;800&family=Lexend:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #ececf0; color: #17171c; font: 15px/1.5 "DM Sans", system-ui, sans-serif; padding: 40px 24px 64px; }
+  .page { max-width: 1240px; margin: 0 auto; }
+  header h1 { font: 600 30px/1.15 Outfit, sans-serif; letter-spacing: -0.02em; }
+  header p { max-width: 70ch; margin-top: 10px; color: #55555f; }
+  .mono { font: 500 11px/1 "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .pick { color: #fff; background: #17171c; padding: 6px 9px; border-radius: 6px; font-style: normal; }
+  .step { color: #77778a; margin-top: 34px; }
+  .mgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+  .mcard { background: #fff; border-radius: 18px; padding: 12px 12px 16px; display: grid; gap: 11px; align-content: start; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+  .mcard input { position: absolute; opacity: 0; }
+  .mcard:has(input:checked) { box-shadow: inset 0 0 0 2px #17171c; }
+  .mcard:has(input:focus-visible) { outline: 3px solid #6f7cff; outline-offset: 2px; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .big { border-radius: 12px; aspect-ratio: 1; display: grid; place-items: center; }
+  .big svg { width: 66%; height: 66%; }
+  .dk { background: #101014; --wing: #ffffff; --body-dot: #9a88ff; --knock: #101014; }
+  .lt { background: #f3f3f6; --wing: #14141a; --body-dot: #6347ff; --knock: #f3f3f6; }
+  .sizes { border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 12px; }
+  .sizes .wm { font: 600 19px/1 Outfit, sans-serif; letter-spacing: -0.03em; margin-left: auto; }
+  .mcard h3 { font: 600 17px/1.3 Outfit, sans-serif; padding: 0 4px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .mcard p { color: #55555f; font-size: 14px; padding: 0 4px; }
+  .choose { margin: 2px 4px 0; padding: 9px 10px; border-radius: 8px; text-align: center; box-shadow: inset 0 0 0 1px #d5d5de; color: #55555f; }
+  .mcard:has(input:checked) .choose { background: #17171c; color: #fff; box-shadow: none; }
+  .dir { margin-top: 16px; border-radius: 22px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 18px 40px -24px rgba(0,0,0,.25); }
+  .dir + .dir { margin-top: 28px; }
+  .dir-head { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; padding: 20px 26px; border-bottom: 1px solid #e8e8ee; }
+  .dir-head h2 { font: 600 20px/1.2 Outfit, sans-serif; }
+  .dir-head p { color: #55555f; flex: 1 1 380px; }
+  .stage { display: grid; grid-template-columns: 1.25fr 1fr; }
+  .hero { background: var(--bg); color: var(--fg); padding: 34px 34px 38px; display: grid; gap: 26px; align-content: start; min-width: 0; }
+  .lockup { display: flex; align-items: center; gap: 10px; }
+  .lockup svg { width: 46px; height: 46px; flex: none; }
+  .word { font: var(--word); letter-spacing: var(--word-ls); }
+  .sample { font: var(--head); letter-spacing: var(--head-ls); max-width: 15ch; text-wrap: balance; }
+  .sample em { font-style: normal; color: var(--accent-text); }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn { font: var(--btn); padding: 12px 20px; border-radius: var(--r); background: var(--primary); color: var(--on-primary); }
+  .btn.ghost { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--line); }
+  .cue { border-radius: 14px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); padding: 14px 16px; max-width: 420px; display: grid; gap: 9px; }
+  .cue .mono { color: var(--accent-text); display: flex; gap: 8px; align-items: center; }
+  .cue .mono svg { width: 20px; height: 20px; flex: none; }
+  .cue p { font: var(--body); font-weight: 500; color: var(--fg); }
+  .cue .them { font: var(--body); font-size: 13.5px; color: var(--fg-2); padding-bottom: 9px; border-bottom: 1px solid var(--line); }
+  .cue .them b { font-weight: 600; margin-right: 6px; }
+  .side { padding: 26px; display: grid; gap: 22px; align-content: start; border-left: 1px solid #e8e8ee; min-width: 0; }
+  .side h3 { color: #77778a; margin-bottom: 10px; }
+  .icons { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .tile { width: 76px; height: 76px; border-radius: 19px; display: grid; place-items: center; }
+  .tile svg { width: 54px; height: 54px; }
+  .tile.s { width: 40px; height: 40px; border-radius: 10px; } .tile.s svg { width: 29px; height: 29px; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+  .sw { border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 0 1px #e3e3ea; }
+  .sw b { display: block; height: 46px; }
+  .sw span { display: block; padding: 7px 9px 8px; font-weight: 500; font-size: 12px; line-height: 1.3; }
+  .sw span small { display: block; font: 400 11px/1.3 "JetBrains Mono", monospace; color: #77778a; }
+  .type p { color: #55555f; font-size: 14px; } .type b { color: #17171c; font-weight: 600; }
+  .alt { border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 9px; }
+  .alt svg { width: 34px; height: 34px; } .alt .word { font-size: 21px; }
+  .notes { margin-top: 36px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .notes div { background: #fff; border-radius: 16px; padding: 20px 22px; }
+  .notes h3 { font: 600 16px/1.3 Outfit, sans-serif; margin-bottom: 6px; }
+  .notes p { color: #55555f; font-size: 14px; }
+  @media (max-width: 860px) { .stage { grid-template-columns: 1fr; } .side { border-left: 0; border-top: 1px solid #e8e8ee; } .hero { padding: 26px 22px 30px; } .sample { font-size: 36px; } }
+  @media (max-width: 760px) { .mgrid { grid-template-columns: 1fr; } }
+  .a { --bg:#0B0A14; --fg:#FFFFFF; --fg-2:#A9A7BD; --card:#16151F; --line:#2B2A3A; --primary:#D4FF3A; --on-primary:#141A00; --accent-text:#D4FF3A; --dot:#D4FF3A; --r:12px; --word:600 26px/1 "Outfit",sans-serif; --word-ls:-0.035em; --head:600 45px/1.05 "Outfit",sans-serif; --head-ls:-0.035em; --body:400 16px/1.5 "DM Sans",sans-serif; --btn:600 15px/1 "DM Sans",sans-serif; }
+  .b { --bg:#F6F4FF; --fg:#150B33; --fg-2:#5A5275; --card:#FFFFFF; --line:#DAD4F2; --primary:#5B2EFF; --on-primary:#FFFFFF; --accent-text:#5B2EFF; --dot:#FF3D7F; --r:999px; --word:800 26px/1 "Plus Jakarta Sans",sans-serif; --word-ls:-0.04em; --head:800 45px/1.05 "Plus Jakarta Sans",sans-serif; --head-ls:-0.04em; --body:400 16px/1.5 "Plus Jakarta Sans",sans-serif; --btn:600 15px/1 "Plus Jakarta Sans",sans-serif; }
+  .c { --bg:#1B34F2; --fg:#FFFFFF; --fg-2:#C9D0FF; --card:rgba(255,255,255,.12); --line:rgba(255,255,255,.3); --primary:#FFD84A; --on-primary:#1A1400; --accent-text:#FFD84A; --dot:#FFD84A; --r:10px; --word:600 26px/1 "Lexend",sans-serif; --word-ls:-0.04em; --head:600 45px/1.05 "Lexend",sans-serif; --head-ls:-0.04em; --body:400 16px/1.5 "Lexend",sans-serif; --btn:600 15px/1 "Lexend",sans-serif; }
+</style>
+</head>
+<body>
+<!-- Round 4 marks. --wing is the main colour, --body-dot the accent, --knock the background behind the mark. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="m1" viewBox="0 0 64 64"><path d="M4 50L20 36L26 49Z" fill="var(--wing)"/><g transform="rotate(45 32 37)"><path d="M32 21H48V37A16 16 0 1 1 32 21Z" fill="var(--wing)"/></g><path d="M33 41C20 40 9 30 6 14C23 13 37 24 33 41Z" fill="var(--body-dot)" stroke="var(--knock)" stroke-width="3.2" stroke-linejoin="round"/><circle cx="41.5" cy="32.5" r="2.9" fill="var(--knock)"/></symbol>
+  <symbol id="m2" viewBox="0 0 64 64"><path d="M4 44L28 33L22 55Z" fill="var(--wing)" fill-opacity=".5"/><path d="M28 33L60 30L22 55Z" fill="var(--wing)"/><path d="M28 33L34 6L50 30.9Z" fill="var(--body-dot)" fill-opacity=".55"/><path d="M28 33L14 9L44 31.5Z" fill="var(--body-dot)"/></symbol>
+  <symbol id="m3" viewBox="0 0 64 64"><path d="M9 52V22L20 10L31 26V44L20 30V52Z" fill="var(--wing)" stroke="var(--wing)" stroke-width="3" stroke-linejoin="round"/><g transform="translate(66 -5) scale(-1 1) rotate(-6 31 44)"><path d="M9 52V22L20 10L31 26V44L20 30V52Z" fill="var(--body-dot)" stroke="var(--body-dot)" stroke-width="3" stroke-linejoin="round"/></g></symbol>
+</svg>
+<div class="page">
+  <header>
+    <p class="mono" style="color:#77778a;margin-bottom:12px">MeetFly · Brand directions · Round 4</p>
+    <h1>Three stronger marks, each with a story</h1>
+    <p>Fewer options, more care. Each of these was sketched several ways and the best kept. Each carries one idea from the name: something that <b>flies</b>, in a <b>meeting</b>. Choose a mark and the three looks below update. In each look, the small mark beside “Say next” shows how the logo lives inside the product.</p>
+  </header>
+  <section>
+    <p class="mono step">Step 1 · The mark</p>
+    <div class="mgrid">
+      <label class="mcard"><input type="radio" name="mk" value="m1" checked><div class="pair"><div class="big dk"><svg><use href="#m1"/></svg></div><div class="big lt"><svg><use href="#m1"/></svg></div></div><div class="sizes lt"><svg style="width:40px;height:40px"><use href="#m1"/></svg><svg style="width:26px;height:26px"><use href="#m1"/></svg><svg style="width:16px;height:16px"><use href="#m1"/></svg><span class="wm">MeetFly</span></div><h3>1 · Little bird <em class="mono pick">My pick</em></h3><p>“A little bird told me.” A speech bubble turned on its side becomes a bird: the bubble’s point is its beak, and it has one bright wing. It is the helper that tells you what to say. Friendly, and it can become a mascot that moves.</p><span class="choose mono">Use this mark</span></label>
+      <label class="mcard"><input type="radio" name="mk" value="m2"><div class="pair"><div class="big dk"><svg><use href="#m2"/></svg></div><div class="big lt"><svg><use href="#m2"/></svg></div></div><div class="sizes lt"><svg style="width:40px;height:40px"><use href="#m2"/></svg><svg style="width:26px;height:26px"><use href="#m2"/></svg><svg style="width:16px;height:16px"><use href="#m2"/></svg><span class="wm">MeetFly</span></div><h3>2 · Paper bird</h3><p>A bird folded from a sheet of notes, mid-flight. Sharp and precise, for a tool that feels fast and professional. The bright wing is the part that is live.</p><span class="choose mono">Use this mark</span></label>
+      <label class="mcard"><input type="radio" name="mk" value="m3"><div class="pair"><div class="big dk"><svg><use href="#m3"/></svg></div><div class="big lt"><svg><use href="#m3"/></svg></div></div><div class="sizes lt"><svg style="width:40px;height:40px"><use href="#m3"/></svg><svg style="width:26px;height:26px"><use href="#m3"/></svg><svg style="width:16px;height:16px"><use href="#m3"/></svg><span class="wm">MeetFly</span></div><h3>3 · Lift M</h3><p>The M of MeetFly as two folded blades. The first stands; the second is bright and already leaving the ground. The simplest, and the strongest as an app icon.</p><span class="choose mono">Use this mark</span></label>
+      </div>
+    <p class="mono step" style="margin-top:44px">Step 2 · The look</p>
+  </section>
+
+  <section class="dir a">
+    <div class="dir-head"><h2>A · Electric</h2><p>Near-black with a sharp lime light. Feels fast and live, like an instrument panel. Lime marks whatever MeetFly is doing right now.</p><span class="mono pick">My pick</span></div>
+    <div class="stage">
+      <div class="hero" style="--wing:#FFFFFF;--body-dot:#D4FF3A;--knock:#0B0A14">
+        <div class="lockup"><svg><use class="mk" href="#m1"/></svg><span class="word">MeetFly</span></div>
+        <p class="sample">Your AI copilot for <em>every call.</em></p>
+        <div class="row"><span class="btn">Download</span><span class="btn ghost">See it live</span></div>
+        <div class="cue"><small class="them"><b>Them</b> “When could you start the pilot?”</small><span class="mono"><svg><use class="mk" href="#m1"/></svg>Say next</span><p>“We can start on Monday with five seats.”</p></div>
+      </div>
+      <div class="side">
+        <div><h3 class="mono">App icon</h3><div class="icons"><div class="tile" style="background:linear-gradient(160deg,#23212F,#0B0A14);--wing:#FFFFFF;--body-dot:#D4FF3A;--knock:#15141F"><svg><use class="mk" href="#m1"/></svg></div><div class="tile s" style="background:#D4FF3A;--wing:#0B0A14;--body-dot:#FFFFFF;--knock:#D4FF3A"><svg><use class="mk" href="#m1"/></svg></div><div class="tile s" style="background:#FFFFFF;--wing:#0B0A14;--body-dot:#7A9C00;--knock:#FFFFFF;box-shadow:inset 0 0 0 1px #e3e3ea"><svg><use class="mk" href="#m1"/></svg></div></div></div>
+        <div><h3 class="mono">Colours</h3><div class="swatches"><div class="sw"><b style="background:#0B0A14"></b><span>Ink<small>#0B0A14</small></span></div><div class="sw"><b style="background:#16151F"></b><span>Panel<small>#16151F</small></span></div><div class="sw"><b style="background:#D4FF3A"></b><span>Lime<small>#D4FF3A</small></span></div><div class="sw"><b style="background:#FFFFFF"></b><span>White<small>#FFFFFF</small></span></div><div class="sw"><b style="background:#A9A7BD"></b><span>Mist<small>#A9A7BD</small></span></div></div></div>
+        <div class="type"><h3 class="mono">Type</h3><p><b>Outfit</b> for headings and the wordmark, <b>DM Sans</b> for text.</p></div>
+        <div class="alt" style="background:#F4F4F0;color:#0B0A14;--wing:#0B0A14;--body-dot:#6E8E00;--knock:#F4F4F0;--word:600 21px/1 "Outfit",sans-serif;--word-ls:-0.035em"><svg><use class="mk" href="#m1"/></svg><span class="word">MeetFly</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="dir b">
+    <div class="dir-head"><h2>B · Daybreak</h2><p>Bright white with a vivid violet and a hot pink light. Friendly and modern; the easiest to read on long pages.</p></div>
+    <div class="stage">
+      <div class="hero" style="--wing:#5B2EFF;--body-dot:#FF3D7F;--knock:#F6F4FF">
+        <div class="lockup"><svg><use class="mk" href="#m1"/></svg><span class="word">MeetFly</span></div>
+        <p class="sample">Your AI copilot for <em>every call.</em></p>
+        <div class="row"><span class="btn">Download</span><span class="btn ghost">See it live</span></div>
+        <div class="cue"><small class="them"><b>Them</b> “When could you start the pilot?”</small><span class="mono"><svg><use class="mk" href="#m1"/></svg>Say next</span><p>“We can start on Monday with five seats.”</p></div>
+      </div>
+      <div class="side">
+        <div><h3 class="mono">App icon</h3><div class="icons"><div class="tile" style="background:linear-gradient(160deg,#7A55FF,#4A1FE8);--wing:#FFFFFF;--body-dot:#FF8FB5;--knock:#6038F5"><svg><use class="mk" href="#m1"/></svg></div><div class="tile s" style="background:#150B33;--wing:#FFFFFF;--body-dot:#FF3D7F;--knock:#150B33"><svg><use class="mk" href="#m1"/></svg></div><div class="tile s" style="background:#FFFFFF;--wing:#5B2EFF;--body-dot:#FF3D7F;--knock:#FFFFFF;box-shadow:inset 0 0 0 1px #e3e3ea"><svg><use class="mk" href="#m1"/></svg></div></div></div>
+        <div><h3 class="mono">Colours</h3><div class="swatches"><div class="sw"><b style="background:#5B2EFF"></b><span>Violet<small>#5B2EFF</small></span></div><div class="sw"><b style="background:#150B33"></b><span>Ink<small>#150B33</small></span></div><div class="sw"><b style="background:#FF3D7F"></b><span>Pink<small>#FF3D7F</small></span></div><div class="sw"><b style="background:#F6F4FF"></b><span>Lilac white<small>#F6F4FF</small></span></div><div class="sw"><b style="background:#5A5275"></b><span>Slate<small>#5A5275</small></span></div></div></div>
+        <div class="type"><h3 class="mono">Type</h3><p><b>Plus Jakarta Sans</b> for headings, the wordmark and text.</p></div>
+        <div class="alt" style="background:#150B33;color:#FFFFFF;--wing:#FFFFFF;--body-dot:#FF3D7F;--knock:#150B33;--word:800 21px/1 "Plus Jakarta Sans",sans-serif;--word-ls:-0.04em"><svg><use class="mk" href="#m1"/></svg><span class="word">MeetFly</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="dir c">
+    <div class="dir-head"><h2>C · Cobalt</h2><p>A full, saturated blue with white and a sunny yellow light. The boldest: no meeting tool we have seen uses a colour like it.</p></div>
+    <div class="stage">
+      <div class="hero" style="--wing:#FFFFFF;--body-dot:#FFD84A;--knock:#1B34F2">
+        <div class="lockup"><svg><use class="mk" href="#m1"/></svg><span class="word">MeetFly</span></div>
+        <p class="sample">Your AI copilot for <em>every call.</em></p>
+        <div class="row"><span class="btn">Download</span><span class="btn ghost">See it live</span></div>
+        <div class="cue"><small class="them"><b>Them</b> “When could you start the pilot?”</small><span class="mono"><svg><use class="mk" href="#m1"/></svg>Say next</span><p>“We can start on Monday with five seats.”</p></div>
+      </div>
+      <div class="side">
+        <div><h3 class="mono">App icon</h3><div class="icons"><div class="tile" style="background:linear-gradient(160deg,#3A52FF,#1226D0);--wing:#FFFFFF;--body-dot:#FFD84A;--knock:#243CF0"><svg><use class="mk" href="#m1"/></svg></div><div class="tile s" style="background:#FFD84A;--wing:#0B1466;--body-dot:#1B34F2;--knock:#FFD84A"><svg><use class="mk" href="#m1"/></svg></div><div class="tile s" style="background:#FFFFFF;--wing:#1B34F2;--body-dot:#E0A800;--knock:#FFFFFF;box-shadow:inset 0 0 0 1px #e3e3ea"><svg><use class="mk" href="#m1"/></svg></div></div></div>
+        <div><h3 class="mono">Colours</h3><div class="swatches"><div class="sw"><b style="background:#1B34F2"></b><span>Cobalt<small>#1B34F2</small></span></div><div class="sw"><b style="background:#0B1466"></b><span>Deep blue<small>#0B1466</small></span></div><div class="sw"><b style="background:#FFD84A"></b><span>Sun<small>#FFD84A</small></span></div><div class="sw"><b style="background:#FFFFFF"></b><span>White<small>#FFFFFF</small></span></div><div class="sw"><b style="background:#C9D0FF"></b><span>Sky<small>#C9D0FF</small></span></div></div></div>
+        <div class="type"><h3 class="mono">Type</h3><p><b>Lexend</b> for headings, the wordmark and text.</p></div>
+        <div class="alt" style="background:#FFFFFF;color:#0B1466;--wing:#1B34F2;--body-dot:#E0A800;--knock:#FFFFFF;--word:600 21px/1 "Lexend",sans-serif;--word-ls:-0.04em"><svg><use class="mk" href="#m1"/></svg><span class="word">MeetFly</span></div>
+      </div>
+    </div>
+  </section>
+  <div class="notes">
+    <div><h3>Why these are better</h3><p>The earlier rounds joined two icons. Each of these is one shape with one idea, drawn on a grid, tested at 16px, and clear in a single colour.</p></div>
+    <div><h3>The honest trade-off</h3><p>Little bird has the most personality and the best story, but birds are used by other brands, so the bubble shape must stay obvious. Paper bird is the most elegant and the least literal. Lift M is the safest.</p></div>
+    <div><h3>Next</h3><p>When you pick, I refine that one mark further, then rebuild the kit: logo files, icons, colours with contrast checks, type and the guide page.</p></div>
+  </div>
+</div>
+<script>
+  const uses = document.querySelectorAll("use.mk");
+  document.querySelectorAll('input[name="mk"]').forEach((r) => r.addEventListener("change", () => uses.forEach((u) => u.setAttribute("href", "#" + r.value))));
+</script>
+</body>
+</html>

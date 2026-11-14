@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeetFly brand guide</title>
+<link rel="icon" href="icon/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--white); font: 400 16px/1.6 var(--font-text); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  .label { font: 500 var(--text-label)/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mist); }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; }
+  h1 { font-size: var(--text-display); line-height: 1.02; letter-spacing: var(--tracking-display); }
+  h2 { font-size: var(--text-h2); line-height: 1.08; letter-spacing: var(--tracking-heading); }
+  h3 { font-size: 1.05rem; font-weight: 500; }
+  p { color: var(--mist); max-width: 62ch; }
+  em.e { font-style: normal; color: var(--lime); }
+  code { font: 400 0.84em var(--font-mono); color: var(--white); }
+
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; }
+  .top img { height: 54px; width: auto; display: block; margin-left: -10px; }
+  .top nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  .top a { color: var(--mist); text-decoration: none; font-size: 0.92rem; }
+  .top a:hover, .top a:focus-visible { color: var(--white); }
+
+  .cover { padding: 56px 0 72px; display: grid; gap: 22px; }
+  .cover p { font-size: var(--text-lead); }
+  .live { display: inline-flex; align-items: center; gap: 9px; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 4px rgba(212, 255, 58, 0.16); }
+  .hero { border-radius: var(--radius-l); background: #08070f; box-shadow: inset 0 0 0 1px var(--line); display: grid; place-items: center; padding: clamp(40px, 8vw, 96px) 20px; margin-top: 10px; }
+  .hero img { width: min(760px, 100%); height: auto; display: block; }
+
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  .head { display: grid; gap: 12px; margin-bottom: 32px; }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .card { background: var(--panel); border-radius: var(--radius-l); padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+  .card p { font-size: var(--text-small); }
+  .plate { border-radius: var(--radius-m); display: grid; place-items: center; padding: 26px 18px; min-height: 180px; }
+  .plate img { max-width: 100%; height: auto; display: block; }
+  .on-ink { background: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+  .on-paper { background: var(--paper); }
+  .on-lime { background: var(--lime); }
+  .on-photo { background: linear-gradient(135deg, #3a2f6b, #a0456a 55%, #e08a4c); }
+  .file { font: 400 0.76rem var(--font-mono); color: var(--dim); }
+
+  .build { background: var(--panel); border-radius: var(--radius-l); padding: 26px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 30px; align-items: center; }
+  .build svg { width: 100%; height: auto; display: block; }
+  .build ol { padding-left: 1.2em; color: var(--mist); display: grid; gap: 10px; font-size: 0.95rem; }
+  .build ol b { color: var(--white); font-weight: 500; }
+  .space .box { justify-self: center; outline: 1px dashed rgba(212, 255, 58, 0.7); padding: 30px; background: rgba(212, 255, 58, 0.05); border-radius: 4px; }
+  .space img { width: 240px; display: block; }
+  .sizes { display: flex; align-items: end; gap: 26px; flex-wrap: wrap; }
+  .sizes figure { display: grid; gap: 10px; justify-items: start; }
+  .sizes img { display: block; height: auto; }
+  .dont { position: relative; }
+  .dont .plate { min-height: 140px; overflow: hidden; }
+  .dont .plate img { width: 190px; }
+  .dont::after { content: "✕"; position: absolute; top: 14px; right: 16px; width: 24px; height: 24px; border-radius: 50%; background: var(--error); color: #2a0606; font: 700 13px/24px var(--font-text); text-align: center; }
+
+  .icons { display: flex; align-items: end; gap: 22px; flex-wrap: wrap; }
+  .icons img { display: block; }
+
+  .sw { border-radius: var(--radius-m); overflow: hidden; background: var(--panel); }
+  .sw b { display: block; height: 84px; }
+  .sw div { padding: 12px 14px 14px; display: grid; gap: 3px; }
+  .sw strong { font-weight: 500; }
+  .sw span { font-size: 0.8rem; color: var(--mist); }
+  .ratio { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 18px; }
+  .ratio div { border-radius: var(--radius-m); padding: 16px 18px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 500; }
+  .ratio small { font: 500 0.75rem var(--font-mono); opacity: 0.85; }
+
+  .type { display: grid; gap: 26px; }
+  .spec { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 20px; align-items: baseline; padding-top: 22px; border-top: 1px solid var(--line); }
+  .spec:first-child { border-top: 0; padding-top: 0; }
+  .t-display { font: 700 var(--text-display)/1.02 var(--font-display); letter-spacing: var(--tracking-display); }
+  .t-h2 { font: 700 var(--text-h2)/1.08 var(--font-display); letter-spacing: var(--tracking-heading); }
+  .t-h3 { font: 500 var(--text-h3)/1.2 var(--font-display); }
+  .t-lead { font-size: var(--text-lead); color: var(--white); max-width: 52ch; }
+
+  .ui { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .tone { border-radius: var(--radius-l); padding: 26px; background: var(--color-bg); color: var(--color-text); display: grid; gap: 18px; align-content: start; box-shadow: inset 0 0 0 1px var(--color-line); }
+  .tone > img { width: 170px; height: auto; margin: -8px 0 -6px -8px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { font: 500 0.95rem/1 var(--font-text); padding: 13px 22px; border-radius: var(--radius-round); background: var(--color-accent); color: var(--color-on-accent); border: 0; cursor: pointer; transition: filter 0.16s; }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.ghost { background: transparent; color: var(--color-text); box-shadow: inset 0 0 0 1.5px var(--color-line); }
+  .btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-accent) 55%, transparent); outline-offset: 2px; }
+  .chip { font: 500 0.82rem/1 var(--font-text); padding: 8px 12px; border-radius: var(--radius-round); box-shadow: inset 0 0 0 1px var(--color-line); color: var(--color-muted); }
+  .cue { border-radius: var(--radius-m); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-line); padding: 16px 18px; display: grid; gap: 8px; }
+  .cue .label { color: var(--color-accent-text); display: flex; align-items: center; gap: 8px; }
+  .cue .label i { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); }
+  .cue p { color: var(--color-text); max-width: none; font-weight: 500; }
+  .cue small { color: var(--color-muted); font-size: 0.82rem; }
+  .tone a { color: var(--color-accent-text); font-weight: 500; text-underline-offset: 3px; }
+
+  footer { padding: 40px 0 64px; border-top: 1px solid var(--line); }
+  footer p { font-size: var(--text-small); }
+  @media (max-width: 900px) { .g3, .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .build, .ui { grid-template-columns: minmax(0, 1fr); } .top nav { display: none; } }
+  @media (max-width: 560px) { .g2, .g3 { grid-template-columns: minmax(0, 1fr); } .spec { grid-template-columns: minmax(0, 1fr); gap: 8px; } .cover { padding: 36px 0 52px; } section { padding: 48px 0; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <img src="logo/meetfly-on-dark.svg" alt="MeetFly" width="408" height="144">
+    <nav aria-label="Sections"><a href="#logo">Logo</a><a href="#icons">Icons</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#ui">In use</a></nav>
+  </div>
+
+  <header class="cover">
+    <span class="label live"><i></i>Brand guide · Version 2</span>
+    <h1>The name, <em class="e">listening.</em></h1>
+    <p>The MeetFly logo is the name itself, with a pair of headphones over the two e’s: MeetFly is the one listening in on your call. This page shows the logo, its rules, the colours and the type.</p>
+    <div class="hero"><img src="logo/meetfly-on-dark.svg" alt="The MeetFly logo: the name in white with lime headphones over the two e’s" width="760" height="268"></div>
+  </header>
+
+  <section id="logo">
+    <div class="head"><span class="label">01 · Logo</span><h2>One logo, four backgrounds</h2><p>The headphones are always the accent colour: lime on dark, violet on light, because lime cannot be seen on a light background.</p></div>
+    <div class="grid g2">
+      <div class="card"><div class="plate on-ink"><img src="logo/meetfly-on-dark.svg" alt="MeetFly logo on dark" width="360"></div><h3>On dark · the default</h3><span class="file">logo/meetfly-on-dark.svg</span></div>
+      <div class="card"><div class="plate on-paper"><img src="logo/meetfly-on-light.svg" alt="MeetFly logo on light" width="360"></div><h3>On light</h3><span class="file">logo/meetfly-on-light.svg</span></div>
+      <div class="card"><div class="plate on-lime"><img src="logo/meetfly-on-lime.svg" alt="MeetFly logo on lime" width="360"></div><h3>On lime</h3><span class="file">logo/meetfly-on-lime.svg</span></div>
+      <div class="card"><div class="plate on-photo"><img src="logo/meetfly-mono-white.svg" alt="MeetFly logo in one colour" width="360"></div><h3>One colour, for photos and print</h3><span class="file">logo/meetfly-mono-white.svg · meetfly-mono-ink.svg</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="label">02 · Construction</span><h2>How the headphones sit</h2></div>
+    <div class="build">
+      <svg viewBox="700 -40 1500 1230" role="img" aria-label="The two e’s and the headphones with their guide lines">
+        <image href="logo/meetfly-on-dark.svg" x="-88" y="0" width="4083" height="1439"/>
+        <g fill="none" stroke="#807e96" stroke-width="4">
+          <path d="M720 1070H2180"/><path d="M720 584H2180" stroke-dasharray="14 12"/><path d="M720 150H2180" stroke-dasharray="14 12"/>
+          <path d="M1428 110V1110" stroke-dasharray="14 12"/><circle cx="1428" cy="670" r="482"/>
+        </g>
+        <g font-family="JetBrains Mono, monospace" font-size="34" fill="#a9a7bd">
+          <text x="2010" y="1058">Baseline</text><text x="1950" y="572">Top of e</text><text x="1950" y="138">Top of band</text>
+        </g>
+      </svg>
+      <ol>
+        <li><b>The band is a half-circle</b> centred between the two e’s, then runs straight down each side.</li>
+        <li><b>It rises above the letters</b> to 0.92 of the type size, so the headphones read at a glance.</li>
+        <li><b>An ear cup closes each end:</b> a rounded bar over the outer edge of each e.</li>
+        <li><b>Everything else is plain Outfit Bold,</b> spaced slightly open so the headphones have room.</li>
+      </ol>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card space"><h3>Clear space</h3><div class="box"><img src="logo/meetfly-on-dark.svg" alt="" width="240" height="85"></div><p>The files already include the right margin. Keep at least the height of the letter e free around it.</p></div>
+      <div class="card"><h3>Smallest sizes</h3>
+        <div class="sizes">
+          <figure><img src="logo/meetfly-on-dark.svg" alt="" width="160"><span class="file">160px</span></figure>
+          <figure><img src="logo/meetfly-on-dark.svg" alt="" width="96"><span class="file">96px · smallest</span></figure>
+          <figure><img src="icon/favicon.svg" alt="" width="32" height="32"><span class="file">Icon 32px</span></figure>
+          <figure><img src="icon/favicon.svg" alt="" width="16" height="16"><span class="file">Icon 16px</span></figure>
+        </div>
+        <p>Below 96px wide, use the icon instead of the full name.</p></div>
+    </div>
+    <div class="grid g4" style="margin-top:16px">
+      <div class="card dont"><div class="plate on-ink"><img src="logo/meetfly-on-dark.svg" alt="" style="filter:hue-rotate(200deg)"></div><p>Don’t recolour the headphones.</p></div>
+      <div class="card dont"><div class="plate on-ink"><img src="logo/meetfly-on-dark.svg" alt="" style="transform:scaleX(1.3);width:150px"></div><p>Don’t stretch it.</p></div>
+      <div class="card dont"><div class="plate on-ink"><img src="logo/meetfly-on-dark.svg" alt="" style="transform:rotate(-8deg)"></div><p>Don’t rotate it.</p></div>
+      <div class="card dont"><div class="plate on-paper"><img src="logo/meetfly-on-dark.svg" alt=""></div><p>Don’t use the dark version on light.</p></div>
+    </div>
+  </section>
+
+  <section id="icons">
+    <div class="head"><span class="label">03 · Icons</span><h2>App icon and favicon</h2><p>The icon is the part only MeetFly has: the two e’s wearing the headphones.</p></div>
+    <div class="grid g2">
+      <div class="card"><div class="icons"><img src="icon/app-icon.svg" alt="App icon" width="148" height="148"><img src="icon/app-icon.svg" alt="" width="72" height="72"><img src="icon/app-icon.svg" alt="" width="36" height="36"><img src="icon/favicon.svg" alt="" width="32" height="32"><img src="icon/favicon.svg" alt="" width="16" height="16"></div><h3>Dark tile · the default</h3><span class="file">icon/app-icon.svg · icon/favicon.svg · icon/favicon.ico</span></div>
+      <div class="card"><div class="icons"><img src="icon/app-icon-lime.svg" alt="Alternative app icon" width="148" height="148"><img src="icon/app-icon-lime.svg" alt="" width="72" height="72"><img src="icon/app-icon-lime.svg" alt="" width="36" height="36"></div><h3>Lime tile</h3><span class="file">icon/app-icon-lime.svg</span></div>
+    </div>
+  </section>
+
+  <section id="colour">
+    <div class="head"><span class="label">04 · Colour</span><h2>Ink, white and <em class="e">one lime</em></h2><p>Lime is rare: the headphones, one primary action per view, and things that are live. On light backgrounds, violet does lime’s job.</p></div>
+    <div class="grid g4">
+      <div class="sw"><b style="background:#0b0a14;box-shadow:inset 0 0 0 1px #262536"></b><div><strong>Ink</strong><code>#0B0A14</code><span>Page on dark, text on light</span></div></div>
+      <div class="sw"><b style="background:#171622;box-shadow:inset 0 0 0 1px #262536"></b><div><strong>Panel</strong><code>#171622</code><span>Cards on Ink</span></div></div>
+      <div class="sw"><b style="background:#262536"></b><div><strong>Line</strong><code>#262536</code><span>Hairlines on Ink</span></div></div>
+      <div class="sw"><b style="background:#ffffff"></b><div><strong>White</strong><code>#FFFFFF</code><span>Text on Ink</span></div></div>
+      <div class="sw"><b style="background:#d4ff3a"></b><div><strong>Lime</strong><code>#D4FF3A</code><span>The accent on dark</span></div></div>
+      <div class="sw"><b style="background:#a9a7bd"></b><div><strong>Mist</strong><code>#A9A7BD</code><span>Secondary text on Ink</span></div></div>
+      <div class="sw"><b style="background:#f4f4f0"></b><div><strong>Paper</strong><code>#F4F4F0</code><span>Page on light</span></div></div>
+      <div class="sw"><b style="background:#5b2eff"></b><div><strong>Violet</strong><code>#5B2EFF</code><span>The accent on light</span></div></div>
+    </div>
+    <div class="ratio">
+      <div style="background:#0b0a14;color:#fff;box-shadow:inset 0 0 0 1px #262536">White on Ink <small>19.7:1</small></div>
+      <div style="background:#0b0a14;color:#d4ff3a;box-shadow:inset 0 0 0 1px #262536">Lime on Ink <small>17.0:1</small></div>
+      <div style="background:#0b0a14;color:#a9a7bd;box-shadow:inset 0 0 0 1px #262536">Mist on Ink <small>8.4:1</small></div>
+      <div style="background:#d4ff3a;color:#0b0a14">Ink on Lime <small>17.0:1</small></div>
+      <div style="background:#f4f4f0;color:#0b0a14">Ink on Paper <small>18.0:1</small></div>
+      <div style="background:#f4f4f0;color:#5b2eff">Violet on Paper <small>5.8:1</small></div>
+    </div>
+  </section>
+
+  <section id="type">
+    <div class="head"><span class="label">05 · Type</span><h2>Outfit, throughout</h2><p>The logo is drawn from Outfit Bold, so headings use it too. Text is Outfit Regular. JetBrains Mono is for small labels and times. The sample words below are placeholders.</p></div>
+    <div class="card type">
+      <div class="spec"><span class="label">Display · Outfit 700</span><div class="t-display">Aa Meet<em class="e">Fly</em></div></div>
+      <div class="spec"><span class="label">Heading · Outfit 700</span><div class="t-h2">A heading at section size</div></div>
+      <div class="spec"><span class="label">Subheading · Outfit 500</span><div class="t-h3">A smaller heading for cards and lists</div></div>
+      <div class="spec"><span class="label">Lead · Outfit 400</span><p class="t-lead">A lead paragraph introduces a section in one or two sentences, a little larger than body text.</p></div>
+      <div class="spec"><span class="label">Body · Outfit 400</span><p>Body text is 16px with a 1.6 line height and lines of about 62 characters. Numbers such as 0123456789 and times such as 14:05 stay easy to read.</p></div>
+      <div class="spec"><span class="label">Label · Mono 500</span><span class="label" style="color:var(--white)">Live · 00:12:48 · Say next</span></div>
+    </div>
+  </section>
+
+  <section id="ui">
+    <div class="head"><span class="label">06 · In use</span><h2>Buttons, chips and a suggestion card</h2><p>The same pieces on both tones. Dark is the default; light is for long reading pages. The card’s words are an illustration.</p></div>
+    <div class="ui">
+      <div class="tone" data-tone="ink">
+        <img src="logo/meetfly-on-dark.svg" alt="MeetFly" width="170" height="60">
+        <div class="row"><button class="btn" type="button">Primary action</button><button class="btn ghost" type="button">Secondary</button></div>
+        <div class="row"><span class="chip">Chip</span><span class="chip">Another chip</span><a href="#ui">A text link</a></div>
+        <div class="cue"><span class="label"><i></i>Say next</span><p>“We can start on Monday with five seats.”</p><small>Suggested from the last question</small></div>
+      </div>
+      <div class="tone" data-tone="light">
+        <img src="logo/meetfly-on-light.svg" alt="MeetFly" width="170" height="60">
+        <div class="row"><button class="btn" type="button">Primary action</button><button class="btn ghost" type="button">Secondary</button></div>
+        <div class="row"><span class="chip">Chip</span><span class="chip">Another chip</span><a href="#ui">A text link</a></div>
+        <div class="cue"><span class="label"><i></i>Say next</span><p>“We can start on Monday with five seats.”</p><small>Suggested from the last question</small></div>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>MeetFly brand kit, version 2. Rules and file list: <code>README.md</code>. Colours and type as CSS variables: <code>tokens.css</code>. Earlier directions: <code>explorations/</code>.</p></footer>
+</div>
+</body>
+</html>

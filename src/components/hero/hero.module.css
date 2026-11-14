@@ -1,0 +1,380 @@
+.hero {
+  --mx: 50%;
+  --my: 30%;
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+  padding: calc(14px + 60px + clamp(36px, 7vh, 72px)) 0 clamp(40px, 6vh, 72px);
+}
+
+/* ---------- Background ---------- */
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  /* Fade out at the foot, so the hero melts into the page instead of ending on an edge. */
+  mask-image: linear-gradient(#000 60%, transparent);
+}
+
+/* Soft colour fields that drift. Gradients moved by transform only. */
+.glowA,
+.glowB {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.glowA {
+  width: 980px;
+  height: 680px;
+  left: calc(50% - 900px);
+  top: -320px;
+  background: radial-gradient(closest-side, rgba(91, 46, 255, 0.16), transparent);
+  animation: driftA 20s ease-in-out infinite alternate;
+}
+
+.glowB {
+  width: 900px;
+  height: 620px;
+  left: calc(50% + 40px);
+  top: -260px;
+  background: radial-gradient(closest-side, rgba(212, 255, 58, 0.5), transparent);
+  animation: driftB 24s ease-in-out infinite alternate;
+}
+
+@keyframes driftA {
+  to {
+    transform: translate(160px, 90px) scale(1.12);
+  }
+}
+
+@keyframes driftB {
+  to {
+    transform: translate(-180px, 120px) scale(0.9);
+  }
+}
+
+/* A faint square grid, faded out away from the headline. */
+.grid {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(11, 10, 20, 0.045) 1px, transparent 1px) 0 0 / 64px 64px,
+    linear-gradient(90deg, rgba(11, 10, 20, 0.045) 1px, transparent 1px) 0 0 / 64px 64px;
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 40%, #000 10%, transparent 75%);
+}
+
+/* The spotlight follows a mouse pointer, moved by translate (hero-fx.jsx). */
+.spot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 560px;
+  height: 560px;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(91, 46, 255, 0.08), transparent);
+  translate: var(--mx) var(--my);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.hero[data-pointer] .spot {
+  opacity: 1;
+}
+
+/* ---------- Copy ---------- */
+.inner {
+  width: 100%;
+  max-width: calc(1100px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 14px 5px 5px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(11, 10, 20, 0.07), 0 8px 22px -12px rgba(11, 10, 20, 0.25);
+  font-size: 0.88rem;
+  color: var(--color-muted);
+  animation: rise 0.8s var(--ease-out) both;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  font: 500 0.68rem / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tag i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+  animation: ping 1.8s ease-out infinite;
+}
+
+@keyframes ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 255, 58, 0.7);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px rgba(212, 255, 58, 0);
+  }
+}
+
+.title {
+  margin-top: 28px;
+  font: 700 clamp(2.2rem, 0.9rem + 6vw, 6.2rem) / 1 var(--font-display);
+  letter-spacing: -0.045em;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.top,
+.bottom {
+  display: block;
+}
+
+.top {
+  text-wrap: balance;
+  animation: rise 0.6s var(--ease-out) both;
+}
+
+.bottom {
+  margin-top: 0.06em;
+  animation: rise 0.8s var(--ease-out) 0.45s both;
+}
+
+.lead {
+  margin-top: 28px;
+  max-width: 56ch;
+  font-size: var(--text-lead);
+  line-height: 1.55;
+  color: var(--color-muted);
+  animation: rise 0.8s var(--ease-out) 0.7s both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(6px);
+  }
+}
+
+.actions {
+  margin-top: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  animation: rise 0.8s var(--ease-out) 0.85s both;
+}
+
+/* Primary: ink, a lime icon that spins on hover, a light sweep, and a magnetic pull. */
+.primary {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 8px 8px 26px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.04rem;
+  text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 18px 40px -16px rgba(11, 10, 20, 0.65);
+  transition: translate 0.35s var(--ease-out), box-shadow 0.25s;
+}
+
+.primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.24) 50%, transparent 65%);
+  translate: -110% 0;
+  transition: translate 0.8s var(--ease-out);
+}
+
+.primary:hover::after {
+  translate: 110% 0;
+}
+
+.primary svg {
+  width: 42px;
+  height: 42px;
+  padding: 12px;
+  border-radius: 50%;
+  background: var(--lime);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: rotate 0.5s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.primary:hover svg {
+  rotate: -360deg;
+}
+
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 24px 8px 8px;
+  border-radius: 999px;
+  color: var(--color-text);
+  font-weight: 500;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 1px rgba(11, 10, 20, 0.1), 0 10px 26px -16px rgba(11, 10, 20, 0.35);
+  transition: box-shadow 0.25s, transform 0.25s var(--ease-out);
+}
+
+.secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(11, 10, 20, 0.18), 0 16px 30px -16px rgba(11, 10, 20, 0.4);
+}
+
+.play {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--violet);
+}
+
+/* A ring pulses out from the play button. */
+.play::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--violet);
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  to {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+.play svg {
+  width: 15px;
+  height: 15px;
+  fill: #fff;
+}
+
+.trust {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 24px;
+  color: var(--color-muted);
+  font-size: 0.88rem;
+  animation: rise 0.8s var(--ease-out) 1s both;
+}
+
+.trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.trust svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- The demo, right under the buttons (it animates itself in when seen) ---------- */
+.stageWrap {
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: clamp(36px, 5vh, 56px) auto 0;
+  padding: 0 var(--gutter);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: calc(14px + 60px + 36px) 0 48px;
+  }
+
+  .actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primary {
+    justify-content: space-between;
+  }
+
+  .trust {
+    flex-direction: column;
+    align-items: center;
+  }
+
+}
+
+/* Short laptop screens: tighten so everything fits above the scroll hint. */
+@media (max-height: 760px) and (min-width: 641px) {
+  .title {
+    margin-top: 20px;
+    font-size: clamp(2.6rem, 0.6rem + 5vw, 5rem);
+  }
+
+  .lead {
+    margin-top: 20px;
+  }
+
+  .actions {
+    margin-top: 26px;
+  }
+
+  .trust {
+    margin-top: 20px;
+  }
+}

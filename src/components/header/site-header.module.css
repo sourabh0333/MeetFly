@@ -1,0 +1,244 @@
+.header {
+  position: fixed;
+  inset: 14px 0 auto;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--gutter);
+  pointer-events: none;
+}
+
+/* One bar that changes shape. Width, colour and radius ease with a soft spring. */
+.bar {
+  --spring: cubic-bezier(0.34, 1.32, 0.5, 1);
+  pointer-events: auto;
+  width: min(1120px, 100%);
+  height: 60px;
+  padding: 0 8px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 1px rgba(11, 10, 20, 0.06);
+  backdrop-filter: blur(16px) saturate(1.7);
+  transition:
+    width 0.7s var(--spring),
+    height 0.5s var(--spring),
+    border-radius 0.5s var(--ease-out),
+    background-color 0.4s,
+    box-shadow 0.4s;
+}
+
+.header[data-island] .bar {
+  width: 520px;
+  height: 52px;
+  padding: 0 6px 0 8px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.92);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 18px 40px -16px rgba(11, 10, 20, 0.55);
+}
+
+/* Brand: the wordmark at the top, the icon in the island. They cross-fade in the same spot. */
+.brand {
+  position: relative;
+  display: grid;
+  flex: none;
+  height: 40px;
+  width: 128px;
+  transition: width 0.6s var(--spring);
+}
+
+.brand img {
+  grid-area: 1 / 1;
+  align-self: center;
+  transition: opacity 0.35s, transform 0.5s var(--spring);
+}
+
+.wordmark {
+  height: 46px;
+  width: auto;
+  margin-left: -6px;
+}
+
+.icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.header[data-island] .brand {
+  width: 38px;
+}
+
+.header[data-island] .wordmark {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.header[data-island] .icon {
+  opacity: 1;
+  transform: none;
+}
+
+/* The live meter only exists in the island. */
+.live {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font: 500 0.66rem / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+.header[data-island] .live {
+  display: inline-flex;
+  animation: appear 0.5s var(--ease-out) both;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+}
+
+.meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 14px;
+}
+
+.meter i {
+  width: 2.5px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--lime);
+  transform: scaleY(0.35);
+  animation: level 1s ease-in-out infinite;
+}
+
+.meter i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.meter i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.meter i:nth-child(4) {
+  animation-delay: 0.1s;
+}
+
+.meter i:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+@keyframes level {
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.nav {
+  margin: 0 auto;
+  display: flex;
+  gap: 2px;
+}
+
+.link {
+  color: var(--color-muted);
+  text-decoration: none;
+  font-size: 0.92rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--color-text);
+  background: rgba(11, 10, 20, 0.05);
+}
+
+.header[data-island] .link {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.86rem;
+  padding: 7px 11px;
+}
+
+.header[data-island] .link:hover,
+.header[data-island] .link:focus-visible {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.download {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px 0 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s, height 0.4s var(--spring), transform 0.2s var(--ease-out);
+}
+
+.download svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s;
+}
+
+.download:hover {
+  transform: scale(1.04);
+}
+
+.download:active {
+  transform: scale(0.96);
+}
+
+.header[data-island] .download {
+  height: 40px;
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.header[data-island] .download svg {
+  stroke: var(--ink);
+}
+
+@media (max-width: 720px) {
+  .nav {
+    display: none;
+  }
+
+  .bar {
+    justify-content: space-between;
+  }
+
+  .header[data-island] .bar {
+    width: 300px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meter i {
+    animation: none;
+    transform: scaleY(0.7);
+  }
+}

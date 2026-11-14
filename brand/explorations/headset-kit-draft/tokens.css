@@ -1,0 +1,70 @@
+/* MeetFly brand tokens. Dark surfaces, white type, one lime accent.
+   Contrast ratios (WCAG 2.x) are against the surface named in each comment. */
+:root {
+  /* Brand */
+  --ink: #0b0a14;          /* page background on dark; text on light */
+  --panel: #16151f;        /* cards and panels on ink */
+  --raised: #1f1e2b;       /* hover, menus, inputs */
+  --line: #2b2a3a;         /* hairlines on ink (decorative) */
+  --white: #ffffff;        /* text on ink 19.7:1 */
+  --mist: #a9a7bd;         /* secondary text on ink 8.4:1, on panel 7.7:1 */
+  --dim: #7e7c93;          /* captions on ink 4.9:1; 14px and up */
+  --lime: #d4ff3a;         /* the accent on dark: on ink 17:1 */
+  --lime-ink: #141a00;     /* text on lime 15.4:1 */
+
+  /* Light surfaces. Lime is invisible on light (1:1), so the accent there is violet. */
+  --paper: #f4f4f0;
+  --violet: #5b2eff;       /* the accent on light and on lime: on paper 5.8:1, on white 6.4:1, on lime 5.5:1 */
+  --stone: #5a5870;        /* secondary text on paper 6.2:1 */
+  --line-light: #dcdcd6;
+
+  /* Status. Never lime. */
+  --ok: #5bd6a0;
+  --warn: #f5c451;
+  --error: #ff6b6b;
+
+  /* Type */
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;   /* headings and the logo's own face; 600–700 */
+  --font-text: "Outfit", ui-sans-serif, system-ui, sans-serif;      /* text and interface; 400–500 */
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;    /* labels, timecodes */
+
+  --text-display: clamp(2.6rem, 1.4rem + 4.6vw, 5rem);
+  --text-h2: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
+  --text-h3: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem);
+  --text-lead: clamp(1.06rem, 1rem + 0.35vw, 1.25rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: 0.72rem;   /* mono, uppercase, 0.08em tracking */
+  --tracking-display: -0.03em;
+  --tracking-heading: -0.02em;
+
+  /* Shape */
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+  --radius-round: 999px;
+}
+
+/* Role tokens: components read these, never the brand colours directly. */
+:root,
+[data-tone="ink"] {
+  --color-bg: var(--ink);
+  --color-surface: var(--panel);
+  --color-text: var(--white);
+  --color-muted: var(--mist);
+  --color-line: var(--line);
+  --color-accent: var(--lime);
+  --color-accent-text: var(--lime);
+  --color-on-accent: var(--lime-ink);
+}
+
+[data-tone="paper"] {
+  --color-bg: var(--paper);
+  --color-surface: #ffffff;
+  --color-text: var(--ink);
+  --color-muted: var(--stone);
+  --color-line: var(--line-light);
+  --color-accent: var(--violet);
+  --color-accent-text: var(--violet);
+  --color-on-accent: #ffffff;
+}

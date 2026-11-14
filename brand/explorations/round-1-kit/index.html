@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeetFly brand guide</title>
+<link rel="icon" href="icon/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--night); color: var(--chalk); font: 400 16px/1.6 var(--font-text); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .label { font: 500 var(--text-label)/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--haze); }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; }
+  h1 { font-size: var(--text-display); line-height: 1.02; letter-spacing: var(--tracking-display); }
+  h2 { font-size: var(--text-h2); line-height: 1.08; letter-spacing: var(--tracking-heading); }
+  h3 { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; }
+  p { color: var(--haze); max-width: 62ch; }
+  em.e { font-style: normal; color: var(--ember); }
+  code { font: 400 0.84em var(--font-mono); color: var(--chalk); }
+
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 0; }
+  .top img { height: 34px; width: auto; display: block; }
+  .top nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  .top a { color: var(--haze); text-decoration: none; font-size: 0.9rem; }
+  .top a:hover, .top a:focus-visible { color: var(--chalk); }
+
+  .cover { padding: 72px 0 84px; display: grid; gap: 22px; }
+  .cover p { font-size: var(--text-lead); }
+  .live { display: inline-flex; align-items: center; gap: 9px; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 0 4px rgba(255, 138, 76, 0.18); }
+
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  .head { display: grid; gap: 12px; margin-bottom: 32px; }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .card { background: var(--panel); border-radius: var(--radius-l); padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+  .card p { font-size: var(--text-small); }
+  .plate { border-radius: var(--radius-m); display: grid; place-items: center; padding: 34px 20px; min-height: 190px; }
+  .plate img { max-width: 100%; height: auto; display: block; }
+  .on-night { background: var(--night); box-shadow: inset 0 0 0 1px var(--line); }
+  .on-chalk { background: var(--chalk); }
+  .on-ember { background: var(--ember); }
+  .on-mid { background: linear-gradient(135deg, #3b3550, #7a4a3a); }
+  .file { font: 400 0.76rem var(--font-mono); color: var(--dim); }
+
+  /* Construction */
+  .build { background: var(--panel); border-radius: var(--radius-l); padding: 26px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 30px; align-items: center; }
+  .build svg { width: 100%; height: auto; display: block; }
+  .build ol { padding-left: 1.2em; color: var(--haze); display: grid; gap: 10px; font-size: 0.95rem; }
+  .build ol b { color: var(--chalk); font-weight: 600; }
+
+  .space { position: relative; display: grid; place-items: center; padding: 20px; }
+  .space .box { outline: 1px dashed rgba(255, 138, 76, 0.7); outline-offset: 0; padding: 30px; background: rgba(255, 138, 76, 0.06); border-radius: 4px; }
+  .space img { height: 60px; display: block; }
+  .sizes { display: flex; align-items: end; gap: 26px; flex-wrap: wrap; }
+  .sizes figure { display: grid; gap: 10px; justify-items: start; }
+  .sizes img { display: block; }
+
+  .dont { position: relative; }
+  .dont .plate { min-height: 150px; }
+  .dont .plate img { height: 44px; }
+  .dont::after { content: "✕"; position: absolute; top: 14px; right: 16px; width: 24px; height: 24px; border-radius: 50%; background: var(--error); color: #2a0606; font: 700 13px/24px var(--font-text); text-align: center; }
+
+  .icons { display: flex; align-items: end; gap: 22px; flex-wrap: wrap; }
+  .icons img { display: block; border-radius: 22.5%; }
+  .icons img.sq { border-radius: 0; }
+
+  .sw { border-radius: var(--radius-m); overflow: hidden; background: var(--panel); }
+  .sw b { display: block; height: 84px; }
+  .sw div { padding: 12px 14px 14px; display: grid; gap: 3px; }
+  .sw strong { font: 600 0.95rem var(--font-display); }
+  .sw span { font-size: 0.8rem; color: var(--haze); }
+  .ratio { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 18px; }
+  .ratio div { border-radius: var(--radius-m); padding: 16px 18px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; }
+  .ratio small { font: 500 0.75rem var(--font-mono); opacity: 0.85; }
+
+  .type { display: grid; gap: 26px; }
+  .spec { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 20px; align-items: baseline; padding-top: 22px; border-top: 1px solid var(--line); }
+  .spec:first-child { border-top: 0; padding-top: 0; }
+  .t-display { font: 700 var(--text-display)/1.02 var(--font-display); letter-spacing: var(--tracking-display); }
+  .t-h2 { font: 700 var(--text-h2)/1.08 var(--font-display); letter-spacing: var(--tracking-heading); }
+  .t-h3 { font: 600 var(--text-h3)/1.2 var(--font-display); letter-spacing: -0.02em; }
+  .t-lead { font-size: var(--text-lead); color: var(--chalk); max-width: 52ch; }
+
+  .ui { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .tone { border-radius: var(--radius-l); padding: 28px; background: var(--color-bg); color: var(--color-text); display: grid; gap: 20px; align-content: start; box-shadow: inset 0 0 0 1px var(--color-line); }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { font: 600 0.95rem/1 var(--font-text); padding: 13px 22px; border-radius: var(--radius-round); background: var(--color-accent); color: var(--color-on-accent); border: 0; cursor: pointer; transition: background 0.16s; }
+  .btn:hover { background: var(--ember-soft); }
+  .btn.ghost { background: transparent; color: var(--color-text); box-shadow: inset 0 0 0 1.5px var(--color-line); }
+  .btn.ghost:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+  .btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--ember) 55%, transparent); outline-offset: 2px; }
+  .chip { font: 500 0.82rem/1 var(--font-text); padding: 8px 12px; border-radius: var(--radius-round); box-shadow: inset 0 0 0 1px var(--color-line); color: var(--color-muted); }
+  .cue { border-radius: var(--radius-m); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-line); padding: 16px 18px; display: grid; gap: 8px; }
+  .cue .label { color: var(--color-accent-text); display: flex; align-items: center; gap: 8px; }
+  .cue .label i { width: 7px; height: 7px; border-radius: 50%; background: var(--ember); }
+  .cue p { color: var(--color-text); max-width: none; }
+  .cue small { color: var(--color-muted); font-size: 0.82rem; }
+  .tone a { color: var(--color-accent-text); font-weight: 600; text-underline-offset: 3px; }
+
+  footer { padding: 40px 0 64px; border-top: 1px solid var(--line); }
+  footer p { font-size: var(--text-small); }
+
+  @media (max-width: 900px) {
+    .g3, .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .build, .ui { grid-template-columns: minmax(0, 1fr); }
+    .top nav { display: none; }
+  }
+  @media (max-width: 560px) {
+    .g2, .g3 { grid-template-columns: minmax(0, 1fr); }
+    .spec { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .cover { padding: 44px 0 56px; }
+    section { padding: 48px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <img src="logo/lockup-on-dark.svg" alt="MeetFly" width="213" height="64">
+    <nav aria-label="Sections"><a href="#logo">Logo</a><a href="#icons">Icons</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#ui">In use</a></nav>
+  </div>
+
+  <header class="cover">
+    <span class="label live"><i></i>Brand guide · Version 1</span>
+    <h1>Lift, in <em class="e">Night flight.</em></h1>
+    <p>A speech bubble that is also a wing, on dark surfaces with one warm accent. This page shows the logo, its rules, the colours and the type. Every file it shows is in this folder.</p>
+  </header>
+
+  <section id="logo">
+    <div class="head"><span class="label">01 · Logo</span><h2>The lockup</h2><p>The symbol and the wordmark together are the default logo. The wordmark is Sora Bold, outlined, so the files need no font.</p></div>
+    <div class="grid g2">
+      <div class="card"><div class="plate on-night"><img src="logo/lockup-on-dark.svg" alt="MeetFly logo on dark" width="320"></div><h3>On dark</h3><span class="file">logo/lockup-on-dark.svg</span></div>
+      <div class="card"><div class="plate on-chalk"><img src="logo/lockup.svg" alt="MeetFly logo on light" width="320"></div><h3>On light</h3><span class="file">logo/lockup.svg</span></div>
+    </div>
+    <div class="grid g4" style="margin-top:16px">
+      <div class="card"><div class="plate on-night"><img src="logo/symbol-on-dark.svg" alt="" width="92"></div><h3>Symbol, dark</h3><span class="file">logo/symbol-on-dark.svg</span></div>
+      <div class="card"><div class="plate on-chalk"><img src="logo/symbol.svg" alt="" width="92"></div><h3>Symbol, light</h3><span class="file">logo/symbol.svg</span></div>
+      <div class="card"><div class="plate on-mid"><img src="logo/lockup-mono-white.svg" alt="" width="190"></div><h3>One colour, white</h3><span class="file">logo/lockup-mono-white.svg</span></div>
+      <div class="card"><div class="plate on-ember"><img src="logo/lockup-mono-ink.svg" alt="" width="190"></div><h3>One colour, ink</h3><span class="file">logo/lockup-mono-ink.svg</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="label">02 · Construction</span><h2>How the symbol is built</h2></div>
+    <div class="build">
+      <svg viewBox="0 0 64 64" role="img" aria-label="The symbol on its grid">
+        <g stroke="#2c2c38" stroke-width="0.25">
+          <path d="M8 0V64M16 0V64M24 0V64M32 0V64M40 0V64M48 0V64M56 0V64M0 8H64M0 16H64M0 24H64M0 32H64M0 40H64M0 48H64M0 56H64"/>
+        </g>
+        <path d="M10 53V31A19 19 0 0 1 29 12H56C55 24 53 30 52 34A19 19 0 0 1 33 53Z" fill="#f4f3ef" stroke="#f4f3ef" stroke-width="3.5" stroke-linejoin="round"/>
+        <circle cx="32" cy="32.5" r="6.2" fill="#ff8a4c"/>
+        <g fill="none" stroke="#ff8a4c" stroke-width="0.4" stroke-dasharray="1.2 1.2"><circle cx="29" cy="31" r="19"/><circle cx="33" cy="34" r="19"/></g>
+        <g font-family="JetBrains Mono, monospace" font-size="2.6" fill="#a3a2ad">
+          <text x="2" y="61.5">Tail</text><text x="54" y="6.5">Tip</text>
+        </g>
+      </svg>
+      <ol>
+        <li><b>Two equal circles</b> (dashed) round the top-left and bottom-right corners, so the shape leans forward.</li>
+        <li><b>The tail</b> is the square corner at the bottom left: the bubble points to the person speaking.</li>
+        <li><b>The tip</b> is the sharp corner at the top right, with the edge beneath it curving in like a wing.</li>
+        <li><b>The live dot</b> sits at the centre and is always Ember. In the one-colour versions it is cut out.</li>
+      </ol>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card"><h3>Clear space</h3><div class="space"><div class="box"><img src="logo/lockup-on-dark.svg" alt="" width="200" height="60"></div></div><p>Keep at least half the symbol's height free on every side.</p></div>
+      <div class="card"><h3>Smallest sizes</h3>
+        <div class="sizes">
+          <figure><img src="logo/lockup-on-dark.svg" alt="" width="88" height="26"><span class="file">Lockup 88px wide</span></figure>
+          <figure><img src="logo/symbol-on-dark.svg" alt="" width="24" height="24"><span class="file">Symbol 24px</span></figure>
+          <figure><img src="logo/symbol-on-dark.svg" alt="" width="16" height="16"><span class="file">Symbol 16px</span></figure>
+          <figure><img src="icon/favicon.svg" alt="" width="16" height="16"><span class="file">Favicon 16px</span></figure>
+        </div>
+        <p>Below 24px on a busy background, use the favicon: it carries its own tile.</p></div>
+    </div>
+    <div class="grid g4" style="margin-top:16px">
+      <div class="card dont"><div class="plate on-night"><img src="logo/lockup-on-dark.svg" alt="" style="filter:hue-rotate(150deg)"></div><p>Don't recolour the dot.</p></div>
+      <div class="card dont"><div class="plate on-night"><img src="logo/lockup-on-dark.svg" alt="" style="transform:scaleX(1.35);height:38px"></div><p>Don't stretch it.</p></div>
+      <div class="card dont"><div class="plate on-night"><img src="logo/lockup-on-dark.svg" alt="" style="transform:rotate(-9deg)"></div><p>Don't rotate it.</p></div>
+      <div class="card dont"><div class="plate on-night"><img src="logo/lockup-on-dark.svg" alt="" style="filter:drop-shadow(0 0 10px #ff8a4c)"></div><p>Don't add glows or shadows.</p></div>
+    </div>
+  </section>
+
+  <section id="icons">
+    <div class="head"><span class="label">03 · Icons</span><h2>App icon and favicon</h2><p>The night tile is the default. The ember tile is for places where a dark icon would disappear.</p></div>
+    <div class="grid g2">
+      <div class="card"><div class="icons"><img src="icon/app-icon.svg" alt="App icon" width="148" height="148"><img src="icon/app-icon.svg" alt="" width="72" height="72"><img src="icon/app-icon.svg" alt="" width="36" height="36"><img class="sq" src="icon/favicon.svg" alt="" width="32" height="32"><img class="sq" src="icon/favicon.svg" alt="" width="16" height="16"></div><h3>Night tile</h3><span class="file">icon/app-icon.svg · icon/favicon.svg · icon/favicon.ico</span></div>
+      <div class="card"><div class="icons"><img src="icon/app-icon-ember.svg" alt="Alternative app icon" width="148" height="148"><img src="icon/app-icon-ember.svg" alt="" width="72" height="72"><img src="icon/app-icon-ember.svg" alt="" width="36" height="36"></div><h3>Ember tile</h3><span class="file">icon/app-icon-ember.svg</span></div>
+    </div>
+  </section>
+
+  <section id="colour">
+    <div class="head"><span class="label">04 · Colour</span><h2>Night, chalk and <em class="e">one ember</em></h2><p>Ember is rare: one primary action per view, the dot, and things that are live. Status colours are separate.</p></div>
+    <div class="grid g4">
+      <div class="sw"><b style="background:#0d0d12;box-shadow:inset 0 0 0 1px #2c2c38"></b><div><strong>Night</strong><code>#0D0D12</code><span>Page on dark, ink on light</span></div></div>
+      <div class="sw"><b style="background:#17171f;box-shadow:inset 0 0 0 1px #2c2c38"></b><div><strong>Panel</strong><code>#17171F</code><span>Cards on Night</span></div></div>
+      <div class="sw"><b style="background:#20202b"></b><div><strong>Raised</strong><code>#20202B</code><span>Hover, menus, inputs</span></div></div>
+      <div class="sw"><b style="background:#2c2c38"></b><div><strong>Line</strong><code>#2C2C38</code><span>Hairlines on Night</span></div></div>
+      <div class="sw"><b style="background:#f4f3ef"></b><div><strong>Chalk</strong><code>#F4F3EF</code><span>Text on Night, page on light</span></div></div>
+      <div class="sw"><b style="background:#a3a2ad"></b><div><strong>Haze</strong><code>#A3A2AD</code><span>Secondary text on Night</span></div></div>
+      <div class="sw"><b style="background:#ff8a4c"></b><div><strong>Ember</strong><code>#FF8A4C</code><span>The accent</span></div></div>
+      <div class="sw"><b style="background:#b4430c"></b><div><strong>Ember deep</strong><code>#B4430C</code><span>Accent as text on light</span></div></div>
+      <div class="sw"><b style="background:#ffa574"></b><div><strong>Ember soft</strong><code>#FFA574</code><span>Ember on hover</span></div></div>
+      <div class="sw"><b style="background:#5e5d68"></b><div><strong>Stone</strong><code>#5E5D68</code><span>Secondary text on light</span></div></div>
+      <div class="sw"><b style="background:linear-gradient(90deg,#5bd6a0 0 33.3%,#f5c451 0 66.6%,#ff6b6b 0)"></b><div><strong>Status</strong><code>#5BD6A0 #F5C451 #FF6B6B</code><span>OK, careful, error</span></div></div>
+      <div class="sw"><b style="background:#1c0d04"></b><div><strong>Ember ink</strong><code>#1C0D04</code><span>Text on Ember</span></div></div>
+    </div>
+    <div class="ratio">
+      <div style="background:#0d0d12;color:#f4f3ef;box-shadow:inset 0 0 0 1px #2c2c38">Chalk on Night <small>17.5:1</small></div>
+      <div style="background:#0d0d12;color:#a3a2ad;box-shadow:inset 0 0 0 1px #2c2c38">Haze on Night <small>7.7:1</small></div>
+      <div style="background:#0d0d12;color:#ff8a4c;box-shadow:inset 0 0 0 1px #2c2c38">Ember on Night <small>8.3:1</small></div>
+      <div style="background:#ff8a4c;color:#1c0d04">Ink on Ember <small>8.1:1</small></div>
+      <div style="background:#f4f3ef;color:#0d0d12">Night on Chalk <small>17.5:1</small></div>
+      <div style="background:#f4f3ef;color:#b4430c">Ember deep on Chalk <small>5.1:1</small></div>
+    </div>
+  </section>
+
+  <section id="type">
+    <div class="head"><span class="label">05 · Type</span><h2>Sora and Manrope</h2><p>Sora for headings, set tight. Manrope for everything you read. JetBrains Mono for small labels and times. The sample words below are placeholders.</p></div>
+    <div class="card type">
+      <div class="spec"><span class="label">Display · Sora 700</span><div class="t-display">Aa Meet<em class="e">Fly</em></div></div>
+      <div class="spec"><span class="label">Heading · Sora 700</span><div class="t-h2">A heading at section size</div></div>
+      <div class="spec"><span class="label">Subheading · Sora 600</span><div class="t-h3">A smaller heading for cards and lists</div></div>
+      <div class="spec"><span class="label">Lead · Manrope 400</span><p class="t-lead">A lead paragraph introduces a section in one or two sentences, a little larger than body text.</p></div>
+      <div class="spec"><span class="label">Body · Manrope 400</span><p>Body text is 16px with a 1.6 line height and lines of about 62 characters. Numbers such as 0123456789 and times such as 14:05 stay easy to read.</p></div>
+      <div class="spec"><span class="label">Label · Mono 500</span><span class="label" style="color:var(--chalk)">Live · 00:12:48 · Say next</span></div>
+    </div>
+  </section>
+
+  <section id="ui">
+    <div class="head"><span class="label">06 · In use</span><h2>Buttons, chips and a cue card</h2><p>The same pieces on both tones. Night is the default; light is for long reading pages. The card's words are an illustration.</p></div>
+    <div class="ui">
+      <div class="tone" data-tone="night">
+        <img src="logo/lockup-on-dark.svg" alt="MeetFly" width="140" height="42">
+        <div class="row"><button class="btn" type="button">Primary action</button><button class="btn ghost" type="button">Secondary</button></div>
+        <div class="row"><span class="chip">Chip</span><span class="chip">Another chip</span><a href="#ui">A text link</a></div>
+        <div class="cue"><span class="label"><i></i>Say next</span><p>“We can start the pilot on Monday with five seats.”</p><small>Suggested from the last question</small></div>
+      </div>
+      <div class="tone" data-tone="light">
+        <img src="logo/lockup.svg" alt="MeetFly" width="140" height="42">
+        <div class="row"><button class="btn" type="button">Primary action</button><button class="btn ghost" type="button">Secondary</button></div>
+        <div class="row"><span class="chip">Chip</span><span class="chip">Another chip</span><a href="#ui">A text link</a></div>
+        <div class="cue"><span class="label"><i></i>Say next</span><p>“We can start the pilot on Monday with five seats.”</p><small>Suggested from the last question</small></div>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>MeetFly brand kit, version 1. Rules and file list: <code>README.md</code>. Colours and type as CSS variables: <code>tokens.css</code>. Earlier options: <code>explorations/directions.html</code>.</p></footer>
+</div>
+</body>
+</html>

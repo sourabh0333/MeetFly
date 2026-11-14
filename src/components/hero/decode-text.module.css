@@ -1,0 +1,32 @@
+.text {
+  display: inline;
+}
+
+.word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.space {
+  white-space: pre;
+}
+
+/* Each letter keeps its own width; while scrambling, the real letter is hidden and a random one
+   is drawn centred over it. */
+.ch {
+  position: relative;
+  display: inline-block;
+}
+
+.ch[data-scrambled] {
+  color: transparent;
+}
+
+.glyph {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  translate: -50% 0;
+  color: var(--violet);
+  opacity: 0.85;
+}

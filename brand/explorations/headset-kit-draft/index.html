@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeetFly brand guide</title>
+<link rel="icon" href="icon/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--white); font: 400 16px/1.6 var(--font-text); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  .label { font: 500 var(--text-label)/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mist); }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; }
+  h1 { font-size: var(--text-display); line-height: 1.02; letter-spacing: var(--tracking-display); }
+  h2 { font-size: var(--text-h2); line-height: 1.08; letter-spacing: var(--tracking-heading); }
+  h3 { font-size: 1.05rem; font-weight: 600; }
+  p { color: var(--mist); max-width: 62ch; }
+  em.e { font-style: normal; color: var(--lime); }
+  code { font: 400 0.84em var(--font-mono); color: var(--white); }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 0; }
+  .top img { height: 44px; width: auto; display: block; margin-left: -4px; }
+  .top nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  .top a { color: var(--mist); text-decoration: none; font-size: 0.9rem; }
+  .top a:hover, .top a:focus-visible { color: var(--white); }
+  .cover { padding: 64px 0 76px; display: grid; gap: 20px; }
+  .cover p { font-size: var(--text-lead); }
+  section { padding: 60px 0; border-top: 1px solid var(--line); }
+  .head { display: grid; gap: 12px; margin-bottom: 30px; }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .card { background: var(--panel); border-radius: var(--radius-l); padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+  .card p { font-size: var(--text-small); }
+  .plate { border-radius: var(--radius-m); display: grid; place-items: center; padding: 30px 20px; min-height: 180px; }
+  .plate img { max-width: 100%; height: auto; display: block; }
+  .on-ink { background: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+  .on-paper { background: var(--paper); } .on-lime { background: var(--lime); }
+  .on-photo { background: linear-gradient(135deg, #3a2f6b, #1c5a6b); }
+  .file { font: 400 0.76rem var(--font-mono); color: var(--dim); overflow-wrap: anywhere; }
+  .hero-plate { min-height: 320px; padding: 40px 24px; }
+
+  .anat { background: var(--panel); border-radius: var(--radius-l); padding: 24px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+  .anat .plate { min-height: 240px; }
+  .anat ol { padding-left: 1.2em; color: var(--mist); display: grid; gap: 10px; font-size: 0.95rem; }
+  .anat ol b { color: var(--white); font-weight: 600; }
+
+  .space .box { outline: 1px dashed rgba(212, 255, 58, 0.7); background: rgba(212, 255, 58, 0.06); padding: 26px 30px; border-radius: 4px; }
+  .space img { height: 64px; width: auto; display: block; }
+  .sizes { display: flex; align-items: end; gap: 26px; flex-wrap: wrap; }
+  .sizes figure { display: grid; gap: 10px; justify-items: start; }
+  .dont { position: relative; }
+  .dont .plate { min-height: 140px; overflow: hidden; }
+  .dont .plate img { height: 56px; width: auto; }
+  .dont::after { content: "✕"; position: absolute; top: 12px; right: 14px; width: 24px; height: 24px; border-radius: 50%; background: var(--error); color: #2a0606; font: 700 13px/24px var(--font-text); text-align: center; }
+
+  .icons { display: flex; align-items: end; gap: 20px; flex-wrap: wrap; }
+  .icons img { display: block; }
+
+  .sw { border-radius: var(--radius-m); overflow: hidden; background: var(--panel); }
+  .sw b { display: block; height: 80px; }
+  .sw div { padding: 12px 14px 14px; display: grid; gap: 3px; }
+  .sw strong { font: 600 0.95rem var(--font-display); }
+  .sw span { font-size: 0.8rem; color: var(--mist); }
+  .ratio { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 18px; }
+  .ratio div { border-radius: var(--radius-m); padding: 16px 18px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; }
+  .ratio small { font: 500 0.75rem var(--font-mono); opacity: 0.85; }
+
+  .type { display: grid; gap: 24px; }
+  .spec { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 20px; align-items: baseline; padding-top: 20px; border-top: 1px solid var(--line); }
+  .spec:first-child { border-top: 0; padding-top: 0; }
+  .t-display { font: 700 var(--text-display)/1.02 var(--font-display); letter-spacing: var(--tracking-display); }
+  .t-h2 { font: 700 var(--text-h2)/1.08 var(--font-display); letter-spacing: var(--tracking-heading); }
+  .t-h3 { font: 600 var(--text-h3)/1.2 var(--font-display); }
+  .t-lead { font-size: var(--text-lead); color: var(--white); max-width: 52ch; }
+
+  .ui { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .tone { border-radius: var(--radius-l); padding: 26px; background: var(--color-bg); color: var(--color-text); display: grid; gap: 18px; align-content: start; box-shadow: inset 0 0 0 1px var(--color-line); }
+  .tone > img { height: 44px; width: auto; margin-left: -5px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { font: 600 0.95rem/1 var(--font-text); padding: 13px 22px; border-radius: var(--radius-round); background: var(--color-accent); color: var(--color-on-accent); border: 0; cursor: pointer; }
+  .btn.ghost { background: transparent; color: var(--color-text); box-shadow: inset 0 0 0 1.5px var(--color-line); }
+  .btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-accent) 55%, transparent); outline-offset: 2px; }
+  .chip { font: 500 0.82rem/1 var(--font-text); padding: 8px 12px; border-radius: var(--radius-round); box-shadow: inset 0 0 0 1px var(--color-line); color: var(--color-muted); }
+  .cue { border-radius: var(--radius-m); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-line); padding: 15px 17px; display: grid; gap: 8px; }
+  .cue .label { color: var(--color-accent-text); display: flex; align-items: center; gap: 8px; }
+  .cue .label i { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); }
+  .cue p { color: var(--color-text); max-width: none; font-weight: 500; }
+  .cue small { color: var(--color-muted); font-size: 0.82rem; }
+  .tone a { color: var(--color-accent-text); font-weight: 600; text-underline-offset: 3px; }
+  footer { padding: 36px 0 60px; border-top: 1px solid var(--line); }
+  footer p { font-size: var(--text-small); }
+  @media (max-width: 900px) { .g3, .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .anat, .ui { grid-template-columns: minmax(0, 1fr); } .top nav { display: none; } }
+  @media (max-width: 560px) { .g2, .g3 { grid-template-columns: minmax(0, 1fr); } .spec { grid-template-columns: minmax(0, 1fr); gap: 8px; } .cover { padding: 40px 0 52px; } section { padding: 46px 0; } .hero-plate { min-height: 200px; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <img src="logo/logo-on-dark.svg" alt="MeetFly" width="382" height="132">
+    <nav aria-label="Sections"><a href="#logo">Logo</a><a href="#icons">Icons</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#ui">In use</a></nav>
+  </div>
+
+  <header class="cover">
+    <span class="label">Brand guide · Version 2</span>
+    <h1>The name, <em class="e">wearing a headset.</em></h1>
+    <p>MeetFly’s logo is its own name, with a thin lime loop over the two e’s and a small microphone under them. This page shows the logo, its rules, the colours and the type. Every file it shows is in this folder.</p>
+  </header>
+
+  <section id="logo">
+    <div class="head"><span class="label">01 · Logo</span><h2>The logo</h2><p>The approved drawing, unchanged. The letters are outlines of Outfit Bold, so the files need no font.</p></div>
+    <div class="card"><div class="plate hero-plate on-ink"><img src="logo/logo-on-dark.svg" alt="MeetFly logo on dark" width="640"></div><h3>On dark: the default</h3><span class="file">logo/logo-on-dark.svg</span></div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card"><div class="plate on-paper"><img src="logo/logo-on-light.svg" alt="MeetFly logo on light" width="360"></div><h3>On light</h3><p>The icon turns violet: lime cannot be seen on a light background.</p><span class="file">logo/logo-on-light.svg</span></div>
+      <div class="card"><div class="plate on-lime"><img src="logo/logo-on-lime.svg" alt="MeetFly logo on lime" width="360"></div><h3>On lime</h3><p>The same ink and violet pair.</p><span class="file">logo/logo-on-lime.svg</span></div>
+      <div class="card"><div class="plate on-photo"><img src="logo/logo-mono-white.svg" alt="" width="360"></div><h3>One colour, white</h3><p>For photos and coloured backgrounds.</p><span class="file">logo/logo-mono-white.svg</span></div>
+      <div class="card"><div class="plate on-paper"><img src="logo/logo-mono-ink.svg" alt="" width="360"></div><h3>One colour, ink</h3><p>For print in a single colour.</p><span class="file">logo/logo-mono-ink.svg</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="label">02 · The icon</span><h2>What the icon is</h2></div>
+    <div class="anat">
+      <div class="plate on-ink"><img src="logo/symbol-on-dark.svg" alt="The two e’s with the headset" width="300"></div>
+      <ol>
+        <li><b>The loop</b> stands on the two e’s like the band of a pair of headphones. The e’s are the ear cups.</li>
+        <li><b>The hook</b> curves under the second e, like a headset’s microphone arm.</li>
+        <li><b>The capsule</b> at its end is the microphone.</li>
+        <li><b>Together</b> they say what MeetFly does: it sits in on your call and listens.</li>
+      </ol>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card space"><h3>Clear space</h3><div class="plate on-ink" style="min-height:0;padding:26px"><div class="box"><img src="logo/logo-on-dark.svg" alt="" width="186" height="64"></div></div><p>Keep the height of the letter e free on every side. The logo files already include it.</p></div>
+      <div class="card"><h3>Smallest sizes</h3>
+        <div class="sizes">
+          <figure><img src="logo/logo-on-dark.svg" alt="" width="96" height="33"><span class="file">Logo 96px wide</span></figure>
+          <figure><img src="logo/symbol-on-dark.svg" alt="" width="40" height="35"><span class="file">Symbol 40px</span></figure>
+          <figure><img src="icon/favicon.svg" alt="" width="24" height="24"><span class="file">Favicon 24px</span></figure>
+          <figure><img src="icon/favicon.svg" alt="" width="16" height="16"><span class="file">Favicon 16px</span></figure>
+        </div>
+        <p>Below 96px wide, use the symbol. Below 24px, use the favicon.</p></div>
+    </div>
+    <div class="grid g4" style="margin-top:16px">
+      <div class="card dont"><div class="plate on-ink"><img src="logo/logo-on-dark.svg" alt="" style="filter:hue-rotate(200deg)"></div><p>Don’t recolour the icon.</p></div>
+      <div class="card dont"><div class="plate on-ink"><img src="logo/logo-on-dark.svg" alt="" style="transform:scaleX(1.3);height:46px"></div><p>Don’t stretch it.</p></div>
+      <div class="card dont"><div class="plate on-ink"><img src="logo/logo-on-dark.svg" alt="" style="transform:rotate(-8deg)"></div><p>Don’t rotate it.</p></div>
+      <div class="card dont"><div class="plate on-paper"><img src="logo/logo-on-dark.svg" alt=""></div><p>Don’t use the dark version on light.</p></div>
+    </div>
+  </section>
+
+  <section id="icons">
+    <div class="head"><span class="label">03 · Icons</span><h2>App icon and favicon</h2><p>The two e’s with their headset, on a rounded tile. Ink is the default; lime is for places where a dark icon would disappear.</p></div>
+    <div class="grid g2">
+      <div class="card"><div class="icons"><img src="icon/app-icon.svg" alt="App icon" width="148" height="148"><img src="icon/app-icon.svg" alt="" width="72" height="72"><img src="icon/app-icon.svg" alt="" width="36" height="36"><img src="icon/favicon.svg" alt="" width="32" height="32"><img src="icon/favicon.svg" alt="" width="16" height="16"></div><h3>Ink tile</h3><span class="file">icon/app-icon.svg · icon/favicon.svg · icon/favicon.ico</span></div>
+      <div class="card"><div class="icons"><img src="icon/app-icon-lime.svg" alt="Alternative app icon" width="148" height="148"><img src="icon/app-icon-lime.svg" alt="" width="72" height="72"><img src="icon/app-icon-lime.svg" alt="" width="36" height="36"></div><h3>Lime tile</h3><span class="file">icon/app-icon-lime.svg</span></div>
+    </div>
+  </section>
+
+  <section id="colour">
+    <div class="head"><span class="label">04 · Colour</span><h2>Ink, white and <em class="e">one lime</em></h2><p>Lime is rare: the icon, one primary action per view, and things that are live. On light backgrounds the accent is violet.</p></div>
+    <div class="grid g4">
+      <div class="sw"><b style="background:#0b0a14;box-shadow:inset 0 0 0 1px #2b2a3a"></b><div><strong>Ink</strong><code>#0B0A14</code><span>Page on dark, text on light</span></div></div>
+      <div class="sw"><b style="background:#16151f;box-shadow:inset 0 0 0 1px #2b2a3a"></b><div><strong>Panel</strong><code>#16151F</code><span>Cards on Ink</span></div></div>
+      <div class="sw"><b style="background:#1f1e2b"></b><div><strong>Raised</strong><code>#1F1E2B</code><span>Hover, menus, inputs</span></div></div>
+      <div class="sw"><b style="background:#2b2a3a"></b><div><strong>Line</strong><code>#2B2A3A</code><span>Hairlines on Ink</span></div></div>
+      <div class="sw"><b style="background:#ffffff"></b><div><strong>White</strong><code>#FFFFFF</code><span>Text on Ink</span></div></div>
+      <div class="sw"><b style="background:#a9a7bd"></b><div><strong>Mist</strong><code>#A9A7BD</code><span>Secondary text on Ink</span></div></div>
+      <div class="sw"><b style="background:#d4ff3a"></b><div><strong>Lime</strong><code>#D4FF3A</code><span>The accent on dark</span></div></div>
+      <div class="sw"><b style="background:#141a00"></b><div><strong>Lime ink</strong><code>#141A00</code><span>Text on Lime</span></div></div>
+      <div class="sw"><b style="background:#f4f4f0"></b><div><strong>Paper</strong><code>#F4F4F0</code><span>Page on light</span></div></div>
+      <div class="sw"><b style="background:#5b2eff"></b><div><strong>Violet</strong><code>#5B2EFF</code><span>The accent on light and on Lime</span></div></div>
+      <div class="sw"><b style="background:#5a5870"></b><div><strong>Stone</strong><code>#5A5870</code><span>Secondary text on Paper</span></div></div>
+      <div class="sw"><b style="background:linear-gradient(90deg,#5bd6a0 0 33.3%,#f5c451 0 66.6%,#ff6b6b 0)"></b><div><strong>Status</strong><code>#5BD6A0 #F5C451 #FF6B6B</code><span>OK, careful, error</span></div></div>
+    </div>
+    <div class="ratio">
+      <div style="background:#0b0a14;color:#fff;box-shadow:inset 0 0 0 1px #2b2a3a">White on Ink <small>19.7:1</small></div>
+      <div style="background:#0b0a14;color:#a9a7bd;box-shadow:inset 0 0 0 1px #2b2a3a">Mist on Ink <small>8.4:1</small></div>
+      <div style="background:#0b0a14;color:#d4ff3a;box-shadow:inset 0 0 0 1px #2b2a3a">Lime on Ink <small>17:1</small></div>
+      <div style="background:#d4ff3a;color:#141a00">Ink on Lime <small>15.4:1</small></div>
+      <div style="background:#f4f4f0;color:#0b0a14">Ink on Paper <small>17.8:1</small></div>
+      <div style="background:#f4f4f0;color:#5b2eff">Violet on Paper <small>5.8:1</small></div>
+    </div>
+  </section>
+
+  <section id="type">
+    <div class="head"><span class="label">05 · Type</span><h2>Outfit, everywhere</h2><p>Outfit is the logo’s own typeface, so the site and the app use it too: bold for headings, regular for reading. JetBrains Mono is for small labels and times. The sample words are placeholders.</p></div>
+    <div class="card type">
+      <div class="spec"><span class="label">Display · Outfit 700</span><div class="t-display">Aa Meet<em class="e">Fly</em></div></div>
+      <div class="spec"><span class="label">Heading · Outfit 700</span><div class="t-h2">A heading at section size</div></div>
+      <div class="spec"><span class="label">Subheading · Outfit 600</span><div class="t-h3">A smaller heading for cards and lists</div></div>
+      <div class="spec"><span class="label">Lead · Outfit 400</span><p class="t-lead">A lead paragraph introduces a section in one or two sentences, a little larger than body text.</p></div>
+      <div class="spec"><span class="label">Body · Outfit 400</span><p>Body text is 16px with a 1.6 line height and lines of about 62 characters. Numbers such as 0123456789 and times such as 14:05 stay easy to read.</p></div>
+      <div class="spec"><span class="label">Label · Mono 500</span><span class="label" style="color:var(--white)">Live · 00:12:48 · Say next</span></div>
+    </div>
+  </section>
+
+  <section id="ui">
+    <div class="head"><span class="label">06 · In use</span><h2>Buttons, chips and a suggestion card</h2><p>The same pieces on both tones. Ink is the default; Paper is for long reading pages. The card’s words are an illustration.</p></div>
+    <div class="ui">
+      <div class="tone" data-tone="ink">
+        <img src="logo/logo-on-dark.svg" alt="MeetFly" width="128" height="44">
+        <div class="row"><button class="btn" type="button">Primary action</button><button class="btn ghost" type="button">Secondary</button></div>
+        <div class="row"><span class="chip">Chip</span><span class="chip">Another chip</span><a href="#ui">A text link</a></div>
+        <div class="cue"><span class="label"><i></i>Say next</span><p>“We can start on Monday with five seats.”</p><small>Suggested from the last question</small></div>
+      </div>
+      <div class="tone" data-tone="paper">
+        <img src="logo/logo-on-light.svg" alt="MeetFly" width="128" height="44">
+        <div class="row"><button class="btn" type="button">Primary action</button><button class="btn ghost" type="button">Secondary</button></div>
+        <div class="row"><span class="chip">Chip</span><span class="chip">Another chip</span><a href="#ui">A text link</a></div>
+        <div class="cue"><span class="label"><i></i>Say next</span><p>“We can start on Monday with five seats.”</p><small>Suggested from the last question</small></div>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>MeetFly brand kit, version 2. Rules and file list: <code>README.md</code>. Colours and type as CSS variables: <code>tokens.css</code>. Every earlier option: the <code>explorations</code> folder.</p></footer>
+</div>
+</body>
+</html>

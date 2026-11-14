@@ -1,0 +1,71 @@
+/* MeetFly brand tokens. "Night flight": dark surfaces, one warm accent.
+   Contrast ratios are against the surface named in each comment (WCAG 2.x). */
+:root {
+  /* Brand */
+  --night: #0d0d12;        /* page background on dark; ink on light */
+  --panel: #17171f;        /* cards and panels on night */
+  --raised: #20202b;       /* hover, menus, inputs on night */
+  --line: #2c2c38;         /* hairlines on night (decorative only) */
+  --chalk: #f4f3ef;        /* text on night 17.5:1; page background on light */
+  --haze: #a3a2ad;         /* secondary text on night 7.7:1, on panel 7.1:1 */
+  --dim: #7c7b87;          /* captions on night 4.7:1; not below 14px */
+  --ember: #ff8a4c;        /* the accent: on night 8.3:1 */
+  --ember-soft: #ffa574;   /* hover for ember; on night 10.1:1 */
+  --ember-ink: #1c0d04;    /* text on ember 8.1:1 */
+  --ember-deep: #b4430c;   /* accent as text on light: on chalk 5.1:1, on white 5.6:1 */
+
+  /* Light surfaces */
+  --paper: #ffffff;
+  --stone: #5e5d68;        /* secondary text on chalk 5.8:1, on white 6.5:1 */
+  --line-light: #dedcd5;
+
+  /* Status. Ember is never used for status. */
+  --ok: #5bd6a0;
+  --warn: #f5c451;
+  --error: #ff6b6b;
+
+  /* Type */
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;      /* headings, wordmark; 600–700 */
+  --font-text: "Manrope", ui-sans-serif, system-ui, sans-serif;      /* text and interface; 400–600 */
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;     /* labels, timecodes */
+
+  --text-display: clamp(2.6rem, 1.4rem + 4.6vw, 5rem);
+  --text-h2: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
+  --text-h3: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem);
+  --text-lead: clamp(1.06rem, 1rem + 0.35vw, 1.25rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: 0.72rem;   /* mono, uppercase, 0.08em tracking */
+  --tracking-display: -0.045em;
+  --tracking-heading: -0.03em;
+
+  /* Shape */
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+  --radius-round: 999px;   /* buttons and chips */
+}
+
+/* Role tokens: components read these, never the brand colours directly. */
+:root,
+[data-tone="night"] {
+  --color-bg: var(--night);
+  --color-surface: var(--panel);
+  --color-text: var(--chalk);
+  --color-muted: var(--haze);
+  --color-line: var(--line);
+  --color-accent: var(--ember);
+  --color-accent-text: var(--ember);
+  --color-on-accent: var(--ember-ink);
+}
+
+[data-tone="light"] {
+  --color-bg: var(--chalk);
+  --color-surface: var(--paper);
+  --color-text: var(--night);
+  --color-muted: var(--stone);
+  --color-line: var(--line-light);
+  --color-accent: var(--ember);
+  --color-accent-text: var(--ember-deep);
+  --color-on-accent: var(--ember-ink);
+}

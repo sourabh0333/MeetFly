@@ -1,0 +1,70 @@
+/* MeetFly brand tokens. Dark surfaces, white text, one lime accent.
+   Contrast ratios are against the surface named in each comment (WCAG 2.x). */
+:root {
+  /* Brand */
+  --ink: #0b0a14;          /* page background on dark; text on light and on lime */
+  --panel: #171622;        /* cards and panels on ink */
+  --raised: #1f1e2c;       /* hover, menus, inputs on ink */
+  --line: #262536;         /* hairlines on ink (decorative only) */
+  --white: #ffffff;        /* text on ink 19.7:1 */
+  --mist: #a9a7bd;         /* secondary text on ink 8.4:1, on panel 7.6:1 */
+  --dim: #807e96;          /* captions on ink 5.0:1; not below 14px */
+  --lime: #d4ff3a;         /* the accent: on ink 17.0:1. The headphones, primary buttons, live states */
+  --lime-soft: #e2ff7a;    /* lime on hover */
+
+  /* Light surfaces. Lime is invisible on light (1.0:1), so violet takes its place there. */
+  --paper: #f4f4f0;
+  --violet: #5b2eff;       /* accent on light: on paper 5.8:1, on white 6.4:1 */
+  --stone: #5a586b;        /* secondary text on paper 6.3:1 */
+  --line-light: #dcdcd6;
+
+  /* Status. Lime is never used for status. */
+  --ok: #5bd6a0;
+  --warn: #f5c451;
+  --error: #ff6b6b;
+
+  /* Type */
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;   /* headings 700; the logo's typeface */
+  --font-text: "Outfit", ui-sans-serif, system-ui, sans-serif;      /* text 400–500 */
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;    /* labels, timecodes */
+
+  --text-display: clamp(2.6rem, 1.4rem + 4.6vw, 5rem);
+  --text-h2: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
+  --text-h3: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem);
+  --text-lead: clamp(1.06rem, 1rem + 0.35vw, 1.25rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: 0.72rem;   /* mono, uppercase, 0.08em tracking */
+  --tracking-display: -0.025em;
+  --tracking-heading: -0.02em;
+
+  /* Shape */
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+  --radius-round: 999px;
+}
+
+/* Role tokens: components read these, never the brand colours directly. */
+:root,
+[data-tone="ink"] {
+  --color-bg: var(--ink);
+  --color-surface: var(--panel);
+  --color-text: var(--white);
+  --color-muted: var(--mist);
+  --color-line: var(--line);
+  --color-accent: var(--lime);
+  --color-accent-text: var(--lime);
+  --color-on-accent: var(--ink);
+}
+
+[data-tone="light"] {
+  --color-bg: var(--paper);
+  --color-surface: #ffffff;
+  --color-text: var(--ink);
+  --color-muted: var(--stone);
+  --color-line: var(--line-light);
+  --color-accent: var(--violet);
+  --color-accent-text: var(--violet);
+  --color-on-accent: #ffffff;
+}

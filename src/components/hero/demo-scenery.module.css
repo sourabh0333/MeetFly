@@ -1,0 +1,112 @@
+.scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Sound ripples: rings that grow out from behind the app and fade. */
+.ripples circle {
+  fill: none;
+  stroke: #6a48ff;
+  stroke-width: 1.4;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ripple 9s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  15% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+
+/* The wave hills sway very slightly. */
+.far,
+.mid,
+.near {
+  animation: sway 14s ease-in-out infinite alternate;
+}
+
+.mid {
+  animation-duration: 11s;
+  animation-direction: alternate-reverse;
+}
+
+.near {
+  animation-duration: 17s;
+}
+
+@keyframes sway {
+  to {
+    transform: translateX(-26px);
+  }
+}
+
+/* Equaliser bars bounce like a voice. */
+.bars rect {
+  fill: url(#dsBar);
+  opacity: 0.55;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: eq 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes eq {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Motes of light drift up and fade. */
+.motes circle {
+  opacity: 0;
+  animation: rise 9s linear infinite;
+}
+
+@keyframes rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-160px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ripples circle,
+  .far,
+  .mid,
+  .near,
+  .bars rect,
+  .motes circle {
+    animation: none;
+  }
+
+  .ripples circle:first-child {
+    opacity: 0.25;
+    transform: scale(1.4);
+  }
+
+  .bars rect {
+    transform: scaleY(0.7);
+  }
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeetFly logo: the headset loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #0e0d16; color: #f2f1f6; font: 15px/1.55 "Outfit", system-ui, sans-serif; padding: 44px 24px 72px; }
+  .page { max-width: 1120px; margin: 0 auto; }
+  .mono { font: 500 11px/1 "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #8c8aa3; }
+  header h1 { font-weight: 700; font-size: 32px; line-height: 1.12; letter-spacing: -0.02em; margin-top: 12px; }
+  header p { max-width: 66ch; margin-top: 10px; color: #a9a7bd; }
+
+  .wm { font: 700 1em/1 "Outfit", sans-serif; letter-spacing: -0.012em; color: var(--fg); white-space: nowrap; display: inline-block; position: relative; }
+  .wm .t { position: relative; }                       /* letters sit in front of the band */
+  .a { display: inline-block; width: 0; height: 0; position: relative; vertical-align: baseline; }
+  .a svg { position: absolute; left: 0; bottom: 0; width: 1em; height: 1em; overflow: visible; }
+  .band { fill: none; stroke: var(--ac); stroke-width: 78; }
+  .boom { fill: none; stroke: var(--ac); stroke-width: 52; stroke-linecap: round; }
+  .tip { fill: var(--ac); }
+  .cups .ee { color: var(--ac); }                      /* option: the ear cups take the accent colour too */
+  .guide { display: inline-block; vertical-align: baseline; width: 0; height: 0; position: relative; }
+  .guide i { position: absolute; left: -0.7em; width: 5.2em; height: 0; border-top: 1px dashed #e0497a; }
+
+  .ink { --bg: #0b0a14; --fg: #ffffff; --ac: #d4ff3a; }
+  .paper { --bg: #f4f4f0; --fg: #0b0a14; --ac: #5b2eff; }
+  .lime { --bg: #d4ff3a; --fg: #0b0a14; --ac: #5b2eff; }
+  .ink, .paper, .lime { background: var(--bg); }
+  .panel { background: #171622; border-radius: 22px; box-shadow: inset 0 0 0 1px #262536; padding: 18px; margin-top: 16px; display: grid; gap: 14px; }
+  .panel > .mono, .panel > p { padding: 0 4px; } .panel > p { color: #a9a7bd; font-size: 14px; }
+  .hero { border-radius: 16px; display: grid; place-items: center; padding: 104px 16px 88px; font-size: clamp(50px, 10.5vw, 132px); box-shadow: inset 0 0 0 1px #262536; overflow: hidden; }
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .box { border-radius: 16px; display: grid; place-items: center; padding: 58px 14px 46px; font-size: clamp(30px, 4.4vw, 52px); position: relative; overflow: hidden; }
+  .box.line { box-shadow: inset 0 0 0 1px #262536; }
+  .box > .mono { position: absolute; top: 14px; left: 16px; color: color-mix(in srgb, var(--fg) 55%, transparent); }
+  .box > .pick { position: absolute; top: 10px; right: 12px; left: auto; color: #0b0a14; background: #d4ff3a; padding: 5px 8px; border-radius: 6px; }
+  .cols { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; margin-top: 16px; }
+  .cols .panel { margin-top: 0; align-content: start; }
+  ul { padding-left: 1.1em; color: #a9a7bd; display: grid; gap: 7px; font-size: 14px; } ul b { color: #f2f1f6; font-weight: 500; }
+  .icons { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .tile { border-radius: 22%; display: grid; place-items: center; flex: none; width: var(--s); height: var(--s); font-size: calc(var(--s) * .52); padding-top: calc(var(--s) * .05); }
+  .tile.edge { box-shadow: inset 0 0 0 1px #262536; }
+  .sizes { display: flex; flex-wrap: wrap; align-items: baseline; gap: 28px; padding: 26px 22px 18px; border-radius: 14px; }
+  @media (max-width: 820px) { .two, .three, .cols { grid-template-columns: minmax(0, 1fr); } .hero { padding: 64px 10px 56px; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <span class="mono">MeetFly · Logo · Round 16</span>
+    <h1>The headset loop, in the style you liked</h1>
+    <p>Back to the look of your screenshot: a thin, round loop standing tall over the two e’s, with a small microphone arm. I kept that style and only cleaned it up.</p>
+  </header>
+  <div class="panel"><div class="hero ink"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></div>
+    <div class="two"><div class="box paper"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></div><div class="box lime"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></div></div></div>
+  <div class="panel"><span class="mono">Three versions of the same idea</span>
+    <div class="three"><div class="box ink line"><span class="mono">A · Loop and mic arm</span><span class="mono pick">My pick</span><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></div><div class="box ink line"><span class="mono">B · Loop only</span><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></div><div class="box ink line"><span class="mono">C · Bright ear cups</span><span class="wm cups"><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></div></div>
+    <p>A is your screenshot, cleaned up. B drops the microphone arm for a simpler mark. C colours the two e’s as well, so the headset stands out more.</p></div>
+  <div class="cols">
+    <div class="panel"><span class="mono">How it lines up</span><div class="box paper" style="padding:64px 14px 52px"><span class="wm "><span class="guide" aria-hidden="true"><i style="bottom:0"></i><i style="bottom:0.484em"></i><i style="bottom:0.719em"></i></span><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></div>
+      <ul><li><b>The loop is a true half-circle</b>, running from the centre of one e to the centre of the other.</li><li><b>It rises above the capitals on purpose</b>, like the dot of an i, so it is the first thing you notice.</li><li><b>The loop passes behind the letters</b>, so it joins each e cleanly with no visible end.</li><li><b>The microphone arm</b> leaves the second e, curves under it and ends in a small capsule, inside the depth of the y’s tail.</li></ul></div>
+    <div class="panel"><span class="mono">App icon and favicon</span>
+      <div class="icons"><div class="tile ink edge" style="--s:104px"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M273 -430V-543.0A268.0 268.0 0 0 1 809 -543.0V-430"/><path class="boom" d="M1005 -150C1005 70 909 112 803 112"/><rect class="tip" x="659" y="72" width="150" height="80" rx="40"/></svg></span><span class="t"><span class="ee">ee</span></span></span></div><div class="tile lime" style="--s:104px"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M273 -430V-543.0A268.0 268.0 0 0 1 809 -543.0V-430"/><path class="boom" d="M1005 -150C1005 70 909 112 803 112"/><rect class="tip" x="659" y="72" width="150" height="80" rx="40"/></svg></span><span class="t"><span class="ee">ee</span></span></span></div><div class="tile ink edge" style="--s:52px"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M273 -430V-543.0A268.0 268.0 0 0 1 809 -543.0V-430"/><path class="boom" d="M1005 -150C1005 70 909 112 803 112"/><rect class="tip" x="659" y="72" width="150" height="80" rx="40"/></svg></span><span class="t"><span class="ee">ee</span></span></span></div><div class="tile lime" style="--s:32px"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M273 -430V-543.0A268.0 268.0 0 0 1 809 -543.0V-430"/><path class="boom" d="M1005 -150C1005 70 909 112 803 112"/><rect class="tip" x="659" y="72" width="150" height="80" rx="40"/></svg></span><span class="t"><span class="ee">ee</span></span></span></div><div class="tile ink edge" style="--s:20px"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M273 -430V-543.0A268.0 268.0 0 0 1 809 -543.0V-430"/><path class="boom" d="M1005 -150C1005 70 909 112 803 112"/><rect class="tip" x="659" y="72" width="150" height="80" rx="40"/></svg></span><span class="t"><span class="ee">ee</span></span></span></div></div>
+      <p>The two e’s with their loop and microphone arm make the icon: a headset that is also the middle of the name.</p>
+      <span class="mono">Small sizes</span>
+      <div class="sizes paper"><span style="font-size:34px"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></span><span style="font-size:24px"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></span><span style="font-size:17px"><span class="wm "><span class="a"><svg viewBox="0 -1000 1000 1000" aria-hidden="true"><path class="band" d="M1119 -430V-543.0A268.0 268.0 0 0 1 1655 -543.0V-430"/><path class="boom" d="M1851 -150C1851 70 1755 112 1649 112"/><rect class="tip" x="1505" y="72" width="150" height="80" rx="40"/></svg></span><span class="t">M<span class="ee">ee</span>tFly</span></span></span></div></div>
+  </div>
+</div>
+</body>
+</html>

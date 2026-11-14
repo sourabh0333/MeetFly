@@ -1,0 +1,147 @@
+/* Brand tokens (from brand/tokens.css) and element defaults.
+   Component styles live in a CSS Module beside each component. */
+:root {
+  --ink: #0b0a14;
+  --panel: #171622;
+  --raised: #1f1e2c;
+  --line: #262536;
+  --white: #ffffff;
+  --mist: #a9a7bd;
+  --dim: #807e96;
+  --lime: #d4ff3a;
+  --lime-soft: #e2ff7a;
+  --paper: #f4f4f0;
+  --violet: #5b2eff;
+  --stone: #5a586b;
+  --line-light: #dcdcd6;
+  --ok: #5bd6a0;
+  --warn: #f5c451;
+  --error: #ff6b6b;
+
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-text: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, Menlo, monospace;
+
+  --text-display: clamp(2.7rem, 1.2rem + 5.4vw, 5.4rem);
+  --text-h2: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
+  --text-h3: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem);
+  --text-lead: clamp(1.08rem, 1rem + 0.4vw, 1.3rem);
+  --text-small: 0.875rem;
+  --text-label: 0.72rem;
+
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+  --radius-round: 999px;
+
+  --column: 1200px;
+  --gutter: clamp(18px, 4vw, 40px);
+  --header-h: 68px;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Role tokens: components read these. The site is light (decided 2026-11-14: the app itself is white,
+     so its real footage sits naturally on a light page). Lime is a highlighter and a fill, never text on white. */
+  --color-bg: #fbfbf8;
+  --color-surface: #ffffff;
+  --color-text: var(--ink);
+  --color-muted: var(--stone);
+  --color-line: rgba(11, 10, 20, 0.09);
+  --color-accent: var(--ink);
+  --color-on-accent: #ffffff;
+  --color-link: var(--violet);
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: 400 1rem/1.6 var(--font-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  background: var(--lime);
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: var(--radius-s);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
