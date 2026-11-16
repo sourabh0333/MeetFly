@@ -1,0 +1,528 @@
+/* "Where your call goes": text | orbits | text, then a row of three facts. Same family as the
+   other sections, its own pattern (an orbit diagram). */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --d: 500px; /* the orbit diagram's size */
+  --r1: calc(var(--d) * 0.27); /* inner orbit radius */
+  --r2: calc(var(--d) * 0.46); /* outer orbit radius */
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 120px) var(--gutter);
+  overflow-x: clip;
+}
+
+/* ---------- Header (as in the other sections) ---------- */
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto clamp(32px, 5vh, 56px);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px var(--color-line),
+    0 6px 16px -10px rgba(43, 26, 120, 0.3);
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.lead {
+  margin: 0;
+  max-width: 58ch;
+  font-size: var(--text-lead);
+  line-height: 1.55;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+/* Rise in when first seen. */
+.head,
+.side,
+.orbits,
+.facts li {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+.orbits {
+  transform: scale(0.9);
+  transition-delay: 0.1s;
+}
+
+.side[data-local] {
+  transform: translateX(-24px);
+  transition-delay: 0.3s;
+}
+
+.side[data-out] {
+  transform: translateX(24px);
+  transition-delay: 0.4s;
+}
+
+.facts li {
+  transition-delay: calc(0.5s + var(--i) * 0.08s);
+}
+
+.section[data-in] .head,
+.section[data-in] .side,
+.section[data-in] .orbits,
+.section[data-in] .facts li {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Body: text | orbits | text ---------- */
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--d) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 3vw, 48px);
+}
+
+.side {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 12px;
+  max-width: 300px;
+}
+
+.side[data-local] {
+  justify-self: end;
+  text-align: right;
+  justify-items: end;
+}
+
+/* A soft wash behind the words, so the page wave stays faint there. */
+.side::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -50px -60px;
+  background: radial-gradient(closest-side, var(--color-bg) 62%, transparent);
+  pointer-events: none;
+}
+
+.sideTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.side[data-local] .sideTitle {
+  flex-direction: row-reverse;
+}
+
+.sideTitle span {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+.side[data-local] .sideTitle span {
+  background: color-mix(in srgb, #8f74ff 28%, #fff);
+}
+
+.side[data-out] .sideTitle span {
+  background: color-mix(in srgb, #b9e639 40%, #fff);
+}
+
+.sideTitle svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sideText {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.side ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.side[data-local] ul {
+  justify-content: flex-end;
+}
+
+.side li {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.05);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+/* ---------- The orbits ---------- */
+.orbits {
+  position: relative;
+  width: var(--d);
+  aspect-ratio: 1;
+}
+
+.glow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side at 45% 45%, rgba(143, 116, 255, 0.45), transparent 72%),
+    radial-gradient(closest-side at 70% 55%, rgba(212, 255, 58, 0.35), transparent 70%);
+  filter: blur(14px);
+  animation: breathe 6s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  translate: -50% -50%;
+}
+
+.ring[data-inner] {
+  width: calc(var(--r1) * 2);
+  height: calc(var(--r1) * 2);
+  border: 1.5px solid rgba(91, 46, 255, 0.28);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.ring[data-outer] {
+  width: calc(var(--r2) * 2);
+  height: calc(var(--r2) * 2);
+  border: 1.5px dashed rgba(11, 10, 20, 0.14);
+}
+
+/* Inner orbit: the local things circle slowly, staying upright. */
+.spin {
+  position: absolute;
+  inset: 0;
+  animation: orbit 48s linear infinite;
+}
+
+@keyframes orbit {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.sat,
+.station {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: rotate(var(--a)) translateX(var(--r1)) rotate(calc(-1 * var(--a)));
+}
+
+.station {
+  transform: rotate(var(--a)) translateX(var(--r2)) rotate(calc(-1 * var(--a)));
+}
+
+.upright {
+  display: block;
+  animation: orbit 48s linear infinite reverse;
+}
+
+.chip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% -50%;
+  width: max-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 13px 8px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(11, 10, 20, 0.05),
+    0 12px 26px -12px rgba(43, 26, 120, 0.45);
+  backdrop-filter: blur(10px);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chip svg {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  padding: 6px;
+  border-radius: 50%;
+  background: color-mix(in srgb, #8f74ff 28%, #fff);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The services on the outer orbit: lime, and outside the "home" ring. */
+.chip[data-out] {
+  background: var(--ink);
+  color: #fff;
+}
+
+.chip[data-out] svg {
+  background: var(--lime);
+}
+
+/* Beams from the centre to each service, with dots travelling out. */
+.beam {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--r2);
+  height: 2px;
+  margin-top: -1px;
+  transform-origin: 0 50%;
+  rotate: var(--a);
+  background: linear-gradient(90deg, transparent 30%, rgba(91, 46, 255, 0.35) 55%, rgba(185, 230, 57, 0.6));
+}
+
+.beam i {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: var(--violet);
+  box-shadow: 0 0 10px rgba(91, 46, 255, 0.8);
+  opacity: 0;
+  animation: send 1.8s ease-in infinite;
+}
+
+@keyframes send {
+  0% {
+    opacity: 0;
+    left: 30%;
+  }
+  20% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    left: 88%;
+  }
+}
+
+/* "Your computer" at the centre. */
+.centre {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: calc(var(--d) * 0.3);
+  aspect-ratio: 1;
+  place-content: center;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow:
+    0 0 0 8px rgba(255, 255, 255, 0.85),
+    0 0 0 9px rgba(91, 46, 255, 0.25),
+    0 24px 50px -18px rgba(43, 26, 120, 0.7);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.centre img {
+  border-radius: 10px;
+}
+
+/* ---------- Facts ---------- */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 40px);
+  max-width: 980px;
+  margin: clamp(48px, 7vh, 80px) auto 0;
+  padding: 26px 0 0;
+  border-top: 1px solid var(--color-line);
+  list-style: none;
+}
+
+.facts li {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+
+.factIcon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: var(--ink);
+}
+
+.factIcon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.facts b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+
+.facts li > span:last-child {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+/* ---------- Narrower screens: orbits on top, the two texts side by side under them ---------- */
+@media (max-width: 1080px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    justify-items: center;
+    row-gap: 36px;
+  }
+
+  .orbits {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .side[data-local],
+  .side[data-out] {
+    justify-self: stretch;
+    max-width: none;
+    text-align: left;
+    justify-items: start;
+  }
+
+  .side[data-local] .sideTitle {
+    flex-direction: row;
+  }
+
+  .side[data-local] ul {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    --d: min(340px, 86vw);
+  }
+
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chip {
+    padding: 6px 10px 6px 7px;
+    font-size: 0.68rem;
+  }
+
+  .chip svg {
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+  }
+
+  .centre {
+    font-size: 0.72rem;
+  }
+
+  .centre img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head,
+  .side,
+  .orbits,
+  .facts li {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .glow,
+  .spin,
+  .upright,
+  .beam i {
+    animation: none;
+  }
+}

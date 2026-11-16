@@ -1,0 +1,129 @@
+/* The footer, light: links between rules, then a giant faded MeetFly wordmark where the page wave ends. */
+.footer {
+  position: relative;
+  overflow: hidden;
+}
+
+.wrap {
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.top {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 40px;
+  padding: 36px 0;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.top::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -40px -60px -20px;
+  background: radial-gradient(closest-side, var(--color-bg) 78%, transparent);
+  pointer-events: none;
+}
+
+.brand {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.brand img {
+  height: 34px;
+  width: auto;
+}
+
+.brand p {
+  margin: 0;
+  max-width: 32ch;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.groupTitle {
+  margin: 0 0 14px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.groups ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.groups a {
+  color: var(--ink);
+  font-size: 0.98rem;
+  text-decoration: none;
+  background: linear-gradient(var(--lime), var(--lime)) 0 100% / 0 40% no-repeat;
+  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.groups a:hover {
+  background-size: 100% 40%;
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  font-size: 0.86rem;
+  color: var(--color-muted);
+}
+
+.bottom p {
+  margin: 0;
+}
+
+.top2 {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.top2:hover {
+  color: var(--violet);
+}
+
+.giant {
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 8px auto 0;
+  padding: 0 calc(var(--gutter) * 0.5);
+  line-height: 0;
+  mask-image: linear-gradient(to bottom, #000 10%, transparent 92%);
+  opacity: 0.3;
+}
+
+.giant img {
+  display: block;
+  width: 100%;
+  height: auto;
+  translate: 0 18%;
+}
+
+@media (max-width: 760px) {
+  .top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

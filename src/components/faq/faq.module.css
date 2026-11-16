@@ -1,0 +1,241 @@
+/* FAQ as a large editorial accordion across the full width. No pinning, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 120px) var(--gutter);
+  overflow-x: clip;
+}
+
+.list {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-line);
+}
+
+/* A soft wash so the page wave stays faint behind the questions. */
+.list::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -30px -60px;
+  background: radial-gradient(closest-side, var(--color-bg) 85%, transparent);
+  pointer-events: none;
+}
+
+.row {
+  position: relative;
+  border-bottom: 1px solid var(--color-line);
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.8s var(--ease);
+  transition-delay: calc(0.08s + var(--i) * 0.05s);
+}
+
+.section[data-in] .row {
+  opacity: 1;
+  transform: none;
+}
+
+/* A lime line sweeps across the row's foot on hover, and stays violet when open. */
+.row::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--lime);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 0.6s var(--ease);
+}
+
+.row[data-open]::after {
+  background: linear-gradient(90deg, var(--violet), var(--lime));
+  transform: scaleX(1);
+}
+
+@media (hover: hover) {
+  .row:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.row h3 {
+  margin: 0;
+}
+
+.row button {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: clamp(12px, 2vw, 28px);
+  width: 100%;
+  min-height: 96px;
+  border: 0;
+  padding: 18px 0;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.n {
+  font: 500 0.82rem / 1 var(--font-mono);
+  color: rgba(11, 10, 20, 0.3);
+  transition: color 0.3s;
+}
+
+.row[data-open] .n {
+  color: var(--violet);
+}
+
+.q {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1rem + 1.5vw, 2.3rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: rgba(11, 10, 20, 0.7);
+  transition:
+    color 0.3s,
+    transform 0.5s var(--ease);
+}
+
+.row[data-open] .q {
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .row button:hover .q {
+    color: var(--ink);
+    transform: translateX(8px);
+  }
+}
+
+/* The plus that turns into a cross. */
+.plus {
+  position: relative;
+  justify-self: end;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(11, 10, 20, 0.05);
+  transition:
+    background-color 0.35s,
+    transform 0.5s var(--ease);
+}
+
+.plus i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 16px;
+  height: 2px;
+  margin: -1px 0 0 -8px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform 0.45s var(--ease);
+}
+
+.plus i:last-child {
+  transform: rotate(90deg);
+}
+
+.row[data-open] .plus {
+  background: var(--ink);
+  transform: rotate(135deg);
+}
+
+.row[data-open] .plus i {
+  background: var(--lime);
+}
+
+@media (hover: hover) {
+  .row:not([data-open]) button:hover .plus {
+    background: var(--violet);
+  }
+
+  .row:not([data-open]) button:hover .plus i {
+    background: #fff;
+  }
+}
+
+/* The answer: a smooth height reveal, set to the right. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s var(--ease);
+}
+
+.row[data-open] .panel {
+  grid-template-rows: 1fr;
+}
+
+.inner {
+  overflow: hidden;
+}
+
+.a {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 16px;
+  max-width: 760px;
+  margin: 0 0 0 calc(64px + clamp(12px, 2vw, 28px));
+  padding: 0 0 30px;
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+  line-height: 1.6;
+  color: #3a3550;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s var(--ease);
+}
+
+.row[data-open] .a {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.15s;
+}
+
+.a img {
+  margin-top: 2px;
+  border-radius: 7px;
+}
+
+@media (max-width: 640px) {
+  .row button {
+    grid-template-columns: 36px minmax(0, 1fr) 40px;
+    min-height: 80px;
+  }
+
+  .plus {
+    width: 38px;
+    height: 38px;
+  }
+
+  .a {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .a {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .panel {
+    transition: none;
+  }
+}

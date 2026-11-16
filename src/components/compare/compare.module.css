@@ -1,0 +1,609 @@
+/* "Note-taker vs copilot": a switchable constellation. Same family as the other sections (width,
+   header, glass, glow, violet and lime), its own pattern: a switch, the call in the middle, eight
+   tiles wired to it in two gentle arcs. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --app-line: #e8e4dd;
+  --app-muted: #918b80;
+  --app-primary: #4f46e5;
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 120px) var(--gutter);
+  overflow-x: clip;
+}
+
+/* ---------- Header (as in the other sections) ---------- */
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px var(--color-line),
+    0 6px 16px -10px rgba(43, 26, 120, 0.3);
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.lead {
+  margin: 0;
+  max-width: 58ch;
+  font-size: var(--text-lead);
+  line-height: 1.55;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+/* Rise in when first seen. */
+.head,
+.controls,
+.hub,
+.tile {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease),
+    filter 0.5s ease;
+}
+
+.controls {
+  transition-delay: 0.1s;
+}
+
+.hub {
+  transform: translateY(26px) scale(0.96);
+  transition-delay: 0.2s;
+}
+
+/* Tiles rise in one by one; later, dimming and lighting ripple across them the same way. */
+.tile {
+  transition-delay: calc(0.35s + var(--i) * 0.06s);
+}
+
+.section[data-in] .tile {
+  transition-duration: 0.5s, 0.6s, 0.5s;
+  transition-delay: calc(var(--i) * 0.05s);
+}
+
+.section[data-in] .head,
+.section[data-in] .controls,
+.section[data-in] .hub,
+.section[data-in] .tile {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- The switch ---------- */
+.controls {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin-bottom: clamp(40px, 6vh, 64px);
+}
+
+.switch {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0 1px var(--color-line),
+    0 12px 30px -16px rgba(43, 26, 120, 0.4);
+  backdrop-filter: blur(14px);
+}
+
+/* The sliding thumb: grey on Note-taker, ink on MeetFly. */
+.thumb {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  width: calc(50% - 5px);
+  border-radius: 999px;
+  background: var(--ink);
+  box-shadow: 0 8px 20px -8px rgba(11, 10, 20, 0.55);
+  transform: translateX(100%);
+  transition:
+    transform 0.55s var(--ease),
+    background-color 0.4s;
+}
+
+.section[data-mode="notes"] .thumb {
+  transform: none;
+  background: var(--stone);
+}
+
+.switch button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 168px;
+  height: 46px;
+  border: 0;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: none;
+  color: var(--color-muted);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.4s;
+}
+
+.switch button[aria-checked="true"] {
+  color: #fff;
+}
+
+.switch button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.switch button img {
+  border-radius: 6px;
+}
+
+.count {
+  margin: 0;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.count b {
+  display: inline-block;
+  margin-right: 2px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--violet);
+  animation: tick 0.5s var(--ease);
+}
+
+.section[data-mode="notes"] .count b {
+  color: var(--stone);
+}
+
+@keyframes tick {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ---------- The constellation ---------- */
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(40px, 6vw, 100px);
+}
+
+/* The wires, drawn under everything. */
+.wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.wires path {
+  fill: none;
+  stroke: rgba(11, 10, 20, 0.1);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+  transition:
+    stroke 0.5s,
+    stroke-width 0.5s;
+}
+
+/* Lit wires flow towards the call. */
+.wires path[data-on] {
+  stroke: rgba(91, 46, 255, 0.55);
+  stroke-width: 2;
+  stroke-dasharray: 8 10;
+  animation: flow 1.2s linear infinite;
+}
+
+.section[data-mode="notes"] .wires path[data-on] {
+  stroke: rgba(11, 10, 20, 0.28);
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -36;
+  }
+}
+
+/* Two columns of tiles, in gentle arcs round the call. */
+.col {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.col[data-side="left"] {
+  justify-items: end;
+}
+
+.col[data-side="left"] .tile:nth-child(1),
+.col[data-side="left"] .tile:nth-child(4) {
+  margin-right: 36px;
+}
+
+.col[data-side="right"] .tile:nth-child(1),
+.col[data-side="right"] .tile:nth-child(4) {
+  margin-left: 36px;
+}
+
+/* A tile: icon bubble, title and detail, and a small tag. */
+.tile {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: min(100%, 290px);
+  padding: 10px 12px 10px 10px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(11, 10, 20, 0.05),
+    0 16px 34px -20px rgba(43, 26, 120, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.section[data-in] .tile:not([data-on]) {
+  opacity: 0.42;
+  transform: scale(0.97);
+  filter: grayscale(1);
+}
+
+.tileIcon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: color-mix(in srgb, #8f74ff 26%, #fff);
+}
+
+.tile:has([data-both]) .tileIcon {
+  background: rgba(11, 10, 20, 0.06);
+}
+
+.tileIcon svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tileText {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tileText b {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.tileText small {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.tag {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  font: 600 0.6rem / 1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tag[data-both] {
+  background: rgba(11, 10, 20, 0.06);
+  color: var(--color-muted);
+}
+
+/* ---------- The call in the middle ---------- */
+.hub {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+}
+
+.glow {
+  position: absolute;
+  z-index: -1;
+  width: 150%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side at 45% 45%, rgba(143, 116, 255, 0.45), transparent 70%),
+    radial-gradient(closest-side at 60% 62%, rgba(212, 255, 58, 0.4), transparent 70%);
+  filter: blur(14px);
+  transition: opacity 0.6s ease;
+  animation: breathe 6s ease-in-out infinite alternate;
+}
+
+.section[data-mode="notes"] .glow {
+  opacity: 0.25;
+}
+
+@keyframes breathe {
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.call {
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(21, 16, 46, 0.06),
+    0 34px 70px -30px rgba(43, 26, 120, 0.55);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: #1c1b19;
+  transition: filter 0.5s ease;
+}
+
+.section[data-mode="notes"] .call {
+  filter: grayscale(1);
+}
+
+.callBar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 40px;
+  margin: 0;
+  border-bottom: 1px solid var(--app-line);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.callBar span {
+  position: absolute;
+  left: 14px;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.callBar i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.callBar i:nth-child(2) {
+  background: #febc2e;
+}
+
+.callBar i:nth-child(3) {
+  background: #28c840;
+}
+
+.callBar em {
+  position: absolute;
+  right: 14px;
+  font-size: 0.62rem;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  color: #dc2626;
+}
+
+.lines {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 18px 20px 14px;
+  list-style: none;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.lines li {
+  display: grid;
+  gap: 2px;
+}
+
+.lines b {
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+/* The answer area: a reply as MeetFly, a wait as a note-taker. Both stacked, cross-fading. */
+.answer {
+  display: grid;
+  padding: 0 20px 20px;
+}
+
+.reply,
+.later {
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.45s ease,
+    transform 0.6s var(--ease);
+}
+
+.reply {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(79, 70, 229, 0.25),
+    0 14px 28px -18px rgba(79, 70, 229, 0.5);
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.reply p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--app-primary);
+}
+
+.reply svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.later {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 12px;
+  background: #f4f3f0;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--app-muted);
+}
+
+.later svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.section[data-mode="fly"] .later,
+.section[data-mode="notes"] .reply {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+}
+
+/* ---------- Narrower screens: the call on top, the tiles in two columns under it ---------- */
+@media (max-width: 1080px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .hub {
+    grid-column: 1 / -1;
+    order: -1;
+    width: min(100%, 460px);
+    justify-self: center;
+    margin-bottom: 28px;
+  }
+
+  .col {
+    gap: 12px;
+  }
+
+  .col[data-side] {
+    justify-items: stretch;
+  }
+
+  .col .tile {
+    width: 100%;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .switch button {
+    min-width: 0;
+    padding: 0 16px;
+    font-size: 0.92rem;
+  }
+
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tile {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+  }
+
+  .tileIcon {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head,
+  .controls,
+  .hub,
+  .tile {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .wires path[data-on],
+  .glow {
+    animation: none;
+  }
+}

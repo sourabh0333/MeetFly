@@ -1,0 +1,430 @@
+/* "From your calendar to a better call": an open day timeline across the page, then three giant
+   numbered steps joined by a curve that draws itself with scroll. No pinning, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 120px) var(--gutter);
+  overflow-x: clip;
+}
+
+.day,
+.steps li {
+  position: relative;
+  isolation: isolate;
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+.steps li {
+  transition-delay: calc(0.15s + var(--i) * 0.12s);
+}
+
+.section[data-in] .day,
+.section[data-in] .steps li {
+  opacity: 1;
+  transform: none;
+}
+
+.day::before,
+.steps::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -30px -60px;
+  background: radial-gradient(closest-side, var(--color-bg) 82%, transparent);
+  pointer-events: none;
+}
+
+/* ---------- 1. The day ---------- */
+.dayHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px 28px;
+  margin-bottom: 24px;
+}
+
+.today {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.4rem + 2vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.today span {
+  font-family: var(--font-text);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-muted);
+}
+
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sources li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+.sources i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+}
+
+.scroller {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.timeline {
+  position: relative;
+  min-width: 860px;
+  height: 230px;
+  margin: 0 14px;
+}
+
+/* Meetings: names above, a bar on the shared line. */
+.meetings {
+  position: absolute;
+  inset: 0 0 60px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.meeting {
+  position: absolute;
+  bottom: 0;
+  display: grid;
+  align-content: end;
+  gap: 12px;
+  min-width: 130px;
+}
+
+.mText {
+  display: grid;
+  gap: 3px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.7s var(--ease);
+  transition-delay: calc(0.5s + var(--i) * 0.12s);
+}
+
+.section[data-in] .mText {
+  opacity: 1;
+  transform: none;
+}
+
+.mText b {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+
+.mText small {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.meeting[data-next] .mText b {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* The bar on the line grows from the left. */
+.bar {
+  display: block;
+  height: 10px;
+  border-radius: 10px;
+  background: rgba(11, 10, 20, 0.14);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 0.9s var(--ease);
+  transition-delay: calc(0.3s + var(--i) * 0.12s);
+}
+
+.section[data-in] .bar {
+  transform: scaleX(1);
+}
+
+.meeting[data-next] .bar {
+  height: 14px;
+  background: linear-gradient(90deg, var(--violet), #b9e639);
+  box-shadow: 0 0 22px rgba(91, 46, 255, 0.4);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.actions em {
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.06);
+  font-size: 0.86rem;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.actions em[data-primary] {
+  background: var(--lime);
+  animation: nudge 2.4s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  50% {
+    box-shadow: 0 0 0 6px rgba(212, 255, 58, 0.3);
+  }
+}
+
+/* The hour ruler along the foot. */
+.ruler {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 54px;
+  border-top: 1px solid var(--color-line);
+}
+
+.ruler span {
+  position: absolute;
+  top: 0;
+  translate: -50% 0;
+  padding-top: 14px;
+  font: 500 0.74rem / 1 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.ruler span::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 8px;
+  border-left: 1px solid rgba(11, 10, 20, 0.25);
+}
+
+/* Now: a red line drifting toward the next meeting. */
+.now {
+  position: absolute;
+  top: 18px;
+  bottom: 40px;
+  left: var(--from);
+  width: 2px;
+  background: #dc2626;
+  animation: drift 9s ease-in-out infinite alternate;
+}
+
+.now::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  bottom: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dc2626;
+}
+
+.now i {
+  position: absolute;
+  left: 8px;
+  top: -2px;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: #dc2626;
+  color: #fff;
+  font: 600 0.62rem / 1.3 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@keyframes drift {
+  to {
+    left: var(--to);
+  }
+}
+
+/* ---------- 2. Steps ---------- */
+.steps {
+  position: relative;
+  isolation: isolate;
+  margin-top: clamp(72px, 10vh, 112px);
+}
+
+.path {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: clamp(8px, 2vw, 30px);
+  width: 100%;
+  height: 120px;
+  overflow: visible;
+}
+
+.path path {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The curve draws itself as the steps scroll through the screen. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .path path {
+      animation: draw linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 55%;
+    }
+
+    @keyframes draw {
+      from {
+        stroke-dashoffset: 1;
+      }
+    }
+
+    .bigN span {
+      animation: fill linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 50%;
+    }
+
+    @keyframes fill {
+      from {
+        clip-path: inset(100% 0 0 0);
+      }
+    }
+  }
+}
+
+.steps ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 64px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+
+/* A giant outlined number that fills with violet. */
+.bigN {
+  position: relative;
+  margin-bottom: 6px;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 3rem + 6vw, 9rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(91, 46, 255, 0.35);
+  background: var(--color-bg);
+}
+
+.bigN span {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(170deg, #8f74ff, #5b2eff 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0;
+}
+
+.steps h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.steps p {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* ---------- Narrower screens ---------- */
+@media (max-width: 760px) {
+  .path {
+    display: none;
+  }
+
+  .steps ol {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .bigN {
+    font-size: 5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day,
+  .steps li,
+  .mText {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .bar {
+    transform: none;
+    transition: none;
+  }
+
+  .now,
+  .actions em[data-primary] {
+    animation: none;
+  }
+}

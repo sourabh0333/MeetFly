@@ -1,5 +1,6 @@
 import { Outfit, JetBrains_Mono, Inter, Source_Serif_4 } from "next/font/google";
 import { SiteHeader } from "@/components/header/site-header";
+import { SiteFooter } from "@/components/footer/site-footer";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
         </a>
         <SiteHeader />
         <main id="main">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

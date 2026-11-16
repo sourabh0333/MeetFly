@@ -1,0 +1,231 @@
+/* "Built for": expanding columns across the full width, split by thin rules. No pinning, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 120px) var(--gutter);
+  overflow-x: clip;
+}
+
+.cols {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  height: 380px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.cols::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -30px -60px;
+  background: radial-gradient(closest-side, var(--color-bg) 85%, transparent);
+  pointer-events: none;
+}
+
+/* Each column grows when open; the others share what's left. */
+.col {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  transition: flex-grow 0.7s var(--ease);
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    flex-grow 0.7s var(--ease),
+    opacity 0.8s var(--ease),
+    transform 0.9s var(--ease);
+  transition-delay: 0s, calc(var(--i) * 0.06s), calc(var(--i) * 0.06s);
+}
+
+.section[data-in] .col {
+  opacity: 1;
+  transform: none;
+}
+
+.col + .col {
+  border-left: 1px solid var(--color-line);
+}
+
+.col[data-open] {
+  flex-grow: 3.2;
+}
+
+/* A soft lime glow at the foot of the open column. */
+.col::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 70%;
+  background: linear-gradient(to top, rgba(212, 255, 58, 0.22), transparent);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.col[data-open]::after {
+  opacity: 1;
+}
+
+.col button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 26px clamp(14px, 1.6vw, 24px) 28px;
+  background: none;
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.n {
+  font: 500 0.78rem / 1 var(--font-mono);
+  color: rgba(11, 10, 20, 0.3);
+  transition: color 0.4s;
+}
+
+.col[data-open] .n {
+  color: var(--violet);
+}
+
+/* The role name sits at the foot; it's big when open, smaller when closed. */
+.role {
+  margin-top: auto;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 0.9rem + 0.8vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: rgba(11, 10, 20, 0.45);
+  transition:
+    font-size 0.6s var(--ease),
+    color 0.4s;
+}
+
+.col[data-open] .role {
+  font-size: clamp(2rem, 1.2rem + 2.4vw, 3.4rem);
+  color: var(--ink);
+}
+
+/* The line and the features only show in the open column. */
+.line,
+.uses {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    max-height 0.6s var(--ease),
+    opacity 0.4s ease,
+    transform 0.6s var(--ease);
+}
+
+.col[data-open] .line,
+.col[data-open] .uses {
+  max-height: 160px;
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.2s;
+}
+
+.line {
+  margin-top: 12px;
+  max-width: 34ch;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.uses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 16px;
+}
+
+.uses span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.uses svg {
+  width: 18px;
+  height: 18px;
+  padding: 3px;
+  border-radius: 50%;
+  background: var(--lime);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Phones and tablets: rows instead of columns ---------- */
+@media (max-width: 900px) {
+  .cols {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .col + .col {
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .col button {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 14px;
+    height: auto;
+    padding: 18px 4px;
+  }
+
+  .role {
+    margin-top: 0;
+  }
+
+  .line,
+  .uses {
+    flex-basis: 100%;
+  }
+
+  /* Closed rows take no space for their hidden text. */
+  .col:not([data-open]) .line,
+  .col:not([data-open]) .uses {
+    margin-top: 0;
+  }
+
+  .col[data-open] .line,
+  .col[data-open] .uses {
+    max-height: 200px;
+  }
+
+  .col[data-open] .role {
+    font-size: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .col {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,425 @@
+/* A glass "signal console": one strip of five cells with a gradient edge, each a live visual, a
+   big number and a label; a sound wave runs along the foot. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(24px, 4vh, 48px) var(--gutter);
+  overflow-x: clip;
+}
+
+.console {
+  position: relative;
+  isolation: isolate;
+  border-radius: 28px;
+  padding: 1.5px;
+  /* The gradient edge. */
+  background: linear-gradient(120deg, rgba(143, 116, 255, 0.55), rgba(255, 255, 255, 0.6) 40%, rgba(212, 255, 58, 0.6));
+  box-shadow: 0 40px 80px -46px rgba(43, 26, 120, 0.55);
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+.section[data-in] .console {
+  opacity: 1;
+  transform: none;
+}
+
+/* A soft glow behind the console. */
+.console::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -30px 8%;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side at 25% 50%, rgba(143, 116, 255, 0.3), transparent 70%),
+    radial-gradient(closest-side at 78% 50%, rgba(212, 255, 58, 0.3), transparent 70%);
+  filter: blur(18px);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  border-radius: 26.5px;
+  background: rgba(251, 251, 248, 0.88);
+  backdrop-filter: blur(16px);
+}
+
+.row li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 22px 22px 34px;
+  border-radius: 20px;
+  transition:
+    background-color 0.4s,
+    box-shadow 0.4s,
+    transform 0.5s var(--ease);
+}
+
+/* Thin dividers between cells. */
+.row li + li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22%;
+  bottom: 22%;
+  border-left: 1px solid var(--color-line);
+}
+
+@media (hover: hover) {
+  .row li:hover {
+    background: #fff;
+    box-shadow:
+      0 0 0 1px rgba(91, 46, 255, 0.14),
+      0 20px 40px -24px rgba(91, 46, 255, 0.5);
+    transform: translateY(-4px);
+  }
+
+  .row li:hover::before,
+  .row li:hover + li::before {
+    opacity: 0;
+  }
+}
+
+.visual {
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+
+.value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 1.7rem + 2.6vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(170deg, #8f74ff, #5b2eff 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.affix {
+  font-size: 0.6em;
+  letter-spacing: -0.02em;
+}
+
+.label {
+  margin: 0;
+  max-width: 22ch;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+
+/* ---------- The small visuals ---------- */
+.langs {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #f1f9d6;
+  box-shadow: inset 0 0 0 1px rgba(110, 150, 0, 0.25);
+  font: 600 0.74rem / 1 var(--font-mono);
+  color: #3d5200;
+}
+
+.langs b {
+  display: inline-block;
+  min-width: 2ch;
+  font-weight: 600;
+  animation: flip 0.45s var(--ease);
+}
+
+.langs b:last-child {
+  animation: none;
+}
+
+@keyframes flip {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) rotateX(70deg);
+  }
+}
+
+.langs svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ~1s: a voice, then a bar that fills in about a second, landing on the reply dot. */
+.speed {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 22px;
+}
+
+.wave i {
+  width: 3px;
+  height: calc(var(--h) * 100%);
+  border-radius: 2px;
+  background: var(--violet);
+  transform-origin: 50% 50%;
+}
+
+.speed[data-on] .wave i {
+  animation: talk 0.8s ease-in-out var(--d) infinite alternate;
+}
+
+@keyframes talk {
+  to {
+    transform: scaleY(0.35);
+  }
+}
+
+.bar {
+  width: 54px;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(11, 10, 20, 0.08);
+  overflow: hidden;
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--violet), var(--lime));
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+.speed[data-on] .bar i {
+  animation: fill 2.4s var(--ease) infinite;
+}
+
+@keyframes fill {
+  0%,
+  15% {
+    transform: scaleX(0);
+  }
+  55%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 3px rgba(212, 255, 58, 0.3);
+}
+
+.speed[data-on] .dot {
+  animation: land 2.4s ease infinite;
+}
+
+@keyframes land {
+  0%,
+  50% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  70%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* A mini tuning dial. */
+.dial {
+  width: 64px;
+  height: 38px;
+  overflow: visible;
+}
+
+.dial path {
+  fill: none;
+  stroke: rgba(11, 10, 20, 0.12);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.dial circle {
+  fill: rgba(11, 10, 20, 0.18);
+  transition: fill 0.4s;
+}
+
+.dial circle[data-on] {
+  fill: var(--violet);
+}
+
+.dial circle:last-of-type {
+  fill: var(--ink);
+}
+
+.dial line {
+  stroke: var(--ink);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  transform-origin: 40px 42px;
+  transition: transform 0.8s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+/* Keycaps. */
+.keys {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.keys kbd {
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: linear-gradient(#fff, #f1efe9);
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 20, 0.12),
+    0 3px 0 rgba(11, 10, 20, 0.12);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.3s;
+}
+
+.keys kbd[data-on] {
+  transform: translateY(2px);
+  background: linear-gradient(var(--lime), #c6f224);
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 20, 0.2),
+    0 1px 0 rgba(11, 10, 20, 0.2);
+}
+
+/* No bot. */
+.nobot {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--ink);
+}
+
+.nobot svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nobot path[data-cross] {
+  stroke: var(--lime);
+  stroke-width: 2.4;
+  stroke-dasharray: 26;
+  stroke-dashoffset: 26;
+  transition: stroke-dashoffset 0.8s var(--ease) 0.6s;
+}
+
+.section[data-in] .nobot path[data-cross] {
+  stroke-dashoffset: 0;
+}
+
+/* ---------- The signal along the foot ---------- */
+.signal {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 10px;
+  width: 94%;
+  height: 22px;
+  pointer-events: none;
+}
+
+.signal path {
+  fill: none;
+  stroke: rgba(91, 46, 255, 0.35);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 8;
+  animation: travel 3s linear infinite;
+}
+
+@keyframes travel {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+/* ---------- Narrower screens ---------- */
+@media (max-width: 960px) {
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .row li + li::before {
+    display: none;
+  }
+
+  /* The last fact on its own row: visual, number and label in one line. */
+  .row li:last-child {
+    grid-column: 1 / -1;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 16px;
+  }
+
+  .signal {
+    display: none;
+  }
+
+  .row li {
+    padding: 20px 18px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .signal path,
+  .langs b {
+    animation: none;
+  }
+}

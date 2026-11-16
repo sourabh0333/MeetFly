@@ -1,0 +1,335 @@
+/* "Speak any language": a 5fr / 7fr spread (they say | you read) and a full-width strip of the
+   14 languages. No pinning, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 120px) var(--gutter);
+  overflow-x: clip;
+}
+
+.spread,
+.pickWrap {
+  position: relative;
+  isolation: isolate;
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+.pickWrap {
+  transition-delay: 0.15s;
+}
+
+.section[data-in] .spread,
+.section[data-in] .pickWrap {
+  opacity: 1;
+  transform: none;
+}
+
+.spread::before,
+.pickWrap::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -40px -6%;
+  background:
+    radial-gradient(closest-side at 72% 50%, rgba(212, 255, 58, 0.22), transparent 70%),
+    radial-gradient(closest-side, var(--color-bg) 70%, transparent);
+  pointer-events: none;
+}
+
+.label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.label b {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- The spread: one grid, three shared rows ---------- */
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-rows: auto minmax(2.3em, auto) auto;
+  column-gap: clamp(32px, 6vw, 96px);
+  row-gap: 20px;
+  align-items: start;
+  padding: 28px 0 30px;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.spread > [data-col="l"] {
+  grid-column: 1;
+}
+
+.spread > [data-col="r"] {
+  grid-column: 2;
+}
+
+.spread .label {
+  margin: 0;
+  min-height: 26px;
+}
+
+/* Row 2: both lines sit on the same baseline at the foot of the row. */
+.original,
+.translated {
+  align-self: end;
+}
+
+.original {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.7rem, 1.2rem + 1.8vw, 2.6rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+/* Row 3: the voice line | the language name, on one line. */
+.voice {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+}
+
+.voice i {
+  width: 4px;
+  height: calc(var(--h) * 100%);
+  border-radius: 3px;
+  background: var(--violet);
+  opacity: 0.75;
+  animation: talk 0.9s ease-in-out var(--d) infinite alternate;
+}
+
+@keyframes talk {
+  to {
+    transform: scaleY(0.3);
+  }
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  animation: ping 1.6s ease-out infinite;
+}
+
+@keyframes ping {
+  to {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+}
+
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  color: #15803d;
+}
+
+/* The translation in huge type, always aligned to the column's left edge. */
+.translated {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 1.2rem + 3.6vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  text-align: left;
+  text-wrap: balance;
+}
+
+.w {
+  display: inline-block;
+  animation: char 0.55s var(--ease) both;
+  animation-delay: calc(var(--i) * 0.07s);
+}
+
+@keyframes char {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(14px);
+  }
+}
+
+.langName {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  animation: char 0.5s var(--ease) both;
+}
+
+.langName span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--color-muted);
+}
+
+/* ---------- The 14 languages ---------- */
+.pickWrap {
+  margin-top: clamp(40px, 6vh, 56px);
+}
+
+.pickWrap .label {
+  margin-bottom: 14px;
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 1px solid var(--color-line);
+}
+
+.strip button {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  padding: 16px 4px 18px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--color-muted);
+  transition: color 0.3s;
+}
+
+/* A gradient bar under the chosen language. */
+.strip button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 12px;
+  bottom: -1px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--violet), var(--lime));
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease);
+}
+
+.strip button[aria-checked="true"] {
+  color: var(--ink);
+}
+
+.strip button[aria-checked="true"]::before {
+  transform: scaleX(1);
+}
+
+.strip b {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1rem + 1vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: rgba(11, 10, 20, 0.2);
+  transition: color 0.3s;
+}
+
+.strip button[aria-checked="true"] b {
+  color: var(--violet);
+}
+
+@media (hover: hover) {
+  .strip button:hover,
+  .strip button:hover b {
+    color: var(--ink);
+  }
+}
+
+.strip span {
+  font-size: 0.86rem;
+}
+
+/* ---------- Narrower screens ---------- */
+@media (max-width: 860px) {
+  .spread {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .spread > [data-col="l"],
+  .spread > [data-col="r"] {
+    grid-column: 1;
+  }
+
+  /* Stack in reading order: what they say, then what you read. */
+  .spread > [data-col="l"].label {
+    order: 1;
+  }
+
+  .original {
+    order: 2;
+  }
+
+  .voice {
+    order: 3;
+  }
+
+  .spread > [data-col="r"].label {
+    order: 4;
+    margin-top: 16px;
+  }
+
+  .translated {
+    order: 5;
+  }
+
+  .langName {
+    order: 6;
+  }
+
+  .strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spread,
+  .pickWrap {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .voice i,
+  .dot,
+  .translated span,
+  .langName {
+    animation: none;
+  }
+}

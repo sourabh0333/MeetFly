@@ -1,0 +1,535 @@
+/* "Answers your way", scroll-driven: a pinned 3D style wheel beside a decoding reply, a cursor
+   spotlight, the "Or just ask" line, then a marquee of quick actions. No boxes; full width. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --pos: 0;
+  --p: 0;
+  --mx: 50%;
+  --my: 30%;
+
+  position: relative;
+  isolation: isolate;
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 120px) var(--gutter);
+  overflow-x: clip;
+}
+
+/* A soft violet spotlight that follows the cursor. */
+.spot {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: radial-gradient(480px circle at var(--mx) var(--my), rgba(143, 116, 255, 0.14), transparent 70%);
+  pointer-events: none;
+}
+
+.row,
+.askRow,
+.marquee {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+.askRow {
+  transition-delay: 0.1s;
+}
+
+.marquee {
+  transition-delay: 0.2s;
+}
+
+.section[data-in] .row,
+.section[data-in] .askRow,
+.section[data-in] .marquee {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- The pinned part ---------- */
+.section[data-pinned] .track {
+  height: calc(var(--n) * 75vh);
+}
+
+.section[data-pinned] .sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  padding-top: var(--header-h);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: center;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.label svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.label b {
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  font-weight: 500;
+}
+
+/* Left. */
+.left {
+  position: relative;
+  isolation: isolate;
+}
+
+.left::before,
+.right::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -40px -60px;
+  background: radial-gradient(closest-side, var(--color-bg) 65%, transparent);
+  pointer-events: none;
+}
+
+.right {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+}
+
+.them {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 clamp(24px, 4vh, 40px);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.2rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.them span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+/* The wheel: on wide screens a 3D drum the scroll turns; elsewhere a simple stack. */
+.wheel {
+  position: relative;
+  display: grid;
+  justify-items: start;
+}
+
+.wheel button {
+  border: 0;
+  padding: 2px 0 10px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.word {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 1.4rem + 3vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: rgba(11, 10, 20, 0.16);
+  transition: color 0.4s;
+}
+
+.wheel button[aria-checked="true"] .word {
+  color: var(--ink);
+}
+
+.section[data-pinned] .wheel {
+  height: 300px;
+  perspective: 900px;
+  mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent);
+}
+
+.section[data-pinned] .wheel button {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -0.6em;
+  font-size: clamp(2.4rem, 1.4rem + 3vw, 4.2rem);
+  padding: 0;
+  transform-origin: 0 50% -150px;
+  transform: rotateX(calc((var(--pos) - var(--i)) * 34deg));
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.section[data-pinned] .wheel .word {
+  font-size: 1em;
+}
+
+.swash {
+  position: absolute;
+  left: -3%;
+  bottom: -10px;
+  width: 106%;
+  height: 14px;
+  overflow: visible;
+}
+
+.swash path {
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 130;
+  stroke-dashoffset: 130;
+  transition: stroke-dashoffset 0.6s var(--ease);
+}
+
+.wheel button[aria-checked="true"] .swash path {
+  stroke-dashoffset: 0;
+  transition-delay: 0.1s;
+}
+
+.styleNote {
+  margin: 18px 0 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--violet);
+  animation: fade 0.5s var(--ease) both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Right: the reply. */
+.replyText {
+  min-height: 250px;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1rem + 1.4vw, 2.2rem);
+  font-weight: 500;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.replyText p {
+  margin: 0;
+}
+
+.replyText[data-style="short"] {
+  font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.replyText[data-style="script"] {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.25rem, 1rem + 0.9vw, 1.75rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.replyText ul {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.replyText li {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 18px;
+}
+
+.replyText li::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 5px rgba(212, 255, 58, 0.3);
+}
+
+/* Four segments that fill as the styles pass. */
+.progress {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  gap: 10px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.progress li {
+  position: relative;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(11, 10, 20, 0.08);
+  overflow: visible;
+}
+
+.progress li::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--violet), var(--lime));
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease);
+}
+
+.progress li[data-on]::after {
+  transform: scaleX(1);
+}
+
+.progress span {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  font: 500 0.7rem / 1 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.progress li[data-on] span {
+  color: var(--violet);
+}
+
+/* ---------- Or just ask ---------- */
+.askRow {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: end;
+  margin-top: clamp(56px, 9vh, 96px);
+}
+
+.askRow::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -40px -6%;
+  background: radial-gradient(closest-side, var(--color-bg) 70%, transparent);
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 0.95rem + 0.9vw, 1.7rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.line > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: -0.12em;
+  background: var(--violet);
+  animation: blink 0.9s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.go {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: rgba(11, 10, 20, 0.3);
+  transition:
+    background-color 0.35s,
+    color 0.35s,
+    transform 0.4s var(--ease);
+}
+
+.go[data-on] {
+  background: var(--lime);
+  color: var(--ink);
+  transform: translateX(4px);
+}
+
+.go svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.answer {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 16px;
+  min-height: 3em;
+  margin: 0 0 6px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.2rem, 1rem + 0.8vw, 1.6rem);
+  font-style: italic;
+  line-height: 1.4;
+  color: #3a3550;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s var(--ease);
+}
+
+.answer[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+.answer img {
+  margin-top: 5px;
+  border-radius: 6px;
+}
+
+/* ---------- Quick actions marquee ---------- */
+.marquee {
+  margin: clamp(48px, 7vh, 72px) calc(var(--gutter) * -1) 0;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.track2 {
+  display: flex;
+  gap: clamp(32px, 4vw, 64px);
+  width: max-content;
+  margin: 0;
+  padding: 0 0 0 clamp(32px, 4vw, 64px);
+  list-style: none;
+  animation: slide 28s linear infinite;
+}
+
+.marquee:hover .track2 {
+  animation-play-state: paused;
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.track2 li {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(32px, 4vw, 64px);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.2rem + 3vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(11, 10, 20, 0.25);
+  transition:
+    color 0.5s ease,
+    -webkit-text-stroke-color 0.5s ease;
+}
+
+/* A lime star between the words. */
+.track2 li::after {
+  content: "✦";
+  font-size: 0.5em;
+  color: var(--lime);
+  -webkit-text-stroke: 0;
+}
+
+.track2 li[data-on] {
+  color: var(--ink);
+  -webkit-text-stroke-color: var(--ink);
+}
+
+.note {
+  margin: 20px 0 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+/* ---------- Narrower screens ---------- */
+@media (max-width: 959px) {
+  .row,
+  .askRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .replyText {
+    min-height: 300px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .askRow,
+  .marquee {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .track2,
+  .caret,
+  .styleNote {
+    animation: none;
+  }
+}

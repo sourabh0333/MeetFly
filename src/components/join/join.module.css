@@ -1,0 +1,226 @@
+/* "Paste a link. MeetFly joins the call.": a full-width link conveyor into a MeetFly node.
+   No pinning, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(56px, 8vh, 96px) var(--gutter) clamp(48px, 7vh, 80px);
+  overflow-x: clip;
+}
+
+.conveyor {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+.section[data-in] .conveyor {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- The conveyor ---------- */
+.conveyor {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(16px, 2vw, 28px);
+  padding: 28px 0;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.conveyor::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -30px -60px;
+  background:
+    radial-gradient(closest-side at 50% 50%, rgba(143, 116, 255, 0.18), transparent 60%),
+    radial-gradient(closest-side, var(--color-bg) 82%, transparent);
+  pointer-events: none;
+}
+
+.lane {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.lane[data-side="in"] {
+  mask-image: linear-gradient(90deg, transparent, #000 30%, #000 85%, transparent);
+}
+
+.lane[data-side="out"] {
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 70%, transparent);
+}
+
+.laneLabel {
+  display: block;
+  margin-bottom: 14px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.lane[data-side="in"] .laneLabel {
+  text-align: right;
+  padding-right: 15%;
+}
+
+.lane[data-side="out"] .laneLabel {
+  padding-left: 15%;
+}
+
+/* Both tracks flow toward the right, like links being pulled through MeetFly. */
+.track {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  gap: 18px;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: flow 26s linear infinite;
+}
+
+@keyframes flow {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.lane[data-side="in"] li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.04);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  font: 500 0.9rem / 1 var(--font-mono);
+  color: #3a3550;
+  white-space: nowrap;
+}
+
+.lane[data-side="in"] svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.lane[data-side="out"] li {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1rem + 1.2vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.lane[data-side="out"] li i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+}
+
+/* The MeetFly node in the middle. */
+.node {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 28px;
+  background: var(--ink);
+  box-shadow:
+    0 0 0 6px var(--color-bg),
+    0 0 0 7px rgba(91, 46, 255, 0.25),
+    0 20px 40px -14px rgba(43, 26, 120, 0.7);
+}
+
+.node img {
+  border-radius: 11px;
+}
+
+.ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 34px;
+  border: 2px solid var(--lime);
+  opacity: 0;
+  animation: pulse 2.6s ease-out infinite;
+}
+
+.ring[data-two] {
+  animation-delay: 1.3s;
+  border-color: var(--violet);
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.8;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* ---------- Narrower screens ---------- */
+@media (max-width: 760px) {
+  .conveyor {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .lane {
+    width: 100%;
+  }
+
+  .conveyor {
+    row-gap: 26px;
+  }
+
+  .lane[data-side="in"],
+  .lane[data-side="out"] {
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .lane .laneLabel {
+    text-align: center !important;
+    padding: 0 !important;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conveyor {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .track,
+  .ring {
+    animation: none;
+  }
+}

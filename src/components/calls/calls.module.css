@@ -1,0 +1,324 @@
+/* "Tuned to the call you're on": a full-width radio band with a draggable needle, then a 5fr / 7fr
+   spread of the tuned moment. No pinning, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.5, 0.5, 1);
+
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(72px, 10vh, 120px) var(--gutter);
+  overflow-x: clip;
+}
+
+.bandWrap,
+.spread {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+.spread {
+  transition-delay: 0.15s;
+}
+
+.section[data-in] .bandWrap,
+.section[data-in] .spread {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- The band ---------- */
+.bandWrap {
+  position: relative;
+  isolation: isolate;
+}
+
+.bandWrap::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -20px -40px;
+  background:
+    radial-gradient(closest-side at 50% 70%, rgba(143, 116, 255, 0.16), transparent 70%),
+    radial-gradient(closest-side, var(--color-bg) 80%, transparent);
+}
+
+.band {
+  --pos: 10%;
+  position: relative;
+  height: 190px;
+  cursor: ew-resize;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+/* Stations: big words along the top of the band. */
+.stations {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 80px;
+}
+
+.station {
+  position: absolute;
+  top: 0;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: rgba(11, 10, 20, 0.2);
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 0.8rem + 1.4vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.4s,
+    transform 0.5s var(--spring);
+}
+
+.station span {
+  font: 500 0.7rem / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  color: rgba(11, 10, 20, 0.3);
+}
+
+@media (hover: hover) {
+  .station:hover {
+    color: rgba(11, 10, 20, 0.5);
+  }
+}
+
+.station[aria-checked="true"] {
+  color: var(--ink);
+  transform: translateY(-4px) scale(1.06);
+}
+
+.station[aria-checked="true"] span {
+  color: var(--violet);
+}
+
+/* The scale: fine ticks across the width; ticks near the needle rise and light up. */
+.scale {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  height: 70px;
+  border-bottom: 2px solid rgba(11, 10, 20, 0.12);
+}
+
+.scale i {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: calc(14px + var(--near) * 34px);
+  margin-left: -1px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--violet) calc(var(--near) * 100%), rgba(11, 10, 20, 0.18));
+  transition:
+    height 0.35s var(--ease),
+    background-color 0.35s;
+}
+
+.scale i[data-long] {
+  height: calc(26px + var(--near) * 34px);
+}
+
+/* The needle. */
+.needle {
+  position: absolute;
+  top: 74px;
+  bottom: 14px;
+  left: var(--pos);
+  width: 3px;
+  margin-left: -1.5px;
+  border-radius: 3px;
+  background: var(--ink);
+  box-shadow: 0 0 18px rgba(91, 46, 255, 0.45);
+  transition: left 0.7s var(--spring);
+  pointer-events: none;
+}
+
+.band[data-dragging] .needle {
+  transition: none;
+}
+
+.needle i {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 22px;
+  height: 22px;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow:
+    0 0 0 4px var(--ink),
+    0 0 26px rgba(212, 255, 58, 0.9);
+}
+
+.band[data-dragging] .needle i {
+  scale: 1.2;
+}
+
+.hint {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 18px 0 0;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.hint span {
+  color: var(--violet);
+}
+
+/* ---------- The tuned moment ---------- */
+.spread {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+  margin-top: clamp(48px, 7vh, 80px);
+}
+
+.spread::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -40px -6%;
+  background: radial-gradient(closest-side, var(--color-bg) 72%, transparent);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.label svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.them {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.8rem, 1.2rem + 2vw, 2.9rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  animation: tuneIn 0.6s var(--ease) both;
+}
+
+@keyframes tuneIn {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(10px);
+  }
+}
+
+.reply {
+  margin: 0;
+  min-height: 3.9em;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1rem + 1.2vw, 2rem);
+  font-weight: 600;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  margin: 26px 0 0;
+  animation: tuneIn 0.6s var(--ease) 0.3s both;
+}
+
+.chips span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 2px solid var(--lime);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.chips b {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+/* ---------- Narrower screens ---------- */
+@media (max-width: 760px) {
+  .band {
+    height: 170px;
+  }
+
+  .station {
+    font-size: 0.86rem;
+  }
+
+  /* Alternate labels up and down so they don't collide. */
+  .station:nth-child(even) {
+    top: 34px;
+  }
+
+  .station:first-child {
+    translate: -25% 0;
+  }
+
+  .station:last-child {
+    translate: -75% 0;
+  }
+
+  .spread {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bandWrap,
+  .spread {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .them,
+  .chips {
+    animation: none;
+  }
+
+  .needle {
+    transition: none;
+  }
+}

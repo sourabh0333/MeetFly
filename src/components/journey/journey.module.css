@@ -1,8 +1,10 @@
-/* "Before · During · After": a centred header, then three equal cards in one row.
-   Each card: a tinted stage (fixed height, so all three line up) holding a live demo, then the text. */
+/* "Before · During · After" as a horizontal scroll story. On wide screens the section pins and
+   slides sideways through three full-width chapters as you scroll down; giant outlined words drift
+   behind at their own speed; a call timeline along the foot shows where you are. No boxes. */
 .section {
-  --stage-h: 340px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --p: 0;
+  --tone: #8f74ff;
   --app-line: #e8e4dd;
   --app-muted: #918b80;
   --app-text: #1c1b19;
@@ -10,206 +12,409 @@
 
   max-width: calc(1240px + 2 * var(--gutter));
   margin: 0 auto;
-  padding: clamp(72px, 10vh, 120px) var(--gutter) clamp(72px, 10vh, 120px);
+  padding: clamp(72px, 10vh, 120px) var(--gutter) clamp(48px, 8vh, 96px);
+  overflow-x: clip;
 }
 
-/* ---------- Header ---------- */
-.head {
+.chapter[data-key="before"] {
+  --tone: #8f74ff;
+}
+
+.chapter[data-key="during"] {
+  --tone: #b9e639;
+}
+
+.chapter[data-key="after"] {
+  --tone: #ffad84;
+}
+
+/* ---------- The pinned track ---------- */
+.section[data-pinned] .track {
+  height: calc(var(--n) * 110vh);
+}
+
+.section[data-pinned] .sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: grid;
-  justify-items: center;
-  gap: 16px;
-  max-width: 720px;
-  margin: 0 auto clamp(40px, 5vw, 56px);
-  text-align: center;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: calc(var(--header-h) + 8px) 0 clamp(18px, 3vh, 32px);
 }
 
-.eyebrow {
-  margin: 0;
-  padding: 7px 14px;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 0 0 1px var(--color-line), 0 6px 16px -10px rgba(43, 26, 120, 0.3);
-  font: 500 var(--text-label) / 1 var(--font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--violet);
+.section[data-pinned] .viewport {
+  min-height: 0;
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 0 var(--gutter);
+  overflow: hidden;
+  /* Soft edges where chapters slide in and out. */
+  mask-image: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent);
 }
 
-.title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--text-h2);
-  font-weight: 700;
-  line-height: 1.04;
-  letter-spacing: -0.035em;
-  text-wrap: balance;
-}
-
-.lead {
-  margin: 0;
-  max-width: 58ch;
-  font-size: var(--text-lead);
-  line-height: 1.55;
-  color: var(--color-muted);
-  text-wrap: pretty;
-}
-
-/* Header and cards rise in one after another. */
-.head,
-.card {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.9s var(--ease),
-    transform 1s var(--ease);
-}
-
-.card {
-  transition-delay: calc(0.12s + var(--i) * 0.12s);
-}
-
-.section[data-in] .head,
-.section[data-in] .card {
-  opacity: 1;
-  transform: none;
-}
-
-/* ---------- Cards ---------- */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+.strip {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  border-radius: 24px;
-  background: #fff;
-  box-shadow:
-    0 0 0 1px var(--color-line),
-    0 24px 50px -32px rgba(43, 26, 120, 0.35);
-}
-
-.card:hover {
-  box-shadow:
-    0 0 0 1px rgba(91, 46, 255, 0.18),
-    0 30px 60px -30px rgba(43, 26, 120, 0.45);
-}
-
-.stage {
-  position: relative;
-  height: var(--stage-h);
-  margin: 8px 8px 0;
-  border-radius: 18px;
-  overflow: hidden;
   display: grid;
-  place-items: center;
-  padding: 18px;
-  background: #efeaff;
+  gap: clamp(72px, 12vh, 120px);
 }
 
-/* A faint dot grid on each stage. */
-.stage::before {
+/* Pinned: the chapters sit side by side and the strip slides sideways with scroll. */
+.section[data-pinned] .strip {
+  display: flex;
+  gap: 0;
+  height: 100%;
+  width: calc(var(--n) * 100%);
+  transform: translateX(calc(var(--p) * (var(--n) - 1) / var(--n) * -100%));
+  will-change: transform;
+}
+
+.chapter {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+}
+
+.section[data-pinned] .chapter {
+  flex: 0 0 calc(100% / var(--n));
+  padding-right: clamp(24px, 4vw, 64px);
+}
+
+/* A giant outlined word behind each chapter, drifting at its own speed (parallax). */
+.giant {
+  position: absolute;
+  z-index: -1;
+  left: -2%;
+  top: 50%;
+  translate: 0 -55%;
+  font-family: var(--font-display);
+  font-size: clamp(8rem, 4rem + 14vw, 17rem);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--tone) 55%, transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.section[data-pinned] .giant {
+  transform: translateX(calc((var(--p) * (var(--n) - 1) - var(--i)) * 28%));
+}
+
+/* ---------- The words ---------- */
+.copy {
+  position: relative;
+  display: grid;
+  justify-items: start;
+}
+
+/* Soft wash so the giant word and page wave stay faint behind the text. */
+.copy::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: radial-gradient(rgba(91, 46, 255, 0.16) 1px, transparent 1.2px) 0 0 / 16px 16px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, #000, transparent);
-}
-
-.card[data-step="during"] .stage {
-  background: #f1f9d6;
-}
-
-.card[data-step="during"] .stage::before {
-  background-image: radial-gradient(rgba(110, 150, 0, 0.2) 1px, transparent 1.2px);
-}
-
-.card[data-step="after"] .stage {
-  background: #f3f1ec;
-}
-
-.card[data-step="after"] .stage::before {
-  background-image: radial-gradient(rgba(11, 10, 20, 0.12) 1px, transparent 1.2px);
-}
-
-.body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 24px 26px 28px;
+  z-index: -1;
+  inset: -50px -70px;
+  background: radial-gradient(closest-side, var(--color-bg) 62%, transparent);
+  pointer-events: none;
 }
 
 .when {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin: 0 0 10px;
+  gap: 12px;
+  margin: 0 0 16px;
   font: 500 var(--text-label) / 1 var(--font-mono);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--violet);
 }
 
 .when span {
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
   background: var(--ink);
   color: var(--lime);
   letter-spacing: 0;
 }
 
-.cardTitle {
-  margin: 0 0 8px;
+.stepTitle {
+  margin: 0 0 18px;
   font-family: var(--font-display);
-  font-size: var(--text-h3);
+  font-size: clamp(2.2rem, 1.3rem + 2.8vw, 3.6rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
 }
 
+/* The sentence lights up word by word as its chapter arrives. */
 .text {
-  margin: 0 0 18px;
-  font-size: 0.98rem;
+  max-width: 40ch;
+  margin: 0 0 26px;
+  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
   line-height: 1.55;
-  color: var(--color-muted);
+  color: var(--ink);
+}
+
+.w {
+  transition: color 0.4s ease, opacity 0.4s ease;
+  transition-delay: calc(0.15s + var(--k) * 0.03s);
+}
+
+.chapter[data-state="off"] .w {
+  color: rgba(11, 10, 20, 0.18);
+  transition-delay: 0s;
 }
 
 .points {
   display: grid;
-  gap: 10px;
-  margin: auto 0 0;
-  padding: 16px 0 0;
-  border-top: 1px solid var(--color-line);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
   list-style: none;
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.4;
 }
 
 .points li {
   display: grid;
-  grid-template-columns: 18px minmax(0, 1fr);
-  gap: 10px;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  transition:
+    opacity 0.5s ease,
+    transform 0.6s var(--ease);
+  transition-delay: calc(0.5s + var(--k) * 0.1s);
+}
+
+.chapter[data-state="off"] .points li {
+  opacity: 0;
+  transform: translateX(-12px);
+  transition-delay: 0s;
 }
 
 .points svg {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
+  padding: 5px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tone) 32%, #fff);
   fill: none;
-  stroke: var(--violet);
-  stroke-width: 2.4;
+  stroke: var(--ink);
+  stroke-width: 2.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-/* ---------- The little app panel inside each stage ---------- */
+/* ---------- The demo, floating ---------- */
+.visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 440px;
+}
+
+.glow {
+  position: absolute;
+  width: 90%;
+  aspect-ratio: 1;
+  max-height: 120%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--tone) 55%, transparent), transparent 72%);
+  filter: blur(12px);
+  animation: breathe 6s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.demo {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 400px);
+  height: 360px;
+  filter: drop-shadow(0 30px 40px rgba(43, 26, 120, 0.25));
+  transition:
+    transform 0.8s var(--ease),
+    opacity 0.6s ease;
+}
+
+.chapter[data-state="off"] .demo {
+  transform: scale(0.9) rotate(-3deg);
+  opacity: 0.5;
+}
+
+.demo > .panel {
+  max-width: none;
+}
+
+.float {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px 9px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(11, 10, 20, 0.05),
+    0 14px 30px -14px rgba(43, 26, 120, 0.45);
+  backdrop-filter: blur(10px);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  animation: bob 5s ease-in-out infinite alternate;
+  transition:
+    opacity 0.5s ease,
+    scale 0.6s var(--ease);
+}
+
+.chapter[data-state="off"] .float {
+  opacity: 0;
+  scale: 0.6;
+}
+
+.float svg {
+  width: 26px;
+  height: 26px;
+  padding: 6px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tone) 38%, #fff);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.float[data-n="0"] {
+  top: 6%;
+  left: 2%;
+}
+
+.float[data-n="1"] {
+  top: 44%;
+  right: -2%;
+  animation-delay: -1.6s;
+}
+
+.float[data-n="2"] {
+  bottom: 0;
+  left: 8%;
+  animation-delay: -3.2s;
+}
+
+@keyframes bob {
+  from {
+    translate: 0 -6px;
+  }
+  to {
+    translate: 0 6px;
+  }
+}
+
+/* ---------- The call timeline along the foot ---------- */
+.timeline {
+  display: grid;
+  gap: 14px;
+  padding-top: 8px;
+}
+
+.rail {
+  position: relative;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(11, 10, 20, 0.08);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8f74ff, var(--violet) 40%, #b9e639 70%, #ffad84);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p));
+}
+
+.head {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--p) * 100%);
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow:
+    0 0 0 4px var(--ink),
+    0 0 20px rgba(212, 255, 58, 0.8);
+}
+
+.zones {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+}
+
+.zones button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 10px;
+  align-items: baseline;
+  border: 0;
+  padding: 0;
+  background: none;
+  text-align: left;
+  color: var(--color-muted);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.4s;
+}
+
+.zones button:nth-child(2) {
+  justify-self: center;
+}
+
+.zones button:last-child {
+  justify-self: end;
+}
+
+.zones b {
+  grid-row: span 2;
+  font: 500 0.74rem / 1.6 var(--font-mono);
+  color: rgba(11, 10, 20, 0.3);
+}
+
+.zones small {
+  font: 500 0.7rem / 1.4 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.zones button[data-on] b {
+  color: var(--violet);
+}
+
+.zones button[data-now] {
+  color: var(--ink);
+}
+
+/* ---------- The little app panel inside each demo ---------- */
 .panel {
   position: relative;
   width: 100%;
@@ -648,37 +853,64 @@
   line-height: 1.45;
 }
 
-/* ---------- Narrower screens ---------- */
-@media (max-width: 1080px) {
-  .grid {
+/* ---------- Narrower screens: no pin; chapters stack, words above the demo ---------- */
+@media (max-width: 959px) {
+  .chapter {
     grid-template-columns: minmax(0, 1fr);
-    max-width: 560px;
-    margin: 0 auto;
+    gap: 20px;
+  }
+
+  .giant {
+    top: 0;
+    translate: 0 -20%;
+    font-size: clamp(5rem, 22vw, 9rem);
+  }
+
+  .visual {
+    min-height: 0;
+    padding: 40px 0 56px;
+  }
+
+  .float[data-n="1"] {
+    right: 0;
   }
 }
 
 @media (max-width: 640px) {
-  .section {
-    --stage-h: 336px;
+  .demo {
+    height: 350px;
   }
 
-  .body {
-    padding: 20px 20px 24px;
+  .float {
+    font-size: 0.72rem;
+    padding: 7px 12px 7px 8px;
   }
 
-  .stage {
-    padding: 14px;
+  .float svg {
+    width: 22px;
+    height: 22px;
+    padding: 5px;
+  }
+
+  .float[data-n="0"] {
+    top: 0;
+    left: 0;
+  }
+
+  .float[data-n="1"] {
+    display: none;
+  }
+
+  .float[data-n="2"] {
+    bottom: 8px;
+    left: auto;
+    right: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .head,
-  .card {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
+  .glow,
+  .float,
   .caret,
   .lang b {
     animation: none;
