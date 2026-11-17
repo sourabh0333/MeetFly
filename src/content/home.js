@@ -1,13 +1,62 @@
 // Homepage copy. Every product claim here comes from the app's README or its code.
 // The hero video is a real recording of the app, labelled with how it was made.
 
+// The main menu. Shaped like similar products' menus (Product and Use cases dropdowns), but only
+// with what MeetFly really has: no Log in (no accounts), no Pricing (not decided), no Blog yet.
+// Links jump to homepage sections for now; point them at the new pages as those are built.
 export const nav = {
   links: [
-    { label: "Watch it work", href: "/#demo" },
-    { label: "Works with", href: "/#platforms" },
+    {
+      label: "Features",
+      href: "/features",
+      menu: {
+        groups: [
+          {
+            title: "During the call",
+            items: [
+              { label: "Instant replies", text: "Answers in your style, the moment they stop", href: "/features#live-replies" },
+              { label: "Floating panel", text: "Stays over any meeting, one key away", href: "/features#floating-panel" },
+              { label: "Live translation", text: "Their captions in 14 languages", href: "/features#live-translation" },
+            ],
+          },
+          {
+            title: "Before and after",
+            items: [
+              { label: "Call prep", text: "Call types, goals and practice", href: "/features#call-prep" },
+              { label: "Notes", text: "Live notes, then full notes and an email", href: "/features#notes" },
+              { label: "Meeting library", text: "Search and ask across every call", href: "/features#library" },
+            ],
+          },
+        ],
+        featured: { label: "All features", text: "Everything MeetFly does, in one place", href: "/features" },
+      },
+    },
+    {
+      label: "Use cases",
+      menu: {
+        groups: [
+          {
+            title: "Built for",
+            items: [
+              { label: "Sales", href: "/#role-sales" },
+              { label: "Support", href: "/#role-support" },
+              { label: "Founders", href: "/#role-founders" },
+              { label: "Hiring", href: "/#role-hiring" },
+              { label: "Job seekers", href: "/#role-job-seekers" },
+              { label: "Multilingual teams", href: "/#role-multilingual-teams" },
+            ],
+          },
+        ],
+        featured: { label: "Works with your call app", text: "Meet, Zoom, Teams, Webex and more", href: "/#platforms" },
+      },
+    },
+    { label: "Privacy", href: "/#privacy" },
+    { label: "FAQ", href: "/#faq" },
   ],
   download: { label: "Download", href: "/#download" },
   live: "Live",
+  menu: "Menu",
+  close: "Close menu",
 };
 
 export const hero = {
@@ -117,7 +166,7 @@ export const journey = {
       when: "Before the call",
       title: "Walk in prepared",
       text: "Tell MeetFly the call type, your goal and the background. Attach documents, save it as a profile, and rehearse first.",
-      points: ["Sales, interview, support, meeting or negotiation", "Attach documents and reuse saved profiles", "Practice mode: your mic plays the other person"],
+      points: ["Sales, interview, customer support, team meeting, negotiation or other", "Attach documents and reuse saved profiles", "Practice mode: your mic plays the other person"],
       // Small pieces of the app that float around the demo.
       floats: [
         { icon: "doc", text: "pricing-2026.pdf" },
@@ -127,7 +176,7 @@ export const journey = {
       demo: {
         heading: "Prepare call",
         typeLabel: "Call type",
-        types: ["Sales", "Interview", "Support", "Meeting", "Negotiation"],
+        types: ["Sales", "Interview", "Customer support", "Team meeting", "Negotiation"],
         goalLabel: "Goal",
         goal: "Agree a two-week pilot",
         docLabel: "Background",
@@ -253,7 +302,7 @@ export const calls = {
     },
     {
       key: "support",
-      label: "Support",
+      label: "Customer support",
       them: "The export keeps failing on my account.",
       reply: "Sorry about that. Which browser are you on? While we check, here’s a quick way to get your file.",
       goal: "Solve it on the first call",
@@ -377,6 +426,7 @@ export const footer = {
     {
       title: "Product",
       links: [
+        { label: "All features", href: "/features" },
         { label: "Watch it work", href: "/#demo" },
         { label: "Note-taker vs copilot", href: "/#compare" },
         { label: "Before, during, after", href: "/#journey" },
@@ -414,7 +464,7 @@ export const numbers = {
   items: [
     { value: 14, label: "Languages for live translated captions", visual: "langs" },
     { value: 1, prefix: "~", suffix: "s", label: "To a suggested reply in our test call", visual: "speed" },
-    { value: 5, label: "Call types, each with its own notes template", visual: "dial" },
+    { value: 5, label: "Call types with their own notes template, plus Other", visual: "dial" },
     { value: 8, label: "Keyboard shortcuts, some from any app", visual: "keys" },
     { value: 0, label: "Bots joining your call", visual: "nobot" },
   ],
@@ -438,7 +488,7 @@ export const answers = {
   styles: [
     {
       key: "balanced",
-      label: "Balanced",
+      label: "Normal",
       reply:
         "Your current tool records the call. MeetFly helps you during it: it suggests what to say the moment they stop, checks facts, and writes the notes and follow-up for you.",
     },

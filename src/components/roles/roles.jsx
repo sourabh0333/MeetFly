@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { roles } from "@/content/home";
 import { SectionHead } from "@/components/section-head/section-head";
 import { useSeen } from "@/components/use-seen";
@@ -9,10 +9,23 @@ import styles from "./roles.module.css";
 // "Built for": six roles as tall columns across the full width, split by thin rules (no boxes).
 // Hovering or tapping a column widens it and shows the features that role uses most; the others
 // narrow. On phones the columns become rows that open the same way.
+const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
 export function Roles() {
   const ref = useRef(null);
   const seen = useSeen(ref);
   const [open, setOpen] = useState(0);
+
+  // Menu links like /#role-sales open that role.
+  useEffect(() => {
+    const fromHash = () => {
+      const i = roles.items.findIndex((r) => `#role-${slug(r.role)}` === window.location.hash);
+      if (i >= 0) setOpen(i);
+    };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    return () => window.removeEventListener("hashchange", fromHash);
+  }, []);
 
   return (
     <section ref={ref} id="roles" className={styles.section} data-in={seen || undefined} aria-labelledby="roles-title">
@@ -22,6 +35,7 @@ export function Roles() {
         {roles.items.map((r, i) => (
           <li
             key={r.role}
+            id={`role-${slug(r.role)}`}
             className={styles.col}
             data-open={i === open || undefined}
             style={{ "--i": i }}

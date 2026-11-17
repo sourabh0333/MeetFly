@@ -88,7 +88,9 @@ function indexAtY(path, y) {
   return lo;
 }
 
-export function PageWave({ from = "demo" }) {
+// `lift`: how far above the anchor's bottom edge the wave starts (the homepage tucks it behind the
+// demo; a page whose anchor ends in text can pass a negative lift to start below it).
+export function PageWave({ from = "demo", lift = 140 }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -111,7 +113,7 @@ export function PageWave({ from = "demo" }) {
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const anchor = document.getElementById(from);
-      const start = anchor ? anchor.getBoundingClientRect().bottom + window.scrollY - 140 : h * 0.6;
+      const start = anchor ? anchor.getBoundingClientRect().bottom + window.scrollY - lift : h * 0.6;
       const end = document.documentElement.scrollHeight - 40;
       path = end - start > 200 ? buildPath(w, start, end, Math.min(900, Math.max(520, h * 0.85))) : null;
       if (reduce) draw();
@@ -217,7 +219,7 @@ export function PageWave({ from = "demo" }) {
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [from]);
+  }, [from, lift]);
 
   return <canvas ref={ref} className={styles.wave} aria-hidden="true" />;
 }

@@ -8,7 +8,7 @@ import { useOnScreen, useSeen } from "@/components/use-seen";
 import styles from "./answers.module.css";
 
 // "Answers your way", scroll-driven. On wide screens the top part pins while you scroll and a 3D
-// wheel of the four answer styles turns with the scroll (Balanced → Short → Bullets → Script); the
+// wheel of the four answer styles turns with the scroll (Normal → Short → Bullets → Script); the
 // reply decodes into place for each style. A soft spotlight follows the cursor. After the pin:
 // "Or just ask" types onto an underline, and the quick actions slide past as a big marquee with one
 // word filling in at a time. Narrow screens and reduced motion: no pin; tap a style (it also cycles).

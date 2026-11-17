@@ -1,0 +1,415 @@
+/* The feature reels: four ruled rows on a grid (name | reel | counter). The reel runs the full
+   width under the side columns and is masked to the middle; names bend like a drum (transforms
+   come from feature-reels.jsx). No boxes. */
+.wrap {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --side: max(var(--gutter), calc((100vw - 1240px) / 2));
+  --col: calc(var(--side) + clamp(140px, 14vw, 210px));
+  position: relative;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rows {
+  border-top: 1px solid var(--color-line);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--col) minmax(0, 1fr) var(--col);
+  align-items: center;
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* ---------- The reel ---------- */
+.window {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  overflow: hidden;
+  perspective: 1100px;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  mask-image: linear-gradient(
+    90deg,
+    transparent calc(var(--col) - 40px),
+    #000 calc(var(--col) + 90px),
+    #000 calc(100% - var(--col) - 90px),
+    transparent calc(100% - var(--col) + 40px)
+  );
+}
+
+.window:active {
+  cursor: grabbing;
+}
+
+.gauge {
+  position: absolute;
+  left: var(--col);
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.track li {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 2.2vw, 36px);
+  padding-right: clamp(20px, 2.2vw, 36px);
+  opacity: 0.14;
+  will-change: transform, opacity;
+}
+
+.track button {
+  border: 0;
+  padding: clamp(16px, 2.4vh, 24px) 0;
+  background: none;
+  color: var(--ink);
+  font: 700 clamp(1.8rem, 0.9rem + 2.7vw, 3.5rem) / 1.1 var(--font-display);
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  cursor: inherit;
+  -webkit-user-drag: none;
+}
+
+/* The picked name: a highlighter line in its colour draws under it. */
+.track button {
+  background: linear-gradient(var(--tone), var(--tone)) 0 84% / 0 0.14em no-repeat;
+  transition: background-size 0.6s var(--ease);
+}
+
+.track button[data-on] {
+  background-size: 100% 0.14em;
+}
+
+.spark {
+  flex: none;
+  width: clamp(14px, 1.4vw, 22px);
+  height: clamp(14px, 1.4vw, 22px);
+  fill: var(--tone);
+}
+
+/* The lens: a soft glow in the middle of every row, and a tick on the rule below it. */
+.lens {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: clamp(240px, 28vw, 380px);
+  transform: translateX(-50%);
+  background: radial-gradient(50% 60% at 50% 50%, color-mix(in srgb, var(--tone) 20%, transparent), transparent);
+  pointer-events: none;
+}
+
+.row::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 40px;
+  height: 3px;
+  margin-left: -20px;
+  border-radius: 3px;
+  background: rgba(11, 10, 20, 0.12);
+  transition:
+    background-color 0.5s,
+    width 0.5s var(--ease),
+    margin 0.5s var(--ease);
+}
+
+.row:first-child::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  width: 40px;
+  height: 3px;
+  margin-left: -20px;
+  border-radius: 3px;
+  background: rgba(11, 10, 20, 0.12);
+}
+
+.row[data-on]::after {
+  width: 72px;
+  margin-left: -36px;
+  background: var(--tone);
+}
+
+/* ---------- Side columns ---------- */
+.name {
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 0;
+  padding-left: var(--side);
+  pointer-events: none;
+}
+
+.name span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--tone);
+  filter: saturate(1.4) brightness(0.8);
+}
+
+.name b {
+  font: 600 1.02rem / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--color-muted);
+  transition: color 0.4s;
+}
+
+.name em {
+  grid-column: 2;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.name em::after {
+  content: " features";
+}
+
+.row[data-on] .name b {
+  color: var(--ink);
+}
+
+/* The counter: which of the row's features is in the lens. */
+.count {
+  grid-column: 3;
+  grid-row: 1;
+  z-index: 2;
+  justify-self: end;
+  margin: 0;
+  padding-right: var(--side);
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  transition: color 0.4s;
+}
+
+.row[data-on] .count {
+  color: var(--ink);
+}
+
+/* Two hairlines frame the lens down all four rows, with corner ticks top and bottom. */
+.rows {
+  position: relative;
+  isolation: isolate;
+}
+
+.frame {
+  --w: clamp(300px, 34vw, 480px);
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: -14px;
+  bottom: -14px;
+  width: var(--w);
+  margin-left: calc(var(--w) / -2);
+  border-left: 1px dashed rgba(11, 10, 20, 0.12);
+  border-right: 1px dashed rgba(11, 10, 20, 0.12);
+  pointer-events: none;
+  mask-image: linear-gradient(transparent, #000 14px, #000 calc(100% - 14px), transparent);
+}
+
+/* ---------- What the picked feature does: where | what | how far ---------- */
+.detail {
+  display: grid;
+  grid-template-columns: var(--col) minmax(0, 1fr) var(--col);
+  align-items: start;
+  min-height: 160px;
+  padding-top: clamp(28px, 4.5vh, 44px);
+}
+
+.where {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px 10px;
+  margin: 8px 0 0;
+  padding-left: var(--side);
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.where i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--tone);
+  box-shadow: 0 0 12px var(--tone);
+  transition: background-color 0.4s;
+}
+
+.where b {
+  grid-column: 2;
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.detailBody {
+  max-width: 640px;
+  justify-self: center;
+  text-align: center;
+  animation: swap 0.55s var(--ease) both;
+}
+
+@keyframes swap {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(10px);
+  }
+}
+
+/* How far: one tick per feature, in its group's colour; the picked one stands tall. */
+.ticks {
+  justify-self: end;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 30px;
+  margin: 4px 0 0;
+  padding-right: var(--side);
+}
+
+.ticks i {
+  width: 3px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--tone);
+  opacity: 0.35;
+  transition:
+    height 0.5s var(--ease),
+    opacity 0.4s;
+}
+
+.ticks i[data-on] {
+  height: 30px;
+  opacity: 1;
+}
+
+.detailBody h2 {
+  margin: 0 0 8px;
+  font: 700 clamp(1.6rem, 1.1rem + 1.4vw, 2.4rem) / 1.1 var(--font-display);
+  letter-spacing: -0.035em;
+}
+
+.text {
+  margin: 0;
+  font-size: 1.06rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 14px 0 0;
+}
+
+.chips span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.05);
+  font: 500 0.76rem / 1.4 var(--font-mono);
+  color: var(--ink);
+}
+
+/* ---------- Narrow screens: the name and controls sit above the reel ---------- */
+@media (max-width: 760px) {
+  .wrap {
+    --col: var(--gutter);
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-top: 14px;
+  }
+
+  .name {
+    grid-row: 1;
+    padding-left: var(--gutter);
+  }
+
+  .count {
+    grid-column: 2;
+    grid-row: 1;
+    padding-right: var(--gutter);
+  }
+
+  .frame {
+    display: none;
+  }
+
+  .window {
+    grid-row: 2;
+    mask-image: linear-gradient(90deg, transparent, #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent);
+  }
+
+  .track button {
+    padding: 10px 0 16px;
+  }
+
+  .detail {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 14px;
+    padding: 28px var(--gutter) 0;
+  }
+
+  .where {
+    display: flex;
+    padding-left: 0;
+  }
+
+  .detailBody {
+    grid-row: 2;
+  }
+
+  .ticks {
+    grid-row: 3;
+    justify-self: center;
+    padding-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detailBody {
+    animation: none;
+  }
+}

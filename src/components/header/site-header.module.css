@@ -31,7 +31,7 @@
 }
 
 .header[data-island] .bar {
-  width: 520px;
+  width: 640px;
   height: 52px;
   padding: 0 6px 0 8px;
   border-radius: 999px;
@@ -145,22 +145,51 @@
 }
 
 .nav {
+  position: relative;
   margin: 0 auto;
   display: flex;
   gap: 2px;
 }
 
+/* Dropdowns are centred under the whole menu, so they never run off the screen. */
+.item {
+  position: static;
+}
+
 .link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: none;
   color: var(--color-muted);
   text-decoration: none;
+  font: inherit;
   font-size: 0.92rem;
   padding: 8px 14px;
   border-radius: 999px;
+  cursor: pointer;
   transition: color 0.2s, background-color 0.2s;
 }
 
+.link svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.link[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
 .link:hover,
-.link:focus-visible {
+.link:focus-visible,
+.link[aria-expanded="true"] {
   color: var(--color-text);
   background: rgba(11, 10, 20, 0.05);
 }
@@ -172,9 +201,231 @@
 }
 
 .header[data-island] .link:hover,
-.header[data-island] .link:focus-visible {
+.header[data-island] .link:focus-visible,
+.header[data-island] .link[aria-expanded="true"] {
   color: #fff;
   background: rgba(255, 255, 255, 0.08);
+}
+
+/* A menu item that is both a link (the word) and a menu (the arrow). */
+.split {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  transition: background-color 0.2s;
+}
+
+.split .link {
+  padding-right: 4px;
+}
+
+.split .link:hover,
+.split .link:focus-visible {
+  background: none;
+}
+
+.split:hover,
+.split[data-open] {
+  background: rgba(11, 10, 20, 0.05);
+}
+
+.header[data-island] .split:hover,
+.header[data-island] .split[data-open] {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.chev {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 30px;
+  margin-right: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.header[data-island] .chev {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.chev svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.chev[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* ---------- Dropdown panel ---------- */
+.panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  display: grid;
+  grid-template-columns: auto 230px;
+  max-width: calc(100vw - 2 * var(--gutter));
+  gap: 8px;
+  padding: 10px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 20, 0.06),
+    0 30px 60px -24px rgba(43, 26, 120, 0.4);
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  visibility: hidden;
+  /* Centred under the menu (the shift lives in transform: the build drops a separate translate). */
+  transform: translateX(-50%) translateY(-8px) scale(0.98);
+  transform-origin: 50% 0;
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s var(--ease-out),
+    visibility 0s linear 0.35s;
+}
+
+/* A bridge so the mouse can cross the gap without closing it. */
+.panel::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -16px;
+  height: 16px;
+}
+
+.panel[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%);
+  transition:
+    opacity 0.25s ease,
+    transform 0.35s var(--ease-out),
+    visibility 0s;
+}
+
+.groups {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+}
+
+.group {
+  width: 250px;
+}
+
+.group[data-wide] {
+  width: 300px;
+}
+
+.group[data-wide] ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.groupTitle {
+  margin: 0 0 8px;
+  padding: 0 10px;
+  font: 500 0.64rem / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.group a {
+  display: grid;
+  gap: 2px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.group a:hover,
+.group a:focus-visible {
+  background: rgba(91, 46, 255, 0.07);
+}
+
+.group b {
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.group span {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--color-muted);
+}
+
+/* The featured link: a dark tile. */
+.featured {
+  position: relative;
+  display: grid;
+  align-content: end;
+  gap: 4px;
+  min-height: 150px;
+  padding: 18px;
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(91, 46, 255, 0.55), transparent 60%),
+    var(--ink);
+  color: #fff;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.featured b {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.featured span {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.featured svg {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.featured:hover svg {
+  transform: translateX(4px);
+}
+
+/* ---------- Phone menu ---------- */
+.burger {
+  display: none;
+}
+
+.sheet {
+  display: none;
 }
 
 .download {
@@ -222,7 +473,7 @@
   stroke: var(--ink);
 }
 
-@media (max-width: 720px) {
+@media (max-width: 860px) {
   .nav {
     display: none;
   }
@@ -232,7 +483,123 @@
   }
 
   .header[data-island] .bar {
-    width: 300px;
+    width: 340px;
+  }
+
+  .download {
+    margin-left: auto;
+  }
+
+  .burger {
+    flex: none;
+    display: grid;
+    place-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(11, 10, 20, 0.06);
+    cursor: pointer;
+  }
+
+  .header[data-island] .burger {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .burger i {
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--ink);
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .header[data-island] .burger i {
+    background: #fff;
+  }
+
+  .burger[aria-expanded="true"] i:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .burger[aria-expanded="true"] i:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  .sheet {
+    pointer-events: auto;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: var(--gutter);
+    right: var(--gutter);
+    display: grid;
+    gap: 18px;
+    max-height: calc(100svh - 110px);
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow:
+      0 0 0 1px rgba(11, 10, 20, 0.06),
+      0 30px 60px -24px rgba(43, 26, 120, 0.45);
+    backdrop-filter: blur(18px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.35s var(--ease-out),
+      visibility 0s linear 0.35s;
+  }
+
+  .sheet[data-open] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 0.25s ease,
+      transform 0.35s var(--ease-out),
+      visibility 0s;
+  }
+
+  .sheetGroup ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sheetGroup .groupTitle {
+    padding: 0;
+  }
+
+  .sheetGroup a,
+  .sheetLink {
+    display: block;
+    padding: 8px 0;
+    color: var(--ink);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .sheetGroup .sheetLink {
+    margin-bottom: 4px;
+    padding: 0 0 6px;
+    border-top: 0;
+  }
+
+  .sheetLink {
+    padding: 12px 0 0;
+    border-top: 1px solid var(--color-line);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
   }
 }
 

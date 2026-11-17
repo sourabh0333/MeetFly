@@ -65,6 +65,7 @@ export function Compare() {
   // Draw the wires from the call to each tile, whenever the layout changes.
   useEffect(() => {
     const measure = () => {
+      if (!stage.current || !hub.current) return; // the section has left the page
       const s = stage.current.getBoundingClientRect();
       const h = hub.current.getBoundingClientRect();
       if (!window.matchMedia("(min-width: 1081px)").matches) {
