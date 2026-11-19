@@ -1,0 +1,435 @@
+/* The close of the Features page: centred like the hero, with the same soft glows. A rolling "29",
+   a flashing ticker of feature names, the download buttons, and a ruled row of jump links. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  display: grid;
+  justify-items: center;
+  padding: clamp(96px, 14vh, 160px) var(--gutter) clamp(64px, 9vh, 100px);
+  text-align: center;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Glows (as in the hero) ---------- */
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent);
+}
+
+.glowA,
+.glowB {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.glowA {
+  width: 900px;
+  height: 620px;
+  left: calc(50% - 900px);
+  top: 10%;
+  background: radial-gradient(closest-side, rgba(91, 46, 255, 0.14), transparent);
+  animation: driftA 22s ease-in-out infinite alternate;
+}
+
+.glowB {
+  width: 860px;
+  height: 600px;
+  left: calc(50% + 20px);
+  top: 18%;
+  background: radial-gradient(closest-side, rgba(212, 255, 58, 0.42), transparent);
+  animation: driftB 26s ease-in-out infinite alternate;
+}
+
+@keyframes driftA {
+  to {
+    transform: translate(160px, -60px) scale(1.1);
+  }
+}
+
+@keyframes driftB {
+  to {
+    transform: translate(-180px, 70px) scale(0.92);
+  }
+}
+
+/* ---------- Reveal ---------- */
+.eyebrow,
+.title,
+.ticker,
+.actions,
+.jumps {
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease),
+    filter 0.9s var(--ease);
+}
+
+.section:not([data-in]) :is(.eyebrow, .title, .ticker, .actions, .jumps) {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(24px);
+}
+
+.title {
+  transition-delay: 0.08s;
+}
+
+.ticker {
+  transition-delay: 0.2s;
+}
+
+.actions {
+  transition-delay: 0.3s;
+}
+
+.jumps {
+  transition-delay: 0.45s;
+}
+
+/* ---------- Headline ---------- */
+.eyebrow {
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px var(--color-line),
+    0 6px 16px -10px rgba(43, 26, 120, 0.3);
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.title {
+  margin: 26px 0 0;
+  font: 700 clamp(2.6rem, 0.9rem + 6vw, 6.4rem) / 1 var(--font-display);
+  letter-spacing: -0.05em;
+}
+
+.line1,
+.line2 {
+  display: block;
+}
+
+.line2 {
+  margin-top: 0.04em;
+}
+
+/* The rolling 29, filled with the page's gradient. */
+.odo {
+  display: inline-flex;
+  vertical-align: top;
+  font-variant-numeric: tabular-nums;
+}
+
+.col {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.strip {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--d) * -1em));
+  transition: transform 1.8s cubic-bezier(0.2, 0.9, 0.1, 1) calc(0.2s + var(--c) * 0.15s);
+}
+
+.strip > span {
+  display: block;
+  height: 1em;
+  line-height: 1em;
+  background: linear-gradient(165deg, #a3cf1f 5%, #8f74ff 55%, var(--violet) 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- The ticker of feature names ---------- */
+.ticker {
+  display: grid;
+  place-items: center;
+  min-height: 2em;
+  margin: 22px 0 0;
+  font-size: var(--text-lead);
+  color: var(--color-muted);
+}
+
+.flash {
+  font: 500 0.95rem / 1.4 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.settled {
+  animation: settle 0.7s var(--ease) both;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(8px);
+  }
+}
+
+/* ---------- Buttons ---------- */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 60px;
+  padding: 0 24px 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 20, 0.1),
+    0 12px 26px -16px rgba(11, 10, 20, 0.35);
+  color: var(--ink);
+  font: 600 1rem / 1.1 var(--font-display);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease);
+}
+
+.btn[data-primary] {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 18px 40px -16px rgba(11, 10, 20, 0.65);
+}
+
+.btn svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.btn[data-primary] svg {
+  fill: var(--lime);
+}
+
+.btn span {
+  display: grid;
+}
+
+.btn small {
+  font: 500 0.68rem / 1.3 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.btn[aria-disabled="true"] {
+  cursor: default;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.watch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 60px;
+  padding: 0 18px 0 8px;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.watch > span {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--violet);
+}
+
+.watch svg {
+  width: 14px;
+  height: 14px;
+  fill: #fff;
+}
+
+.watch:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------- Jump back: a ruled row of four ---------- */
+.jumps {
+  width: 100%;
+  max-width: 1240px;
+  margin-top: clamp(56px, 9vh, 96px);
+}
+
+.jumpLabel {
+  margin: 0 0 14px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.jumps ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.jumps li + li {
+  border-left: 1px solid var(--color-line);
+}
+
+.jumps a {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 22px clamp(14px, 1.8vw, 26px);
+  color: var(--ink);
+  text-align: left;
+  text-decoration: none;
+}
+
+/* A colour line grows along the top on hover. */
+.jumps a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 3px;
+  background: var(--tone);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 0.5s var(--ease);
+}
+
+.jumps a:hover::before,
+.jumps a:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.jn {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.jl {
+  font: 600 1.05rem / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.jc {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.05);
+  font: 500 0.7rem / 1.3 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.jumps svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.35s var(--ease);
+}
+
+.jumps a:hover svg {
+  transform: translateY(-3px);
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 860px) {
+  .jumps ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .jumps li:nth-child(3) {
+    border-left: 0;
+  }
+
+  .jumps li:nth-child(n + 3) {
+    border-top: 1px solid var(--color-line);
+  }
+}
+
+@media (max-width: 560px) {
+  .actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    justify-content: center;
+  }
+
+  .watch {
+    justify-content: center;
+  }
+
+  .jumps ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .jumps li + li {
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glowA,
+  .glowB,
+  .settled {
+    animation: none;
+  }
+
+  .strip,
+  .eyebrow,
+  .title,
+  .ticker,
+  .actions,
+  .jumps {
+    transition: none;
+  }
+}

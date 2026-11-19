@@ -1,0 +1,788 @@
+/* "After the call", counting up from the moment you hang up: a timeline over three ruled columns
+   (+0 min, +2 min, +1 week), then one full-width line for the picked feature. The mirror of
+   Before. No boxes: rules, big type, pills. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --peach-ink: #c4622e;
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--gutter) clamp(72px, 10vh, 120px);
+}
+
+.board {
+  --p: 0;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* ---------- The start of the timeline ---------- */
+.timeline {
+  margin: 0 0 16px;
+}
+
+.start {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.start i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff4d4f;
+  box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.5);
+  animation: beat 2s ease-out infinite;
+}
+
+@keyframes beat {
+  70%,
+  100% {
+    box-shadow: 0 0 0 9px rgba(255, 77, 79, 0);
+  }
+}
+
+/* ---------- The three columns ---------- */
+.cols {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 2px solid var(--color-line);
+}
+
+/* The fill along the top edge, driven by scroll. */
+.fillLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -2px;
+  height: 2px;
+}
+
+.fillLine i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #ff4d4f, var(--tone) 35%, var(--violet));
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p));
+}
+
+.col {
+  position: relative;
+  padding: clamp(28px, 4vh, 40px) clamp(20px, 2.6vw, 40px) 0;
+}
+
+.fillLine + .col {
+  padding-left: 0;
+}
+
+.col:last-child {
+  padding-right: 0;
+}
+
+.col + .col {
+  border-left: 1px solid var(--color-line);
+}
+
+/* A tick on the timeline at the start of each column. */
+.tick {
+  position: absolute;
+  left: -6px;
+  top: -7px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 2px var(--tone);
+  transition:
+    background-color 0.4s,
+    box-shadow 0.4s;
+}
+
+.fillLine + .col .tick {
+  left: 0;
+}
+
+.board[data-on] .tick {
+  background: var(--tone);
+}
+
+.col[data-on] .tick {
+  box-shadow:
+    inset 0 0 0 2px var(--tone),
+    0 0 0 5px color-mix(in srgb, var(--tone) 35%, transparent);
+}
+
+/* The big time: + 0 min, rolling up. */
+.time {
+  display: flex;
+  font-variant-numeric: tabular-nums;
+  align-items: baseline;
+  margin: 0;
+  font: 700 clamp(3.6rem, 2rem + 4.4vw, 6.4rem) / 1 var(--font-display);
+  letter-spacing: -0.05em;
+  color: rgba(11, 10, 20, 0.22);
+  transition: color 0.5s var(--ease);
+}
+
+.col[data-on] .time {
+  color: var(--ink);
+}
+
+.plus {
+  color: var(--peach-ink);
+  margin-right: 0.04em;
+}
+
+.roll {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.strip {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--d) * -1em));
+  transition: transform 1.6s cubic-bezier(0.2, 0.9, 0.1, 1) calc(0.25s + var(--c) * 0.22s);
+}
+
+.strip > span {
+  display: block;
+  height: 1em;
+  line-height: 1em;
+}
+
+.unit {
+  margin-left: 12px;
+  font: 500 clamp(0.95rem, 0.85rem + 0.3vw, 1.15rem) / 1 var(--font-mono);
+  letter-spacing: 0;
+}
+
+.timeLabel {
+  margin: 12px 0 22px;
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* The column's features, as ruled rows. */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list li {
+  border-top: 1px solid var(--color-line);
+}
+
+.list button {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: 0;
+  padding: 16px 0;
+  background: none;
+  color: var(--color-muted);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.list button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  height: 2px;
+  width: 0;
+  background: var(--tone);
+  transition: width 0.5s var(--ease);
+}
+
+.num {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--peach-ink);
+}
+
+.fname {
+  font: 600 clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem) / 1.25 var(--font-display);
+  letter-spacing: -0.02em;
+  transition: transform 0.45s var(--ease);
+}
+
+.arrow svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 0.3s,
+    transform 0.4s var(--ease);
+}
+
+.list button:hover,
+.list button[aria-pressed="true"] {
+  color: var(--ink);
+}
+
+.list button[aria-pressed="true"]::before {
+  width: 100%;
+}
+
+.list button[aria-pressed="true"] .fname {
+  transform: translateX(4px);
+}
+
+.list button[aria-pressed="true"] .arrow svg,
+.list button:hover .arrow svg {
+  opacity: 1;
+  transform: none;
+}
+
+/* Columns and rows rise in when reached. */
+.col {
+  transition:
+    opacity 0.8s var(--ease) calc(var(--c) * 0.15s),
+    transform 0.9s var(--ease) calc(var(--c) * 0.15s),
+    filter 0.8s var(--ease) calc(var(--c) * 0.15s);
+}
+
+.board:not([data-on]) .col {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(22px);
+}
+
+/* ---------- The picked feature ---------- */
+.detail {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+  gap: clamp(28px, 5vw, 80px);
+  min-height: 240px;
+  margin-top: clamp(36px, 5vh, 52px);
+  padding-top: clamp(28px, 4vh, 40px);
+  border-top: 1px solid var(--color-line);
+}
+
+.what p,
+.what h3 {
+  margin: 0;
+}
+
+.whereTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px !important;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.whereTag span {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--tone);
+  letter-spacing: 0.04em;
+}
+
+.what h3 {
+  margin-bottom: 10px;
+  font: 700 clamp(1.7rem, 1.2rem + 1.4vw, 2.4rem) / 1.08 var(--font-display);
+  letter-spacing: -0.04em;
+}
+
+.whatText {
+  font-size: 1.04rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.hint {
+  margin-top: 18px !important;
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.what,
+.example {
+  animation: swap 0.55s var(--ease) both;
+}
+
+@keyframes swap {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(10px);
+  }
+}
+
+.example {
+  padding: 4px 0 4px clamp(18px, 2vw, 28px);
+  border-left: 2px solid var(--tone);
+  animation-delay: 0.08s;
+}
+
+/* ---------- The parts ---------- */
+.example p {
+  margin: 0;
+}
+
+.example svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mono {
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: -0.12em;
+  background: var(--violet);
+  animation: blink 1s steps(2) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.ink {
+  display: inline-flex;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+
+/* Search. */
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--ink);
+  font: 600 1.3rem / 1.3 var(--font-display);
+}
+
+.hit {
+  display: grid;
+  gap: 2px;
+  margin-top: 14px !important;
+  font-size: 0.95rem;
+}
+
+.hit span {
+  color: var(--color-muted);
+}
+
+.hit mark {
+  padding: 0 3px;
+  border-radius: 3px;
+  background: var(--lime);
+  color: var(--ink);
+}
+
+/* Ask. */
+.question {
+  font: 600 1.15rem / 1.4 var(--font-display);
+}
+
+.answer {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px !important;
+  padding-left: 12px;
+  border-left: 3px solid var(--lime);
+  line-height: 1.55;
+}
+
+.answer img {
+  margin-top: 2px;
+}
+
+/* Title and template. */
+.docTitle {
+  margin: 0 0 10px;
+  font: 700 clamp(2rem, 1.4rem + 1.6vw, 2.8rem) / 1 var(--font-display);
+  letter-spacing: -0.045em;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  font: 500 0.78rem / 1.4 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.template {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 5px 8px 5px 12px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px var(--color-line);
+}
+
+.template b {
+  font: 600 0.84rem / 1.2 var(--font-display);
+  color: var(--ink);
+  animation: swap 0.5s var(--ease) both;
+}
+
+@keyframes swap {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(6px);
+  }
+}
+
+/* Recording. */
+.player {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.play {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.play svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--lime);
+  stroke: none;
+}
+
+.wave {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 38px;
+}
+
+.wave i {
+  flex: 1;
+  height: calc(var(--h) * 100%);
+  border-radius: 2px;
+  background: var(--tone);
+  opacity: 0.85;
+}
+
+.head {
+  position: absolute;
+  left: 0;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+.example .head {
+  animation: playhead 9s linear infinite;
+}
+
+@keyframes playhead {
+  to {
+    left: 100%;
+  }
+}
+
+.recLabel {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.recLabel i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+/* Stats. */
+.talkBar {
+  display: block;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--tone);
+}
+
+.talkBar i {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--violet);
+  transition: width 1.4s var(--ease) 0.3s;
+}
+
+.example .talkBar i {
+  width: var(--you);
+}
+
+.talkLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font: 500 0.78rem / 1.4 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.statList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+}
+
+.statList dt {
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.statList dd {
+  margin: 2px 0 0;
+  font: 700 1.4rem / 1.2 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+/* Structured notes. */
+.summary {
+  margin: 6px 0 16px !important;
+  font-size: 1.06rem;
+  line-height: 1.6;
+}
+
+.group + .group {
+  margin-top: 12px;
+}
+
+.ticks {
+  display: grid;
+  gap: 8px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ticks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.ticks li > span {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1.5px rgba(11, 10, 20, 0.2);
+  color: transparent;
+  transition:
+    background-color 0.35s calc(0.6s + var(--k) * 0.35s),
+    color 0.35s calc(0.6s + var(--k) * 0.35s),
+    box-shadow 0.35s calc(0.6s + var(--k) * 0.35s);
+}
+
+.ticks svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 2.2;
+}
+
+.example .ticks li > span {
+  background: var(--tone);
+  color: var(--ink);
+  box-shadow: none;
+}
+
+/* Your notes. */
+.mineLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--violet) !important;
+}
+
+.mine {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mine li {
+  padding-left: 14px;
+  border-left: 3px solid var(--violet);
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Email. */
+.subject {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 600 1.1rem / 1.3 var(--font-display);
+}
+
+.body {
+  min-height: 4.8em;
+  margin: 10px 0 14px !important;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* Export. */
+.exportRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.exportRow > span:not(.ink) {
+  padding: 6px 13px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px var(--color-line);
+  font: 500 0.78rem / 1.2 var(--font-mono);
+}
+
+.fine {
+  max-width: 1240px;
+  margin: 22px auto 0;
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+/* ---------- Narrow screens: the columns stack; the detail follows ---------- */
+@media (max-width: 900px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .col,
+  .fillLine + .col,
+  .col:last-child {
+    padding: 28px 0 8px 22px;
+  }
+
+  .col + .col {
+    border-left: 0;
+  }
+
+  .cols {
+    border-top: 0;
+    border-left: 2px solid var(--color-line);
+  }
+
+  .fillLine {
+    left: -2px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+  }
+
+  .fillLine i {
+    background: linear-gradient(#ff4d4f, var(--tone) 35%, var(--violet));
+    transform-origin: 50% 0;
+    transform: scaleY(var(--p));
+  }
+
+  .tick,
+  .fillLine + .col .tick {
+    left: -9px;
+    top: 34px;
+  }
+
+  .detail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .col,
+  .strip,
+  .example .talkBar i,
+  .example .ticks li > span {
+    transition: none;
+  }
+
+  .start i,
+  .example .head,
+  .what,
+  .example,
+  .caret,
+  .template b {
+    animation: none;
+  }
+}

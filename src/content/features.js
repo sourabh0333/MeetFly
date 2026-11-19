@@ -179,12 +179,15 @@ export const duringCall = {
 export const beforeCall = {
   eyebrow: "01 · Before the call",
   title: "Walk in prepared, or rehearse first",
-  lead: "Everything MeetFly does in the fifteen minutes before a call.",
+  lead: "Everything MeetFly does in the fifteen minutes before a call, minute by minute.",
+  minLabel: "min to go",
+  nowLabel: "now",
   window: "MeetFly",
   steps: [
     {
       id: "calendar",
       t: "T–15 min",
+      min: 15,
       screen: "Today",
       chip: "3 meetings today",
       demo: {
@@ -201,6 +204,7 @@ export const beforeCall = {
     {
       id: "call-prep",
       t: "T–12 min",
+      min: 12,
       screen: "Prepare call",
       chip: "Ready to start",
       demo: {
@@ -216,6 +220,7 @@ export const beforeCall = {
     {
       id: "profiles",
       t: "T–8 min",
+      min: 8,
       screen: "Context profiles",
       chip: "2 added to this call",
       demo: {
@@ -229,6 +234,7 @@ export const beforeCall = {
     {
       id: "practice",
       t: "T–5 min",
+      min: 5,
       screen: "Practice mode",
       chip: "Rehearsing",
       demo: {
@@ -240,6 +246,7 @@ export const beforeCall = {
     {
       id: "join",
       t: "T–0",
+      min: 0,
       screen: "Join a meeting",
       chip: "Opened inside MeetFly",
       demo: {
@@ -249,5 +256,127 @@ export const beforeCall = {
         people: ["Client", "You"],
       },
     },
+  ],
+};
+
+// "After the call", as the anatomy of one meeting's notes: each part of the notes carries the
+// feature that made it. The summary, open items and the price worry come from the same real
+// practice call as the homepage demo; the numbers, the email and the search are examples.
+export const afterCall = {
+  eyebrow: "03 · After the call",
+  title: "Notes, recording and follow-up, done when you hang up",
+  lead: "Counting up from the moment you press End: what is ready right away, what you send next, and what you come back to later.",
+  start: "You hang up",
+  // Counting up from the moment you hang up: three times, three features each.
+  times: [
+    { id: "now", plus: 0, unit: "min", label: "When you hang up", features: ["notes", "my-notes", "stats"] },
+    { id: "soon", plus: 2, unit: "min", label: "Before your next call", features: ["recording", "follow-up", "export"] },
+    { id: "later", plus: 1, unit: "week", label: "Whenever you need it", features: ["library", "ask-across", "rewrite"] },
+  ],
+  hint: "Hover or tap a feature",
+  example: "Example notes. The summary and open items are from a real MeetFly practice call; the numbers and email are examples.",
+  parts: [
+    { id: "library", side: "right", kind: "search", query: "pilot price", hit: "Pilot call", excerpt: "…our main worry is the **price**. It is higher than the tool we use…" },
+    {
+      id: "ask-across",
+      side: "left",
+      kind: "ask",
+      question: "What did clients say about price this month?",
+      answer: "Two calls raised price. Both asked for a pilot before deciding.",
+    },
+    { id: "rewrite", side: "right", kind: "title", title: "Pilot call", meta: ["Nov 14", "18 min", "3 people"], template: "Sales", templates: ["Sales", "Team meeting", "Interview", "Customer support"] },
+    { id: "recording", side: "left", kind: "player", length: "18:24", label: "Recording · both sides" },
+    {
+      id: "stats",
+      side: "right",
+      kind: "stats",
+      you: 41,
+      items: [
+        ["Duration", "18:24"],
+        ["Turns", "46"],
+        ["MeetFly helped", "7 times"],
+      ],
+      youLabel: "You",
+      themLabel: "Them",
+    },
+    {
+      id: "notes",
+      side: "left",
+      kind: "notes",
+      summaryLabel: "Summary",
+      summary: "The client’s team reviewed the proposal and liked it. Price is the main worry compared with their current tool.",
+      groups: [
+        ["Decisions", ["Offer a two-week free pilot for up to 10 seats"]],
+        ["Open questions", ["Pilot start date and seat count", "Addressing the price objection"]],
+      ],
+    },
+    {
+      id: "my-notes",
+      side: "right",
+      kind: "mine",
+      label: "From your notes",
+      items: ["They compare us with their current tool", "Setup in one day: mention it again"],
+    },
+    {
+      id: "follow-up",
+      side: "left",
+      kind: "email",
+      subject: "Next steps on the pilot",
+      body: "Hi, thanks for your time today. As discussed, we can start a two-week free pilot for up to 10 seats. Which date suits your team?",
+      open: "Open in mail app",
+    },
+    { id: "export", side: "right", kind: "export", copy: "Copy summary", formats: ["PDF", "Word", "Markdown"] },
+  ],
+};
+
+// "Everywhere": the five features that work across the whole app, on a ruled grid. Shortcut keys
+// are the app's (from featureGroups); privacy follows the homepage wording (never "100% local");
+// the usage numbers are examples.
+export const everywhere = {
+  eyebrow: "04 · Everywhere",
+  title: "Fast to reach, easy to trust",
+  lead: "The things that work across the whole app, from the first shortcut to where your notes are kept.",
+  keysHint: "Try B or ⌘K on your keyboard",
+  command: {
+    typed: "pilot",
+    results: [
+      { icon: "search", label: "Search meetings for “pilot”", meta: "2 calls" },
+      { icon: "link", label: "Join a meeting from a link", meta: "Paste" },
+      { icon: "target", label: "Prepare a call", meta: "Action" },
+    ],
+  },
+  privacy: {
+    local: { title: "On your computer", items: ["Notes", "Transcripts", "Recordings", "Call profiles"] },
+    out: { title: "Sent to speech and AI services", items: ["Audio", "Transcript text"] },
+    fact: "No bot joins your call",
+  },
+  usage: {
+    month: "This month",
+    meters: [
+      { label: "Transcription", used: 312, limit: 600, unit: "min" },
+      { label: "AI requests", used: 1240, limit: 3000, unit: "" },
+    ],
+    note: "Example numbers",
+  },
+  desktop: { systems: ["macOS", "Windows"], light: "Light", dark: "Dark", setup: "Short setup guide" },
+};
+
+// The closing section of the Features page: the bookend to the hero. Download buttons follow
+// siteConfig.downloads ("Coming soon" while there are no links, as on the homepage).
+export const featuresEnd = {
+  eyebrow: "That’s everything",
+  before: "features.",
+  after: "One download.",
+  settle: "All of it in one desktop app for Mac and Windows.",
+  mac: "Download for Mac",
+  windows: "Download for Windows",
+  soon: "Coming soon",
+  watch: { label: "Watch it work", href: "/#demo" },
+  jumpLabel: "Jump back to",
+  jumps: [
+    { href: "#before", n: "01", label: "Before the call", group: "before" },
+    { href: "#during", n: "02", label: "During the call", group: "during" },
+    { href: "#after", n: "03", label: "After the call", group: "after" },
+    { href: "#everywhere", n: "04", label: "Everywhere", group: "everywhere" },
   ],
 };
