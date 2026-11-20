@@ -1,0 +1,468 @@
+/* "Your data, your rules": a retention timeline (past meetings as dots, a moving cutoff), a ruled
+   row of three switches, and a footer line. No boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--gutter);
+}
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.wrap p {
+  margin: 0;
+}
+
+.label {
+  font: 700 clamp(1.25rem, 1rem + 0.8vw, 1.7rem) / 1.15 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.text {
+  margin-top: 8px !important;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* ---------- Row 1: keep meetings for ---------- */
+.keep {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+  padding: clamp(32px, 5vh, 48px) 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.segments {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  margin-top: 22px !important;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.06);
+}
+
+.thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / var(--n));
+  border-radius: 999px;
+  background: var(--ink);
+  transform: translateX(calc(var(--i) * 100%));
+  transition: transform 0.55s var(--ease);
+}
+
+.segments button {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  padding: 9px 8px;
+  background: none;
+  color: var(--color-muted);
+  font: 500 0.84rem / 1 var(--font-display);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.35s;
+}
+
+.segments button[aria-checked="true"] {
+  color: #fff;
+}
+
+.tally {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 16px !important;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.tally b {
+  font: 700 1.3rem / 1 var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* The timeline. */
+.chart {
+  position: relative;
+  height: 210px;
+}
+
+/* The kept stretch, tinted, up to the cutoff. */
+.kept {
+  position: absolute;
+  left: 0;
+  top: 34px;
+  bottom: 40px;
+  width: var(--cut);
+  border-radius: 10px 0 0 10px;
+  background: linear-gradient(90deg, rgba(91, 46, 255, 0.1), rgba(91, 46, 255, 0.03));
+  transition: width 0.9s var(--ease);
+}
+
+.cut {
+  position: absolute;
+  left: var(--cut);
+  top: 0;
+  bottom: 40px;
+  border-left: 2px dashed var(--violet);
+  transition: left 0.9s var(--ease);
+}
+
+.cut b {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  font: 500 0.72rem / 1 var(--font-mono);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.cut[data-forever] {
+  border-left-color: transparent;
+}
+
+.cut[data-forever] b {
+  transform: translateX(-100%);
+}
+
+/* Meetings as dots; cleared ones fade to outlines. */
+.dot {
+  position: absolute;
+  top: calc(48px + var(--row) * 38px);
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: var(--violet);
+  box-shadow: 0 0 0 3px var(--color-bg);
+  transform: scale(0);
+  transition:
+    transform 0.5s cubic-bezier(0.34, 1.6, 0.5, 1) calc(var(--k) * 0.012s),
+    background-color 0.5s,
+    box-shadow 0.5s;
+}
+
+.keep[data-on] .dot {
+  transform: scale(1);
+}
+
+.keep[data-on] .dot[data-gone] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px rgba(11, 10, 20, 0.22);
+  transform: scale(0.72);
+  transition-delay: 0s;
+}
+
+.axis {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 34px;
+  height: 1px;
+  background: rgba(11, 10, 20, 0.18);
+}
+
+.tick {
+  position: absolute;
+  bottom: 0;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.tick::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  width: 1px;
+  height: 10px;
+  background: rgba(11, 10, 20, 0.3);
+}
+
+.tick[data-first] {
+  transform: none;
+}
+
+.tick[data-first]::before {
+  left: 0;
+}
+
+/* ---------- Row 2: three switches ---------- */
+.switches {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.switches li {
+  display: flex;
+  flex-direction: column;
+  padding: 30px clamp(18px, 2.4vw, 36px);
+}
+
+.switches li:first-child {
+  padding-left: 0;
+}
+
+.switches li:last-child {
+  padding-right: 0;
+}
+
+.switches li + li {
+  border-left: 1px solid var(--color-line);
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  align-self: flex-start;
+  margin-top: auto;
+  border: 0;
+  padding: 22px 0 0;
+  background: none;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.switch i {
+  position: relative;
+  width: 56px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.16);
+  transition: background-color 0.35s;
+}
+
+.switch i::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(11, 10, 20, 0.3);
+  transition:
+    transform 0.45s var(--ease),
+    background-color 0.35s;
+}
+
+.switch[aria-checked="true"] i {
+  background: var(--ink);
+}
+
+.switch[aria-checked="true"] i::after {
+  transform: translateX(24px);
+  background: var(--lime);
+}
+
+.switch[aria-checked="true"] span {
+  color: var(--ink);
+}
+
+/* ---------- Row 3: the honest note, facts, delete all ---------- */
+.foot {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(0, 3fr);
+  align-items: start;
+  gap: clamp(24px, 4vw, 56px);
+  padding-top: clamp(28px, 4vh, 40px);
+}
+
+.honest {
+  display: flex;
+  gap: 14px;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.honest b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.lock {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.lock svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.facts {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.facts svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--ok);
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.deleteCell {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  text-align: right;
+}
+
+.deleteCell small {
+  max-width: 26ch;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.delete {
+  border: 0;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(214, 48, 49, 0.45);
+  color: #c62828;
+  font: 600 0.88rem / 1 var(--font-display);
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.delete:hover {
+  background: rgba(214, 48, 49, 0.08);
+}
+
+/* Reveal. */
+.wrap > * {
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.9s var(--ease),
+    filter 0.8s var(--ease);
+}
+
+.section:not([data-in]) .wrap > * {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(20px);
+}
+
+.switches {
+  transition-delay: 0.12s;
+}
+
+.foot {
+  transition-delay: 0.22s;
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 900px) {
+  .keep {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .switches {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .switches li,
+  .switches li:first-child,
+  .switches li:last-child {
+    padding: 24px 0;
+  }
+
+  .switches li + li {
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .foot {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .deleteCell {
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 560px) {
+  .tick:not([data-first]):not(:last-child) {
+    font-size: 0.6rem;
+  }
+
+  .segments button {
+    padding: 9px 4px;
+    font-size: 0.78rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb,
+  .kept,
+  .cut,
+  .dot,
+  .switch i,
+  .switch i::after,
+  .wrap > * {
+    transition: none;
+  }
+}

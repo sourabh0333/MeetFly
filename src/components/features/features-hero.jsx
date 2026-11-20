@@ -1,4 +1,4 @@
-import { featuresPage } from "@/content/features";
+import { featureGroups, featuresPage } from "@/content/features";
 import { DecodeText } from "@/components/hero/decode-text";
 import { MagneticLink } from "@/components/hero/magnetic-link";
 import { FeatureReels } from "./feature-reels";
@@ -18,7 +18,7 @@ export function FeaturesHero() {
         <p className={styles.eyebrow}>
           <span className={styles.tag}>
             <i aria-hidden="true" />
-            {featuresPage.eyebrow.tag}
+            {featureGroups.reduce((n, g) => n + g.items.length, 0)} {featuresPage.eyebrow.tag}
           </span>
           {featuresPage.eyebrow.text}
         </p>

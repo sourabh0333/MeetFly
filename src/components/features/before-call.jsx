@@ -138,6 +138,34 @@ function Demo({ step, live }) {
         ))}
       </ul>
     );
+  if (step.id === "reminders")
+    return (
+      <>
+        <p className={styles.notify}>
+          <span className={styles.bell} aria-hidden="true">
+            <svg viewBox="0 0 16 16">
+              <path d="M4 11V7a4 4 0 0 1 8 0v4l1.5 1.5h-11zM6.5 14h3" />
+            </svg>
+          </span>
+          <span>
+            <b>{d.note}</b>
+            <small>{d.meta}</small>
+          </span>
+        </p>
+        <p className={styles.pills}>
+          <span>{d.join}</span>
+          <span data-hot>{d.notes}</span>
+        </p>
+        <p className={styles.label}>{d.autoLabel}</p>
+        <p className={styles.types}>
+          {d.auto.map((t) => (
+            <span key={t} data-on={t === d.autoPicked || undefined}>
+              {t}
+            </span>
+          ))}
+        </p>
+      </>
+    );
   if (step.id === "practice")
     return (
       <>
@@ -194,7 +222,9 @@ function Row({ step, i }) {
       </div>
       <div className={styles.content}>
         <p className={styles.meta}>
-          <span>{String(i + 1).padStart(2, "0")} / 05</span>
+          <span>
+            {String(i + 1).padStart(2, "0")} / {String(beforeCall.steps.length).padStart(2, "0")}
+          </span>
           {step.t}
         </p>
         <h3 className={styles.name}>{f.name}</h3>

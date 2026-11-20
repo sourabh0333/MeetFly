@@ -300,6 +300,60 @@
   font: 500 0.72rem / 1.4 var(--font-mono);
 }
 
+/* Reminders. */
+.notify {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.notify > span:last-child {
+  display: grid;
+}
+
+.notify b {
+  font: 700 1.2rem / 1.25 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.notify small {
+  font-size: 0.86rem;
+  color: var(--color-muted);
+}
+
+.bell {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--lime);
+}
+
+.row[data-seen] .bell {
+  animation: ring 1.2s var(--ease) 0.6s 2;
+}
+
+@keyframes ring {
+  20% {
+    transform: rotate(14deg);
+  }
+
+  40% {
+    transform: rotate(-12deg);
+  }
+
+  60% {
+    transform: rotate(8deg);
+  }
+
+  80% {
+    transform: rotate(-4deg);
+  }
+}
+
 /* Call prep. */
 .types span {
   padding: 5px 11px;

@@ -3,7 +3,7 @@
 // Voice changer, voice cloning and stealth mode are deliberately left out for now.
 
 export const featuresPage = {
-  eyebrow: { tag: "29 features", text: "One app for the whole call" },
+  eyebrow: { tag: "features", text: "One app for the whole call" },
   title: { top: "Everything MeetFly does,", prefix: "from hello to", mark: "follow-up." },
   lead: "A prep desk before you start, a live copilot while you talk, and notes that write themselves when you hang up.",
   primary: { label: "Download MeetFly", href: "/#download" },
@@ -29,6 +29,8 @@ export const featureGroups = [
       { id: "quick-actions", icon: "bolt", name: "Quick actions", text: "One tap for the help you need right now.", chips: ["What should I say?", "Follow-ups", "Recap", "Fact-check"] },
       { id: "read-my-screen", icon: "screen", name: "Read my screen", text: "MeetFly looks at what’s shared: questions, slides, even coding problems." },
       { id: "ask-box", icon: "ask", name: "Ask box", text: "Type any question. Answers use the call so far and the context you gave it." },
+      { id: "voice-commands", icon: "mic", name: "“MeetFly, …” commands", text: "Say or type “MeetFly, …” to ask something privately, make something, or pause and resume listening." },
+      { id: "created", icon: "doc", name: "Make it mid-call", text: "Ask for a document, a diagram or a slide outline and it is made from the call, saved with the meeting, ready to copy or export.", chips: ["Doc", "Diagram", "Slides"] },
       { id: "live-translation", icon: "globe", name: "Live translation", text: "The other side’s captions, translated live into any of 14 languages." },
       { id: "live-notes", icon: "notes", name: "Live notes", text: "A rolling summary, action items and open questions, refreshed every 30 seconds." },
       { id: "bookmarks", icon: "bookmark", name: "Bookmarks", text: "Press B to mark a key moment. It’s highlighted in your notes." },
@@ -42,10 +44,11 @@ export const featureGroups = [
     line: "Walk in prepared, or rehearse first.",
     tone: "#b9e639",
     items: [
-      { id: "calendar", icon: "calendar", name: "Your calendar", text: "Connect Google Calendar, Outlook or iCloud. Today’s and tomorrow’s meetings show up with Join and Prepare." },
+      { id: "calendar", icon: "calendar", name: "Your calendar", text: "Paste your calendar’s private link from Google Calendar, Outlook or iCloud. Today’s and tomorrow’s meetings show up with Join and Prepare." },
       { id: "call-prep", icon: "target", name: "Call prep", text: "Pick the call type, set your goal, add notes for the AI (who you’re meeting, agenda, prices, key facts) and attach documents.", chips: ["Team meeting", "Sales", "Interview", "Customer support", "Negotiation", "Other"] },
       { id: "profiles", icon: "user", name: "Context profiles", text: "Save what you reuse, like your resume, product facts or pricing, and add it to any call." },
       { id: "practice", icon: "mic", name: "Practice mode", text: "Your mic plays the other person, so you can rehearse before the real thing." },
+      { id: "reminders", icon: "bell", name: "Meeting reminders", text: "A reminder a minute before each meeting and when it starts, with Join and Take notes. MeetFly can take notes on its own for all meetings, or all but one-on-ones." },
       { id: "join", icon: "link", name: "Join from MeetFly", text: "Paste a Meet, Zoom, Teams, Webex or Whereby link and the meeting opens inside MeetFly. Sign in once to Google, Microsoft or Zoom." },
     ],
   },
@@ -58,13 +61,13 @@ export const featureGroups = [
     items: [
       { id: "notes", icon: "doc", name: "Structured notes", text: "Notes from a template for the call type: summary, key points, decisions, action items and open questions." },
       { id: "my-notes", icon: "pen", name: "My notes", text: "Jot rough notes during the call. When you press End, MeetFly turns them into full notes and keeps every point you wrote." },
-      { id: "follow-up", icon: "mail", name: "Follow-up email", text: "A ready-to-send follow-up email at the end of your notes, opened in your mail app in one click." },
+      { id: "follow-up", icon: "mail", name: "Follow-up email", text: "A recap email with the summary, decisions and action items with owners, addressed to the people invited. Open it in your mail app or copy it." },
       { id: "recording", icon: "rec", name: "Recording", text: "Record the full call, both sides, to play back or download. You choose whether to record." },
       { id: "stats", icon: "chart", name: "Call stats", text: "Duration, turns, your share of the talking and how often MeetFly helped." },
       { id: "library", icon: "search", name: "Search every meeting", text: "Full-text search across titles, notes, your notes and transcripts, with the matching excerpt. Organise with tags and folders." },
       { id: "ask-across", icon: "ask", name: "Ask across meetings", text: "Ask a question and get an answer drawn from all your past calls." },
       { id: "rewrite", icon: "redo", name: "Rewrite notes", text: "Turn any meeting’s notes into another template." },
-      { id: "export", icon: "export", name: "Export and share", text: "Copy a share-ready summary, or save as a file.", chips: ["PDF", "Word", "Markdown"] },
+      { id: "export", icon: "export", name: "Export and share", text: "Copy it as Markdown, rich text or for Slack, save it as a file, or send it to Zapier, Make or n8n with a webhook.", chips: ["PDF", "Word", "Markdown", "Slack", "Webhook"] },
     ],
   },
   {
@@ -78,7 +81,7 @@ export const featureGroups = [
       { id: "command-bar", icon: "command", name: "⌘K command bar", text: "Jump anywhere, run any action, paste a meeting link to join, or search every meeting." },
       { id: "privacy", icon: "lock", name: "Stored on your computer", text: "Notes, transcripts and recordings are saved on your machine. No bot joins your call. Audio and transcript text go to the speech and AI services MeetFly uses." },
       { id: "usage", icon: "gauge", name: "Usage and limits", text: "See this month’s usage and set monthly limits on transcription minutes and AI requests." },
-      { id: "desktop", icon: "laptop", name: "Mac and Windows", text: "A desktop app with light and dark themes and a short setup guide." },
+      { id: "desktop", icon: "laptop", name: "Mac and Windows", text: "A desktop app with light, dark and system themes. It can start when you log in and wait in the menu bar, with your next meeting one click away." },
     ],
   },
 ];
@@ -154,6 +157,15 @@ export const duringCall = {
       typed: "What did they say about the budget?",
       answer: "They said the price is higher than their current tool, and they want to see the value first.",
       note: "ask-box",
+    },
+    { stamp: "1:12", who: "you", text: "MeetFly, make a slide outline for the pilot plan.", mark: "Voice command", note: "voice-commands" },
+    {
+      stamp: "1:14",
+      who: "meetfly",
+      kind: "created",
+      label: "Created · Slide outline",
+      bullets: ["1 · Why a pilot", "2 · Two weeks, up to 10 seats", "3 · Set up in one day", "4 · What we will measure"],
+      note: "created",
     },
     {
       stamp: "1:30",
@@ -244,6 +256,21 @@ export const beforeCall = {
       },
     },
     {
+      id: "reminders",
+      t: "T–1 min",
+      min: 1,
+      chip: "Reminder",
+      demo: {
+        note: "Pilot call starts in 1 minute",
+        meta: "Sales · 3 people",
+        join: "Join",
+        notes: "Take notes",
+        autoLabel: "Take notes automatically",
+        auto: ["Off", "All meetings", "All except one-on-ones"],
+        autoPicked: "All except one-on-ones",
+      },
+    },
+    {
       id: "join",
       t: "T–0",
       min: 0,
@@ -325,7 +352,7 @@ export const afterCall = {
       body: "Hi, thanks for your time today. As discussed, we can start a two-week free pilot for up to 10 seats. Which date suits your team?",
       open: "Open in mail app",
     },
-    { id: "export", side: "right", kind: "export", copy: "Copy summary", formats: ["PDF", "Word", "Markdown"] },
+    { id: "export", side: "right", kind: "export", copy: "Copy summary", formats: ["PDF", "Word", "Markdown", "Slack", "Webhook"] },
   ],
 };
 
@@ -379,4 +406,66 @@ export const featuresEnd = {
     { href: "#after", n: "03", label: "After the call", group: "after" },
     { href: "#everywhere", n: "04", label: "Everywhere", group: "everywhere" },
   ],
+};
+
+// Note templates, word for word from the app (server/services/prompts.ts, NOTE_TEMPLATES). Team
+// meeting and Other share one template. Every template starts with Summary and has Action items.
+export const templates = {
+  eyebrow: "Note templates",
+  title: "Notes shaped by the call you had",
+  lead: "Pick the call type before you start and the notes come back in the right shape. Rewrite them into another template any time.",
+  docTitle: "Pilot call",
+  shared: "In every template",
+  types: [
+    {
+      id: "meeting",
+      label: "Team meeting",
+      also: "and Other",
+      blurb: "For syncs, stand-ups and anything that isn’t one of the others.",
+      sections: [["Summary", "3–5 sentences"], ["Key points"], ["Decisions"], ["Action items", "task · owner · due date"], ["Open questions"], ["Follow-up email draft", "short, ready to send"]],
+    },
+    {
+      id: "sales",
+      label: "Sales",
+      blurb: "Built around the deal: what they need, whether they can buy, and what is in the way.",
+      sections: [["Summary", "3–5 sentences"], ["Customer needs and pain points"], ["Budget, authority, need and timeline"], ["Objections and how they were handled"], ["Action items", "task · owner · due date"], ["Next steps"], ["Follow-up email draft", "short, ready to send"]],
+    },
+    {
+      id: "interview",
+      label: "Interview",
+      blurb: "Written for you as the candidate, so the next interview goes better.",
+      sections: [["Summary", "3–5 sentences"], ["Questions asked"], ["How I answered", "strong points"], ["What to improve next time"], ["Action items", "task · owner · due date"], ["Thank-you email draft", "short, ready to send"]],
+    },
+    {
+      id: "support",
+      label: "Customer support",
+      blurb: "From the problem to the fix, with how the customer felt about it.",
+      sections: [["Summary", "3–5 sentences"], ["Issue reported"], ["Troubleshooting steps taken"], ["Resolution"], ["Action items", "task · owner · due date"], ["Customer sentiment"], ["Follow-up email draft", "short, ready to send"]],
+    },
+    {
+      id: "negotiation",
+      label: "Negotiation",
+      blurb: "Who wanted what, who gave what, and what is still open.",
+      sections: [["Summary", "3–5 sentences"], ["Positions of each side"], ["Concessions offered"], ["Agreed terms"], ["Open issues"], ["Action items", "task · owner · due date"], ["Follow-up email draft", "short, ready to send"]],
+    },
+  ],
+};
+
+// "Your data, your rules": the app's privacy settings, from its code (store/retention.ts,
+// DeleteAllMeetings.tsx, consent-store.ts, ErrorReportsSetting.tsx). Never "100% local": audio
+// and transcript text go to the speech and AI services. No claim of encryption (not in the code).
+export const control = {
+  eyebrow: "Privacy",
+  title: "Your data, your rules",
+  lead: "Your call history lives on your computer, and you decide how long it stays.",
+  statement: "Notes, transcripts and recordings are saved on your computer, not on a MeetFly server.",
+  honest: "While you talk, audio and transcript text are sent to the speech and AI services MeetFly uses, so it can write down the call and answer.",
+  settings: [
+    { id: "keep", label: "Keep meetings for", text: "Older meetings are cleared once a day.", kind: "segments", options: ["Forever", "90 days", "30 days", "7 days"], from: 0, to: 2 },
+    { id: "audio", label: "Keep audio recordings", text: "Switch it off to keep the transcript only. Recording is your choice.", kind: "toggle", on: true },
+    { id: "consent", label: "Remind me to ask for consent", text: "At the start of a meeting, with a notice you can paste into the chat.", kind: "toggle", on: true },
+    { id: "errors", label: "Send error reports", text: "On by default to help fix bugs. Turn it off any time.", kind: "toggle", on: true, flip: true },
+    { id: "delete", label: "Delete all meetings", text: "Every meeting, its notes and its recording, from this computer.", kind: "button", button: "Delete all…" },
+  ],
+  facts: ["No bot joins your call", "Delete any single meeting", "Webhooks only send when you ask"],
 };

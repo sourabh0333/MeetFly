@@ -3,6 +3,8 @@ import { BeforeCall } from "@/components/features/before-call";
 import { DuringCall } from "@/components/features/during-call";
 import { AfterCall } from "@/components/features/after-call";
 import { Everywhere } from "@/components/features/everywhere";
+import { Templates } from "@/components/features/templates";
+import { Control } from "@/components/features/control";
 import { FeaturesEnd } from "@/components/features/features-end";
 import { PageWave } from "@/components/page-wave/page-wave";
 
@@ -21,7 +23,9 @@ export default function Page() {
       <BeforeCall />
       <DuringCall />
       <AfterCall />
+      <Templates />
       <Everywhere />
+      <Control />
       <FeaturesEnd />
     </>
   );

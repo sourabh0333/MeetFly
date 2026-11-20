@@ -1,0 +1,843 @@
+/* "One call, set up for your role": a glass role switcher, then three equal columns (Before ·
+   During · After) whose content shows at once; a lime dot travels the flow line on top and
+   highlights each column in turn.
+   Open columns split by hairlines; the only filled shape is the app's own dark panel. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --rule: var(--color-line);
+
+  position: relative;
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(80px, 12vh, 140px) var(--gutter) clamp(72px, 10vh, 120px);
+  overflow-x: clip;
+}
+
+/* ---------- The role switcher ---------- */
+.switchWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(40px, 6vh, 60px);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.8s var(--ease) 0.1s,
+    transform 0.9s var(--ease) 0.1s;
+}
+
+[data-in] .switchWrap {
+  opacity: 1;
+  transform: none;
+}
+
+.switcher {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  width: min(100%, 860px);
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 0 0 1px var(--rule),
+    0 18px 40px -26px rgba(43, 26, 120, 0.45);
+}
+
+.thumb {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 6px;
+  width: calc((100% - 12px) / var(--n));
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--ink);
+  box-shadow: 0 10px 24px -12px rgba(11, 10, 20, 0.7);
+  transform: translateX(calc(var(--a) * 100%));
+  transition: transform 0.6s var(--ease);
+}
+
+.switcher button {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  padding: 12px 8px;
+  border-radius: 999px;
+  background: none;
+  color: var(--color-muted);
+  font: 600 0.95rem / 1.1 var(--font-display);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.35s;
+}
+
+.switcher button:hover {
+  color: var(--ink);
+}
+
+.switcher button[aria-selected="true"] {
+  color: #fff;
+}
+
+.switcher button:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+
+/* ---------- The board ---------- */
+.board {
+  --flow: 0;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-top: 30px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* A wash of the page colour behind the board keeps the page wave faint under the text. */
+.board::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: -50px -70px;
+  background: radial-gradient(closest-side, var(--color-bg) 84%, transparent);
+  pointer-events: none;
+}
+
+/* The flow line along the top: a track, a gradient fill, a stop per column and the glowing dot. */
+.flow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+}
+
+.flow::before,
+.flowFill {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 6px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(11, 10, 20, 0.1);
+}
+
+.flowFill {
+  background: linear-gradient(90deg, var(--violet), #8a5cff 55%, #b6e01c);
+  transform: scaleX(var(--flow));
+  transform-origin: 0 50%;
+}
+
+.flowStop {
+  position: absolute;
+  top: 1px;
+  left: var(--x);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 2px rgba(11, 10, 20, 0.2);
+  transition:
+    background 0.4s,
+    box-shadow 0.4s;
+}
+
+.flowStop[data-on] {
+  background: var(--violet);
+  box-shadow: 0 0 0 4px rgba(91, 46, 255, 0.15);
+}
+
+.flowDot {
+  position: absolute;
+  top: -1px;
+  left: calc(var(--flow) * 100%);
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow:
+    0 0 0 2px var(--ink),
+    0 0 22px 6px rgba(212, 255, 58, 0.75);
+}
+
+/* ---------- The 3 × 3 board ----------
+   Columns Before · During · After (hairlines between them); rows aligned across all three:
+   the heads, what you pick, what it is about, the extras (rules across the full width). */
+.board {
+  grid-template-rows: auto auto auto auto;
+}
+
+.colHead,
+.cell {
+  --px: clamp(18px, 2.4vw, 34px);
+  position: relative;
+  min-width: 0;
+  padding-left: var(--px);
+  padding-right: var(--px);
+}
+
+.colHead[data-c="0"],
+.cell[data-c="0"] {
+  padding-left: 0;
+}
+
+.colHead[data-c="2"],
+.cell[data-c="2"] {
+  padding-right: 0;
+}
+
+.colHead:not([data-c="0"]),
+.cell:not([data-c="0"]) {
+  border-left: 1px solid var(--rule);
+}
+
+.colHead {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "num title"
+    "num where";
+  align-items: end;
+  gap: 2px 14px;
+  padding-top: 14px;
+  padding-bottom: 18px;
+}
+
+/* The ink rule under the heads, drawn inside the padding so it lines up with the content. */
+.colHead::after {
+  content: "";
+  position: absolute;
+  left: var(--px);
+  right: var(--px);
+  bottom: 0;
+  height: 1px;
+  background: var(--ink);
+}
+
+.colHead[data-c="0"]::after {
+  left: 0;
+}
+
+.colHead[data-c="2"]::after {
+  right: 0;
+}
+
+/* A soft light falls on the column the dot is on. */
+.colHead::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -70px;
+  left: -10%;
+  width: 90%;
+  height: 300px;
+  background: radial-gradient(closest-side, rgba(212, 255, 58, 0.24), rgba(212, 255, 58, 0));
+  opacity: 0;
+  transition: opacity 0.6s;
+  pointer-events: none;
+}
+
+.colHead[data-now]::before {
+  opacity: 1;
+}
+
+/* A big outlined numeral that fills with violet when the dot has reached its column. */
+.numeral {
+  grid-area: num;
+  font: 800 clamp(3rem, 2rem + 2.6vw, 4.6rem) / 0.85 var(--font-display);
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(11, 10, 20, 0.25);
+  background: linear-gradient(180deg, var(--violet), #b6e01c) no-repeat 0 100% / 100% 0%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition:
+    background-size 0.9s var(--ease),
+    -webkit-text-stroke-color 0.4s;
+}
+
+.colHead[data-on] .numeral {
+  background-size: 100% 100%;
+  -webkit-text-stroke-color: transparent;
+}
+
+.colTitle {
+  grid-area: title;
+  display: grid;
+  gap: 2px;
+  font: 700 clamp(1.15rem, 1rem + 0.5vw, 1.4rem) / 1.1 var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.colTitle em {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.where {
+  grid-area: where;
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+/* Each cell: a mono label, then its value. Rows 2 and 3 open with a dashed rule. */
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  animation: rise 0.5s var(--ease) both;
+  animation-delay: calc(var(--c) * 90ms + var(--r) * 70ms);
+}
+
+.cell:not([data-r="0"])::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--px);
+  right: var(--px);
+  border-top: 1px dashed var(--rule);
+}
+
+.cell[data-c="0"]:not([data-r="0"])::before {
+  left: 0;
+}
+
+.cell[data-c="2"]:not([data-r="0"])::before {
+  right: 0;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font: 500 var(--text-label) / 1.3 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.label em {
+  font-style: normal;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--violet);
+}
+
+.subLabel {
+  margin-top: 6px;
+}
+
+/* The template's name, as big as the goal so row 1 reads level. */
+.templateName {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font: 700 clamp(1.15rem, 1rem + 0.5vw, 1.4rem) / 1.25 var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.templateName em {
+  font: 500 var(--text-label) / 1.3 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Call type: all six, the picked one fills ink. */
+.types {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.types span {
+  overflow: hidden;
+  padding: 6px 4px;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(11, 10, 20, 0.1);
+  font: 500 0.78rem / 1.2 var(--font-display);
+  color: rgba(11, 10, 20, 0.4);
+  transition:
+    background 0.4s var(--ease),
+    color 0.3s,
+    box-shadow 0.4s,
+    transform 0.4s var(--ease);
+}
+
+.types span[data-on] {
+  animation: pickOn 0.45s var(--ease) 0.15s both;
+  background: var(--ink);
+  box-shadow: 0 8px 16px -10px rgba(11, 10, 20, 0.7);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.goal {
+  min-height: 1.3em;
+  font: 700 clamp(1.15rem, 1rem + 0.5vw, 1.4rem) / 1.25 var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+/* The goal types itself in (a stepped reveal with a caret). */
+.typed {
+  display: inline-block;
+  max-width: 100%;
+  border-right: 2px solid var(--violet);
+  padding-right: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  animation:
+    type 0.9s steps(var(--chars)) 0.25s both,
+    caretOff 0.1s linear 1.6s forwards;
+}
+
+@keyframes type {
+  from {
+    max-width: 0;
+  }
+}
+
+@keyframes caretOff {
+  to {
+    border-right-color: transparent;
+  }
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--violet);
+  animation: caret 0.9s steps(2, jump-none) infinite;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.notes {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--stone);
+}
+
+.files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.files span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 11px 4px 4px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px rgba(11, 10, 20, 0.08),
+    0 6px 14px -10px rgba(11, 10, 20, 0.45);
+  font: 500 0.82rem / 1.2 var(--font-display);
+}
+
+.files span {
+  animation: drop 0.5s var(--ease) calc(0.25s + var(--d)) both;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.95);
+  }
+}
+
+.files b {
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: var(--lime);
+  font: 600 0.58rem / 1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Answer length: a lime pill slides to the picked one. */
+.lengths {
+  --pick: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 4px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(11, 10, 20, 0.12);
+}
+
+.lengths span {
+  position: relative;
+  z-index: 1;
+  padding: 7px 0;
+  text-align: center;
+  font: 500 0.82rem / 1.2 var(--font-display);
+  color: var(--color-muted);
+  transition: color 0.35s;
+}
+
+@keyframes pickOn {
+  from {
+    background: transparent;
+    color: rgba(11, 10, 20, 0.4);
+    transform: none;
+  }
+}
+
+.lengths span[data-on] {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.lengthPill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 4);
+  border-radius: 999px;
+  background: var(--lime);
+  box-shadow: 0 6px 14px -8px rgba(94, 125, 0, 0.9);
+  transform: translateX(calc(var(--pick) * 100%));
+  animation: slide 0.65s var(--ease) 0.45s both;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+}
+
+/* The app's own dark panel with the first line of its real answer. */
+.panel {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-radius: 14px;
+  background: #0d0c16;
+  color: #fff;
+  box-shadow:
+    0 22px 40px -24px rgba(11, 10, 20, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition: box-shadow 0.6s;
+}
+
+.panel {
+  box-shadow:
+    0 22px 40px -24px rgba(11, 10, 20, 0.8),
+    0 0 0 2px rgba(212, 255, 58, 0.85),
+    0 0 34px -8px rgba(212, 255, 58, 0.7);
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 0.8rem / 1 var(--font-display);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.panelHead i {
+  margin-left: auto;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font: 500 0.6rem / 1.2 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+.panelText {
+  font: 600 0.98rem / 1.45 var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.options {
+  display: grid;
+  gap: 8px;
+}
+
+.options span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 600 0.9rem / 1.3 var(--font-display);
+}
+
+.toggle {
+  position: relative;
+  width: 32px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.14);
+}
+
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(11, 10, 20, 0.3);
+}
+
+.toggle {
+  animation: toggleOn 0.4s var(--ease) calc(var(--d) + 0.5s) both;
+}
+
+.toggle::after {
+  animation: knob 0.45s var(--ease) calc(var(--d) + 0.5s) both;
+}
+
+@keyframes toggleOn {
+  to {
+    background: var(--violet);
+  }
+}
+
+@keyframes knob {
+  to {
+    transform: translateX(14px);
+  }
+}
+
+/* Notes template: sections tick in one by one. */
+.template {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.template li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  font: 600 0.92rem / 1.3 var(--font-display);
+  color: var(--ink);
+  animation: lineOn 0.4s var(--ease) calc(0.45s + var(--j) * 0.12s) both;
+}
+
+@keyframes lineOn {
+  from {
+    color: rgba(11, 10, 20, 0.32);
+  }
+}
+
+.tick {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--lime);
+  animation: tickOn 0.4s var(--ease) calc(0.45s + var(--j) * 0.12s) both;
+}
+
+@keyframes tickOn {
+  from {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px rgba(11, 10, 20, 0.16);
+    transform: scale(0.85);
+  }
+}
+
+.tick svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tick path {
+  stroke-dasharray: 1;
+  animation: draw 0.4s var(--ease) calc(0.55s + var(--j) * 0.12s) both;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+.saved {
+  animation: savedIn 0.5s var(--ease) calc(0.6s + var(--n) * 0.12s) both;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  align-self: flex-start;
+  gap: 8px;
+  padding: 8px 14px 8px 8px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: 600 0.84rem / 1.2 var(--font-display);
+}
+
+@keyframes savedIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+}
+
+.saved svg {
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+  border-radius: 50%;
+  background: var(--lime);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.saved i {
+  font-style: normal;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 980px) {
+  .switcher {
+    display: flex;
+    width: auto;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .switcher::-webkit-scrollbar {
+    display: none;
+  }
+
+  .thumb {
+    display: none;
+  }
+
+  .switcher button {
+    flex: none;
+    padding: 11px 16px;
+  }
+
+  .switcher button[aria-selected="true"] {
+    background: var(--ink);
+  }
+
+  /* The board stacks column by column: head, then its three cells. */
+  .board {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 0;
+  }
+
+  .flow {
+    display: none;
+  }
+
+  .colHead,
+  .cell {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    order: var(--o);
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-left: 0 !important;
+  }
+
+  .colHead::after,
+  .cell::before {
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  .colHead:not([data-c="0"]) {
+    margin-top: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switchWrap,
+  .thumb,
+  .colHead::before,
+  .numeral,
+  .cell,
+  .types span,
+  .lengthPill,
+  .tick,
+  .tick path {
+    transition: none;
+  }
+
+  .caret,
+  .typed,
+  .lengthPill,
+  .types span[data-on],
+  .template li,
+  .tick,
+  .tick path,
+  .saved,
+  .cell,
+  .files span,
+  .toggle,
+  .toggle::after {
+    animation: none;
+  }
+
+  .toggle {
+    background: var(--violet);
+  }
+
+  .toggle::after {
+    transform: translateX(14px);
+  }
+}

@@ -14,17 +14,17 @@ export const nav = {
           {
             title: "During the call",
             items: [
-              { label: "Instant replies", text: "Answers in your style, the moment they stop", href: "/features#live-replies" },
-              { label: "Floating panel", text: "Stays over any meeting, one key away", href: "/features#floating-panel" },
-              { label: "Live translation", text: "Their captions in 14 languages", href: "/features#live-translation" },
+              { label: "Instant replies", text: "Answers in your style, the moment they stop", href: "/features#during-live-replies" },
+              { label: "Floating panel", text: "Stays over any meeting, one key away", href: "/features#during-floating-panel" },
+              { label: "Live translation", text: "Their captions in 14 languages", href: "/features#during-live-translation" },
             ],
           },
           {
             title: "Before and after",
             items: [
-              { label: "Call prep", text: "Call types, goals and practice", href: "/features#call-prep" },
-              { label: "Notes", text: "Live notes, then full notes and an email", href: "/features#notes" },
-              { label: "Meeting library", text: "Search and ask across every call", href: "/features#library" },
+              { label: "Call prep", text: "Call types, goals and practice", href: "/features#before-call-prep" },
+              { label: "Note templates", text: "Notes shaped by the call you had", href: "/features#templates" },
+              { label: "Meeting library", text: "Search and ask across every call", href: "/features#after" },
             ],
           },
         ],
@@ -33,21 +33,22 @@ export const nav = {
     },
     {
       label: "Use cases",
+      href: "/use-cases",
       menu: {
         groups: [
           {
             title: "Built for",
             items: [
-              { label: "Sales", href: "/#role-sales" },
-              { label: "Support", href: "/#role-support" },
-              { label: "Founders", href: "/#role-founders" },
-              { label: "Hiring", href: "/#role-hiring" },
-              { label: "Job seekers", href: "/#role-job-seekers" },
-              { label: "Multilingual teams", href: "/#role-multilingual-teams" },
+              { label: "Sales", href: "/use-cases#sales" },
+              { label: "Support", href: "/use-cases#support" },
+              { label: "Founders", href: "/use-cases#founders" },
+              { label: "Hiring", href: "/use-cases#hiring" },
+              { label: "Job seekers", href: "/use-cases#job-seekers" },
+              { label: "Multilingual teams", href: "/use-cases#multilingual-teams" },
             ],
           },
         ],
-        featured: { label: "Works with your call app", text: "Meet, Zoom, Teams, Webex and more", href: "/#platforms" },
+        featured: { label: "All use cases", text: "Six roles, one copilot", href: "/use-cases" },
       },
     },
     { label: "Privacy", href: "/#privacy" },
@@ -441,7 +442,7 @@ export const footer = {
       links: [
         { label: "Live notes", href: "/#notes" },
         { label: "Meeting library", href: "/#library" },
-        { label: "Built for", href: "/#roles" },
+        { label: "Use cases", href: "/use-cases" },
         { label: "Where your call goes", href: "/#privacy" },
         { label: "Getting started", href: "/#start" },
         { label: "Questions", href: "/#faq" },
@@ -705,7 +706,7 @@ export const roles = {
     { role: "Sales", line: "Handle objections and close the next step.", uses: ["Instant replies", "Fact-check", "Follow-up email"] },
     { role: "Support", line: "Solve it on the first call, calmly.", uses: ["Ask box", "Read my screen", "Notes after"] },
     { role: "Founders", line: "Pitch, negotiate and remember every promise.", uses: ["Call prep", "Live notes", "Ask across calls"] },
-    { role: "Hiring", line: "Stay present in interviews, not buried in notes.", uses: ["Live transcript", "Interview template", "Search past calls"] },
+    { role: "Hiring", line: "Stay present in interviews, not buried in notes.", uses: ["Live transcript", "Structured notes", "Search past calls"] },
     { role: "Job seekers", line: "Rehearse until the real interview feels easy.", uses: ["Practice mode", "Answer styles", "Notes after"] },
     { role: "Multilingual teams", line: "Follow every word and answer with confidence.", uses: ["Live translation", "Short answers", "Live transcript"] },
   ],

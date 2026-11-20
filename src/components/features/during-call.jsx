@@ -114,7 +114,7 @@ function Event({ e }) {
     body = <p className={styles.reply}>{seen ? <DecodeText text={e.text} delay={80} duration={1300} /> : e.text}</p>;
   } else if (e.kind === "shapes") {
     body = <Shapes e={e} live={on} />;
-  } else if (e.kind === "action") {
+  } else if (e.kind === "action" || e.kind === "created") {
     body = (
       <ul className={styles.list}>
         {e.bullets.map((b) => (
@@ -184,7 +184,7 @@ function Event({ e }) {
   }
 
   return (
-    <li ref={ref} className={styles.event} data-who={e.who} data-kind={e.kind || "line"} data-seen={seen || undefined}>
+    <li ref={ref} id={e.note ? `during-${e.note}` : undefined} className={styles.event} data-who={e.who} data-kind={e.kind || "line"} data-seen={seen || undefined}>
       <span className={styles.stamp}>{e.stamp}</span>
       <div className={styles.body}>
         <p className={styles.who}>
@@ -230,7 +230,7 @@ export function DuringCall() {
           ))}
 
           {/* The close: all of it lives in the floating panel. */}
-          <li ref={panelRef} className={`${styles.event} ${styles.end}`} data-on={panelOn || undefined}>
+          <li ref={panelRef} id={`during-${duringCall.panel.note}`} className={`${styles.event} ${styles.end}`} data-on={panelOn || undefined}>
             <span className={styles.stamp}>
               <svg viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M2.5 3.5h11v9h-11zM2.5 6h11" />
