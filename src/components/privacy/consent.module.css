@@ -1,0 +1,350 @@
+/* "The people in your meetings": a statement and facts (left), and the consent moment played out on
+   a ruled timeline (right). No panels: a rule, dots, an ink reminder bar and chat lines. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--gutter);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: start;
+  gap: clamp(36px, 6vw, 100px);
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-top: clamp(28px, 4vh, 40px);
+  border-top: 1px solid var(--color-line);
+}
+
+.split p {
+  margin: 0;
+}
+
+/* ---------- Left ---------- */
+.statement {
+  font: 600 clamp(1.35rem, 1.05rem + 1vw, 1.9rem) / 1.25 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.facts {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-line);
+}
+
+.facts li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.facts li > span:last-child {
+  display: grid;
+  gap: 2px;
+}
+
+.facts b {
+  font: 600 1.02rem / 1.3 var(--font-display);
+}
+
+.facts small {
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.check svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- The moment ---------- */
+.demo {
+  position: relative;
+}
+
+.timeline {
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 34px;
+  list-style: none;
+}
+
+/* The rule down the left. */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--color-line);
+}
+
+.timeline > li {
+  position: relative;
+  padding: 0 0 30px;
+  opacity: 0.15;
+  transform: translateY(10px);
+  transition:
+    opacity 0.6s var(--ease),
+    transform 0.7s var(--ease);
+}
+
+.timeline > li[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+.dot {
+  position: absolute;
+  left: -32px;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 2px var(--violet);
+  transition: background-color 0.4s;
+}
+
+li[data-on] > .dot {
+  background: var(--violet);
+}
+
+.start {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 600 1rem / 1.4 var(--font-display);
+}
+
+.stamp {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: 500 0.72rem / 1.4 var(--font-mono);
+}
+
+/* MeetFly's reminder bar (the app's own call alert). */
+.bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px 14px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 24px 40px -24px rgba(11, 10, 20, 0.6);
+}
+
+.shield {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(212, 255, 58, 0.14);
+}
+
+.shield svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bar b {
+  font: 600 1.02rem / 1.35 var(--font-display);
+}
+
+.buttons {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.buttons span {
+  padding: 7px 13px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  font: 500 0.82rem / 1.2 var(--font-display);
+  color: #e9e8f2;
+}
+
+.buttons .primary {
+  background: var(--lime);
+  color: var(--ink);
+  box-shadow: none;
+  transition:
+    transform 0.2s,
+    background-color 0.3s;
+}
+
+.buttons .primary[data-pressed] {
+  animation: press 0.45s var(--ease);
+  background: #fff;
+}
+
+@keyframes press {
+  40% {
+    transform: scale(0.92);
+  }
+}
+
+.buttons .quiet {
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* The meeting chat. */
+.chatLabel {
+  margin-bottom: 12px !important;
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.msg {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0 12px 14px;
+  border-left: 3px solid rgba(11, 10, 20, 0.12);
+}
+
+.msg[data-me] {
+  border-left-color: var(--violet);
+}
+
+.msg + .msg {
+  margin-top: 10px !important;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.5s var(--ease),
+    transform 0.6s var(--ease);
+}
+
+.msg + .msg[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+.who {
+  font: 600 0.82rem / 1.3 var(--font-display);
+  color: var(--violet);
+}
+
+.msg:not([data-me]) .who {
+  color: var(--ink);
+}
+
+.who em {
+  margin-left: 6px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(11, 10, 20, 0.05);
+  font: 500 0.64rem / 1.4 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.text {
+  min-height: 1.5em;
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: -0.12em;
+  background: var(--violet);
+  animation: blink 1s steps(2) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.replay {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 34px;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: none;
+  box-shadow: 0 0 0 1px var(--color-line);
+  color: var(--ink);
+  font: 500 0.86rem / 1 var(--font-display);
+  cursor: pointer;
+}
+
+.replay svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.replay:hover {
+  box-shadow: 0 0 0 1px rgba(11, 10, 20, 0.3);
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline > li,
+  .msg + .msg {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .caret,
+  .buttons .primary[data-pressed] {
+    animation: none;
+  }
+}

@@ -469,3 +469,21 @@ export const control = {
   ],
   facts: ["No bot joins your call", "Delete any single meeting", "Webhooks only send when you ask"],
 };
+
+// The film in the Features hero: a real, unedited screen recording of MeetFly in a practice sales
+// call (public/video/hero/app.mp4, 51s, recorded 2026-11-14). It is cropped to the meeting area
+// (no sidebar or call bar, which show voice features the site leaves out). `from` is when each step
+// starts, in seconds of the video.
+export const film = {
+  title: "Pilot call",
+  meta: "Sales · Practice call",
+  real: "Real recording",
+  note: "A real, unedited recording of MeetFly in a practice call.",
+  sound: "Muted",
+  steps: [
+    { key: "hears", from: 0, title: "Hears the call", text: "Listens on your computer. No bot joins." },
+    { key: "writes", from: 3, title: "Writes it down", text: "Every line of the other side, live." },
+    { key: "reply", from: 9, title: "Suggests a reply", text: "The moment they stop, with key points." },
+    { key: "recap", from: 44, title: "Sums it up", text: "Discussed, agreed and still open." },
+  ],
+};

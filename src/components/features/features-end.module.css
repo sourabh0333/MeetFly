@@ -377,6 +377,29 @@
   transform: translateY(-3px);
 }
 
+/* The full-policy line (Privacy close). */
+.policy {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  margin: 22px 0 0;
+  font: 500 var(--text-label) / 1.5 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.policy span:first-child {
+  color: var(--ink);
+}
+
+.policy a {
+  color: var(--violet);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ---------- Narrow screens ---------- */
 @media (max-width: 860px) {
   .jumps ul {

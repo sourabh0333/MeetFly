@@ -1,0 +1,280 @@
+/* "Every answer, by topic" as an answer wall: big-type topic tabs with a sliding underline, then a
+   ruled three-column grid of question cells; an open cell spans the whole row. No boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--gutter);
+}
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+.section:not([data-in]) .wrap {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+/* ---------- Topic tabs ---------- */
+.tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px clamp(18px, 2.6vw, 40px);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.tabs button {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  border: 0;
+  padding: 6px 0;
+  background: none;
+  color: rgba(11, 10, 20, 0.28);
+  font: 700 clamp(1.1rem, 0.75rem + 1vw, 1.65rem) / 1.1 var(--font-display);
+  letter-spacing: -0.04em;
+  cursor: pointer;
+  scroll-margin-top: 120px;
+  transition: color 0.35s;
+}
+
+.tabs sup {
+  margin-top: 0.2em;
+  font: 500 0.7rem / 1 var(--font-mono);
+  letter-spacing: 0;
+  color: var(--violet);
+}
+
+.tabs button:hover {
+  color: rgba(11, 10, 20, 0.6);
+}
+
+.tabs button[aria-selected="true"] {
+  color: var(--ink);
+}
+
+.bar {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--violet), #a3cf1f);
+  transition:
+    transform 0.55s var(--ease),
+    width 0.55s var(--ease);
+}
+
+/* ---------- The wall ---------- */
+.wall {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  position: relative;
+  border-bottom: 1px solid var(--color-line);
+  transition: background-color 0.35s;
+}
+
+.cell:not([data-open]) + .cell:not([data-open]) {
+  border-left: 1px solid var(--color-line);
+}
+
+.cell button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14px;
+  align-content: start;
+  gap: 14px 12px;
+  width: 100%;
+  min-height: 150px;
+  height: 100%;
+  border: 0;
+  padding: 24px clamp(16px, 2vw, 28px);
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background: linear-gradient(rgba(91, 46, 255, 0.05), transparent 80%);
+}
+
+.meta {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.n {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--violet);
+}
+
+.topic {
+  font: 500 0.66rem / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.q {
+  font: 600 clamp(1.05rem, 0.96rem + 0.4vw, 1.25rem) / 1.3 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.plus {
+  position: relative;
+  align-self: end;
+  width: 14px;
+  height: 14px;
+}
+
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.4s var(--ease);
+}
+
+.plus::after {
+  transform: rotate(90deg);
+}
+
+/* The open cell is lit; its answer opens as a full row under it. */
+.cell[data-open] {
+  background: linear-gradient(rgba(91, 46, 255, 0.09), rgba(91, 46, 255, 0.03));
+  box-shadow: inset 0 -3px 0 var(--violet);
+}
+
+.cell[data-open] .plus::after {
+  transform: rotate(0deg);
+}
+
+.answerRow {
+  position: relative;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: start;
+  gap: 8px clamp(20px, 3vw, 48px);
+  padding: 28px clamp(16px, 2vw, 28px) 30px;
+  border-bottom: 1px solid var(--color-line);
+  background: linear-gradient(90deg, rgba(91, 46, 255, 0.07), rgba(212, 255, 58, 0.12));
+}
+
+/* A small notch pointing up at the open cell. */
+.pointer {
+  position: absolute;
+  top: -8px;
+  left: calc((var(--col) + 0.5) * 100% / var(--cols));
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  background: rgba(127, 104, 255, 0.95);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  transition: left 0.5s var(--ease);
+}
+
+.answerRow p {
+  margin: 0;
+  animation: answer 0.5s var(--ease) 0.1s both;
+}
+
+.aq {
+  font: 700 clamp(1.25rem, 1rem + 0.8vw, 1.7rem) / 1.2 var(--font-display);
+  letter-spacing: -0.035em;
+}
+
+.a {
+  font-size: clamp(1.02rem, 0.96rem + 0.3vw, 1.2rem);
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+@keyframes answer {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(8px);
+  }
+}
+
+/* ---------- View transitions: cells glide to their new places ---------- */
+::view-transition-group(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 900px) {
+  .wall {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .wall {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cell:not([data-open]) + .cell:not([data-open]) {
+    border-left: 0;
+  }
+
+  .cell button {
+    min-height: 0;
+  }
+
+  .answerRow {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 22px 18px;
+  }
+
+  .aq {
+    display: none;
+  }
+
+  /* Tabs on one row you can swipe. */
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabs button {
+    flex: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap,
+  .bar {
+    transition: none;
+  }
+
+  .answerRow p {
+    animation: none;
+  }
+}

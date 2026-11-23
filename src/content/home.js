@@ -31,29 +31,9 @@ export const nav = {
         featured: { label: "All features", text: "Everything MeetFly does, in one place", href: "/features" },
       },
     },
-    {
-      label: "Use cases",
-      href: "/use-cases",
-      menu: {
-        groups: [
-          {
-            title: "Built for",
-            items: [
-              { label: "Sales", href: "/use-cases#sales" },
-              { label: "Support", href: "/use-cases#support" },
-              { label: "Founders", href: "/use-cases#founders" },
-              { label: "Hiring", href: "/use-cases#hiring" },
-              { label: "Job seekers", href: "/use-cases#job-seekers" },
-              { label: "Multilingual teams", href: "/use-cases#multilingual-teams" },
-              { label: "More calls it fits", href: "/use-cases#more-roles" },
-            ],
-          },
-        ],
-        featured: { label: "All use cases", text: "Six roles, one copilot", href: "/use-cases" },
-      },
-    },
-    { label: "Privacy", href: "/#privacy" },
-    { label: "FAQ", href: "/#faq" },
+    { label: "Use cases", href: "/use-cases" },
+    { label: "Privacy", href: "/privacy" },
+    { label: "FAQ", href: "/faq" },
   ],
   download: { label: "Download", href: "/#download" },
   live: "Live",
@@ -441,12 +421,12 @@ export const footer = {
     {
       title: "More",
       links: [
+        { label: "Use cases", href: "/use-cases" },
+        { label: "Privacy", href: "/privacy" },
+        { label: "FAQ", href: "/faq" },
         { label: "Live notes", href: "/#notes" },
         { label: "Meeting library", href: "/#library" },
-        { label: "Use cases", href: "/use-cases" },
-        { label: "Where your call goes", href: "/#privacy" },
         { label: "Getting started", href: "/#start" },
-        { label: "Questions", href: "/#faq" },
         { label: "Download", href: "/#download" },
       ],
     },

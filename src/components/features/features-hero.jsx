@@ -2,9 +2,11 @@ import { featureGroups, featuresPage } from "@/content/features";
 import { DecodeText } from "@/components/hero/decode-text";
 import { MagneticLink } from "@/components/hero/magnetic-link";
 import { FeatureReels } from "./feature-reels";
+import { FeaturesFilm } from "./features-film";
 import styles from "./features-hero.module.css";
 
-// The Features page hero: a big centred headline, then the feature reels (feature-reels.jsx).
+// The Features page hero: a big centred headline, a real recording of MeetFly in a call
+// (features-film.jsx), then the feature reels (feature-reels.jsx).
 export function FeaturesHero() {
   return (
     <section id="features-top" className={styles.hero} aria-labelledby="features-title">
@@ -57,6 +59,8 @@ export function FeaturesHero() {
           </a>
         </div>
       </div>
+
+      <FeaturesFilm />
 
       <div className={styles.reels}>
         <FeatureReels />

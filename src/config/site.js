@@ -9,4 +9,9 @@ export const siteConfig = {
   // Not decided yet: there are no public installers. While these are null,
   // download buttons point to the #download anchor instead of a file.
   downloads: { mac: null, windows: null },
+
+  // The full legal privacy policy and a contact. The app's backend serves the policy at /privacy
+  // (backend/src/legal); set its public address and the contact (LEGAL_CONTACT_EMAIL) once known.
+  // While null, the site shows only the policy's date, no link and no address.
+  legal: { privacyUrl: null, contactEmail: null, policyUpdated: "2026-11-16" },
 };

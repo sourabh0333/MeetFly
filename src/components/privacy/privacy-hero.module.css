@@ -1,0 +1,383 @@
+/* The Privacy hero's map: your computer (a glowing circle, your meetings inside a dashed edge) and
+   the three places anything goes, with particles on curved paths. Chips below pick a flow. */
+.wrap {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: clamp(40px, 6vh, 72px) auto 0;
+  padding: 0 var(--gutter);
+  animation: rise 1s var(--ease) 0.9s both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(18px);
+  }
+}
+
+.stage {
+  position: relative;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.tall {
+  display: none;
+}
+
+/* ---------- Your computer ---------- */
+.edgeRing {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2;
+  stroke-dasharray: 6 8;
+  animation: turn 40s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.innerRing {
+  fill: rgba(91, 46, 255, 0.04);
+  stroke: rgba(91, 46, 255, 0.18);
+  stroke-width: 1;
+}
+
+.coreDot {
+  fill: var(--ink);
+  filter: drop-shadow(0 18px 30px rgba(43, 26, 120, 0.45));
+}
+
+.coreName {
+  font: 700 17px var(--font-display);
+  letter-spacing: -0.02em;
+  fill: #fff;
+}
+
+.coreSub {
+  font: 500 9.5px var(--font-mono);
+  letter-spacing: 0.04em;
+  fill: var(--lime);
+}
+
+.svg[data-layout="tall"] .coreSub {
+  font-size: 7.6px;
+  letter-spacing: 0;
+}
+
+.svg[data-layout="tall"] .coreName {
+  font-size: 15px;
+}
+
+.item rect {
+  fill: #fff;
+  stroke: rgba(91, 46, 255, 0.35);
+  stroke-width: 1;
+  transition: fill 0.4s;
+}
+
+.item text {
+  font: 600 13px var(--font-display);
+  fill: var(--ink);
+  transition: fill 0.4s;
+}
+
+.item {
+  animation: bob 4s ease-in-out calc(var(--k) * -1s) infinite alternate;
+}
+
+@keyframes bob {
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+.edgeLabel {
+  font: 500 11px var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: var(--violet);
+}
+
+/* ---------- Flows ---------- */
+.path {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  transition: stroke-width 0.4s;
+}
+
+.particle {
+  transition: opacity 0.4s;
+}
+
+[data-kind="send"] > .path {
+  stroke: #a3cf1f;
+}
+
+[data-kind="pass"] > .path {
+  stroke: var(--violet);
+  stroke-dasharray: 7 7;
+  animation: march 1.2s linear infinite;
+}
+
+[data-kind="keep"] > .path {
+  stroke: var(--violet);
+  stroke-dasharray: 2 6;
+}
+
+@keyframes march {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.particle {
+  fill: #fff;
+  stroke-width: 2.5;
+}
+
+[data-kind="send"] > .particle {
+  stroke: #7fa311;
+  filter: drop-shadow(0 0 5px rgba(212, 255, 58, 0.95));
+}
+
+[data-kind="pass"] > .particle,
+[data-kind="keep"] > .particle {
+  stroke: var(--violet);
+  filter: drop-shadow(0 0 5px rgba(91, 46, 255, 0.7));
+}
+
+/* ---------- Places ---------- */
+.halo {
+  fill: rgba(91, 46, 255, 0.08);
+  transition: fill 0.4s;
+}
+
+.dot {
+  fill: #fff;
+  stroke: var(--violet);
+  stroke-width: 3;
+}
+
+.place[data-place="speech"] .dot,
+.place[data-place="ai"] .dot {
+  fill: var(--lime);
+  stroke: #7fa311;
+}
+
+.pName {
+  font: 700 22px var(--font-display);
+  letter-spacing: -0.03em;
+  fill: var(--ink);
+}
+
+.pBy {
+  font: 500 12px var(--font-mono);
+  fill: var(--color-muted);
+}
+
+.pStatus {
+  font: 500 14px var(--font-display);
+  fill: var(--color-muted);
+}
+
+/* ---------- Focus: the picked flow lights, the rest dims ---------- */
+.flow,
+.place,
+.core {
+  transition: opacity 0.5s;
+}
+
+/* Lines always stay visible; the flows not picked are only softened (their particles hide). */
+.svg[data-focus="meetings"] .flow,
+.svg[data-focus="audio"] .flow:not([data-flow="audio"]),
+.svg[data-focus="words"] .flow:not([data-flow="words"]),
+.svg[data-focus="meta"] .flow:not([data-flow="meta"]) {
+  opacity: 0.5;
+}
+
+.svg[data-focus="meetings"] .flow .particle,
+.svg[data-focus="audio"] .flow:not([data-flow="audio"]) .particle,
+.svg[data-focus="words"] .flow:not([data-flow="words"]) .particle,
+.svg[data-focus="meta"] .flow:not([data-flow="meta"]) .particle {
+  opacity: 0;
+}
+
+.svg[data-focus="meetings"] .place,
+.svg[data-focus="audio"] .place:not([data-place="speech"]),
+.svg[data-focus="words"] .place[data-place="speech"],
+.svg[data-focus="meta"] .place:not([data-place="server"]) {
+  opacity: 0.55;
+}
+
+/* The picked flow's line gets thicker. */
+.svg[data-focus="audio"] [data-flow="audio"] .path,
+.svg[data-focus="words"] [data-flow="words"] .path,
+.svg[data-focus="meta"] [data-flow="meta"] .path {
+  stroke-width: 3.5;
+}
+
+.svg[data-focus="meetings"] .item rect {
+  fill: var(--violet);
+}
+
+.svg[data-focus="meetings"] .item text {
+  fill: #fff;
+}
+
+/* ---------- Chips ---------- */
+.chips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-line);
+}
+
+.chips li + li {
+  border-left: 1px solid var(--color-line);
+}
+
+.chips button {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 10px;
+  align-content: start;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 20px clamp(12px, 1.6vw, 22px) 6px;
+  background: none;
+  color: var(--color-muted);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.chips li:first-child button {
+  padding-left: 0;
+}
+
+.chips button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--violet), #a3cf1f);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 0.6s var(--ease);
+}
+
+.chips button[aria-selected="true"]::before {
+  transform: scaleX(1);
+}
+
+.chips i {
+  align-self: center;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--violet);
+}
+
+.chips [data-flow="audio"] i {
+  background: var(--lime);
+  box-shadow: inset 0 0 0 2px #7fa311;
+}
+
+.chips [data-flow="words"] i {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--violet);
+}
+
+.chips [data-flow="meta"] i {
+  background: rgba(91, 46, 255, 0.4);
+}
+
+.chips b {
+  font: 700 1.05rem / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.chips span {
+  grid-column: 2;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.chips button:hover,
+.chips button[aria-selected="true"] {
+  color: var(--ink);
+}
+
+.note {
+  max-width: 80ch;
+  margin: 18px 0 0;
+  font-size: var(--text-small);
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* ---------- Phones: the tall map, chips in two columns ---------- */
+@media (max-width: 760px) {
+  .wide {
+    display: none;
+  }
+
+  .tall {
+    display: block;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .chips {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .chips li + li {
+    border-left: 0;
+  }
+
+  .chips li:nth-child(even) {
+    border-left: 1px solid var(--color-line);
+  }
+
+  .chips li:nth-child(n + 3) {
+    border-top: 1px solid var(--color-line);
+  }
+
+  .chips li button,
+  .chips li:first-child button {
+    padding: 16px 10px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap,
+  .edgeRing,
+  .item,
+  [data-kind="pass"] > .path {
+    animation: none;
+  }
+
+  .particle {
+    display: none;
+  }
+}

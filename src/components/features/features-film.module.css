@@ -1,0 +1,313 @@
+/* The Features hero's film: steps | a framed, cropped screen recording | steps. The window tilts
+   back and flattens as it scrolls in (scroll-driven). */
+.film {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3.4fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(18px, 2.4vw, 36px);
+  max-width: calc(1320px + 2 * var(--gutter));
+  margin: clamp(48px, 8vh, 80px) auto 0;
+  padding: 0 var(--gutter);
+  animation: rise 1s var(--ease) 0.9s both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(24px);
+  }
+}
+
+/* ---------- The window ---------- */
+.stage {
+  position: relative;
+  perspective: 1600px;
+}
+
+/* A soft colour glow under the window. */
+.stage::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 10% 4% -6%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(91, 46, 255, 0.28), rgba(212, 255, 58, 0.18) 60%, transparent);
+  filter: blur(40px);
+}
+
+.window {
+  overflow: hidden;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 20, 0.08),
+    0 50px 90px -40px rgba(43, 26, 120, 0.55),
+    0 20px 40px -24px rgba(11, 10, 20, 0.25);
+  transform-origin: 50% 100%;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-line);
+  background: #fbfbf8;
+  font-size: 0.86rem;
+}
+
+.lights {
+  display: flex;
+  gap: 6px;
+  margin-right: 4px;
+}
+
+.lights i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.lights i:nth-child(2) {
+  background: #febc2e;
+}
+
+.lights i:nth-child(3) {
+  background: #28c840;
+}
+
+.meta {
+  font: 500 0.74rem / 1 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.real {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  font: 500 0.66rem / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.real i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4d4f;
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* The recording is 1440 x 900; show only the meeting area (x 300–1440, y 0–790). */
+.screen {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1140 / 790;
+  background: #fbfbf8;
+}
+
+.screen video {
+  position: absolute;
+  top: 0;
+  left: calc(-300 / 1140 * 100%);
+  width: calc(1440 / 1140 * 100%);
+  height: auto;
+  display: block;
+}
+
+/* ---------- The steps ---------- */
+.steps {
+  display: grid;
+  gap: clamp(26px, 5vh, 56px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  transition: opacity 0.4s;
+}
+
+.steps li:not([data-on]) {
+  opacity: 0.5;
+}
+
+.steps button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px 12px;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.left button {
+  text-align: right;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.left .stepText {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.left .n {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.n {
+  font: 500 var(--text-label) / 1.6 var(--font-mono);
+  color: var(--violet);
+}
+
+.stepText {
+  display: grid;
+  gap: 4px;
+}
+
+.stepText b {
+  font: 700 clamp(1rem, 0.9rem + 0.4vw, 1.2rem) / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.stepText small {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.bar {
+  grid-column: 1 / -1;
+  position: relative;
+  display: block;
+  height: 3px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--color-line);
+}
+
+.bar i {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--violet), #a3cf1f);
+  transform-origin: 0 50%;
+  transition: transform 0.15s linear;
+}
+
+.left .bar i {
+  transform-origin: 100% 50%;
+}
+
+.note {
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
+  font-size: var(--text-small);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+/* ---------- Scroll-driven: the window tilts back, then flattens ---------- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .window {
+      animation: flatten linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 45%;
+    }
+
+    @keyframes flatten {
+      from {
+        transform: rotateX(22deg) scale(0.92);
+      }
+
+      to {
+        transform: none;
+      }
+    }
+  }
+}
+
+/* ---------- Narrower screens: the steps sit under the window ---------- */
+@media (max-width: 1100px) {
+  .film {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .stage {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  /* The steps join one grid, so they read 01 02 / 03 04. */
+  .steps {
+    display: contents;
+  }
+
+  .left button {
+    text-align: left;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .left .n {
+    grid-column: 1;
+  }
+
+  .left .stepText {
+    grid-column: 2;
+  }
+
+  .left .bar i {
+    transform-origin: 0 50%;
+  }
+}
+
+@media (max-width: 560px) {
+  .film {
+    gap: 18px 16px;
+  }
+
+  .steps {
+    gap: 18px;
+  }
+
+  .stepText b {
+    font-size: 0.95rem;
+  }
+
+  .titlebar .meta {
+    display: none;
+  }
+
+  .stepText small {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film,
+  .real i {
+    animation: none;
+  }
+}

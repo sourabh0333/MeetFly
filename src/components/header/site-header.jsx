@@ -127,7 +127,7 @@ export function SiteHeader() {
                 <div id={`menu-${i}`} className={styles.panel} data-open={open === i || undefined}>
                   <div className={styles.groups}>
                     {link.menu.groups.map((g) => (
-                      <div key={g.title} className={styles.group} data-wide={g.items.length > 4 || undefined}>
+                      <div key={g.title} className={styles.group} data-wide={(g.items.length > 4 && !g.items[0].text) || undefined}>
                         <p className={styles.groupTitle}>{g.title}</p>
                         <ul>
                           {g.items.map((it) => (
