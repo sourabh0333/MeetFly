@@ -45,6 +45,7 @@ export const nav = {
               { label: "Hiring", href: "/use-cases#hiring" },
               { label: "Job seekers", href: "/use-cases#job-seekers" },
               { label: "Multilingual teams", href: "/use-cases#multilingual-teams" },
+              { label: "More calls it fits", href: "/use-cases#more-roles" },
             ],
           },
         ],

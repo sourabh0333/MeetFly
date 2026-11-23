@@ -279,3 +279,37 @@ export const ask = {
     { role: "multilingual-teams", q: "Will its replies be in my language?", a: "Say so in the notes for the AI, like “Reply in English”, and it answers in that language even when the other side speaks another.", features: ["call-prep", "live-replies"] },
   ],
 };
+
+// "More calls it fits": roles beyond the six above, each with one example line and the call type
+// to pick (Other covers anything without its own template). Every feature named is in the app.
+// Online calls only: MeetFly hears your microphone and your computer's audio.
+export const moreRoles = {
+  eyebrow: "And more",
+  title: "More calls it fits",
+  lead: "Any call where you need to listen, answer well and remember what was said. A few more we hear about:",
+  typeLabel: "Call type",
+  usesLabel: "Uses",
+  them: "They say",
+  templatesLink: { label: "See every notes template", href: "/features#templates" },
+  items: [
+    { id: "customer-success", role: "Customer success", short: "Customer success", call: "Renewal check-in", them: "We’re not sure the team uses it enough to renew.", type: "Sales", uses: ["Call prep", "Instant replies", "Ask across meetings"] },
+    { id: "consultants", role: "Consultants and agencies", short: "Consultants", call: "Weekly client sync", them: "Remind me what we agreed on the timeline last week?", type: "Team meeting", uses: ["Ask across meetings", "Live notes", "Follow-up email"] },
+    { id: "research", role: "Product and user research", short: "User research", call: "User interview", them: "Honestly, I just export it to a spreadsheet every Friday.", type: "Other", uses: ["Live transcript", "Follow-ups", "Search every meeting"] },
+    { id: "managers", role: "Managers and 1:1s", short: "Managers", call: "Weekly one-on-one", them: "I’m not sure I’m ready to lead the next project.", type: "Team meeting", uses: ["Call prep", "Live notes", "Action items"] },
+    { id: "education", role: "Teachers and students", short: "Teachers", call: "Online class or office hours", them: "Could you go over the last part again?", type: "Other", uses: ["Live transcript", "Live notes", "Ask box"] },
+    { id: "presenters", role: "Presenters and trainers", short: "Presenters", call: "Live demo or workshop", them: "How is this different from what we use now?", type: "Other", uses: ["Read my screen", "Instant replies", "Answer length"] },
+  ],
+};
+
+// The close of the Use cases page: the bookend to the hero (shared styles with the Features close).
+export const ucClose = {
+  eyebrow: "Whatever you talk about",
+  before: "Your calls.",
+  after: "Your copilot.",
+  lead: "Set it up for your kind of call once, and MeetFly helps from the first word to the follow-up.",
+  mac: "Download for Mac",
+  windows: "Download for Windows",
+  soon: "Coming soon",
+  features: { label: "See every feature", href: "/features" },
+  jumpLabel: "Jump back to a role",
+};
