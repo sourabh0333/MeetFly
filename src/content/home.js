@@ -2,7 +2,8 @@
 // The hero video is a real recording of the app, labelled with how it was made.
 
 // The main menu. Shaped like similar products' menus (Product and Use cases dropdowns), but only
-// with what MeetFly really has: no Log in (no accounts), no Pricing (not decided), no Blog yet.
+// with what MeetFly really has: no Log in (no accounts), no Blog yet. Pricing (added 2026-11-24)
+// shows the app's own plans and prices.
 // Links jump to homepage sections for now; point them at the new pages as those are built.
 export const nav = {
   links: [
@@ -32,10 +33,11 @@ export const nav = {
       },
     },
     { label: "Use cases", href: "/use-cases" },
+    { label: "Pricing", href: "/pricing" },
     { label: "Privacy", href: "/privacy" },
     { label: "FAQ", href: "/faq" },
   ],
-  download: { label: "Download", href: "/#download" },
+  download: { label: "Download", href: "/download" },
   live: "Live",
   menu: "Menu",
   close: "Close menu",
@@ -52,7 +54,7 @@ export const hero = {
     label: "Always know what to say in your next call.",
   },
   lead: "MeetFly listens to your call, writes down both sides as you talk, and suggests your reply the moment the other person stops speaking.",
-  primary: { label: "Download MeetFly", href: "/#download" },
+  primary: { label: "Download MeetFly", href: "/download" },
   secondary: { label: "Watch it work", href: "/#demo" },
   trust: ["macOS and Windows", "No bot joins your call", "Notes stay on your computer"],
 };
@@ -422,12 +424,13 @@ export const footer = {
       title: "More",
       links: [
         { label: "Use cases", href: "/use-cases" },
+        { label: "Pricing", href: "/pricing" },
         { label: "Privacy", href: "/privacy" },
         { label: "FAQ", href: "/faq" },
         { label: "Live notes", href: "/#notes" },
         { label: "Meeting library", href: "/#library" },
         { label: "Getting started", href: "/#start" },
-        { label: "Download", href: "/#download" },
+        { label: "Download", href: "/download" },
       ],
     },
   ],

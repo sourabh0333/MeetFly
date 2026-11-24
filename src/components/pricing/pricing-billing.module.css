@@ -1,0 +1,612 @@
+/* "How billing works": a dark full-width band holding one matrix: four stories as columns, four
+   shared phases as rows, so every step lines up. A rail with pins runs down each column; the lit
+   phase glows across the whole row. No boxes: rules, rails and type on ink. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --rule: rgba(255, 255, 255, 0.11);
+  --dim: rgba(255, 255, 255, 0.56);
+  --gap: clamp(22px, 2.6vw, 40px);
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background: var(--ink);
+  color: #fff;
+}
+
+.bg {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.2px);
+  background-size: 26px 26px;
+  mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+  pointer-events: none;
+}
+
+.glowA,
+.glowB {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.glowA {
+  top: -14%;
+  left: 18%;
+  width: 60vw;
+  height: 34vw;
+  background: rgba(91, 46, 255, 0.3);
+}
+
+.glowB {
+  right: -10%;
+  bottom: -18%;
+  width: 34vw;
+  height: 34vw;
+  background: rgba(212, 255, 58, 0.08);
+}
+
+.inner {
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(84px, 12vh, 140px) var(--gutter) clamp(72px, 10vh, 112px);
+}
+
+/* ---------- Head ---------- */
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  max-width: 760px;
+  margin: 0 auto clamp(52px, 7vh, 80px);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1s var(--ease);
+}
+
+[data-in] .head {
+  opacity: 1;
+  transform: none;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px var(--rule);
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+.eyebrow i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 10px var(--lime);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.lead {
+  margin: 0;
+  max-width: 56ch;
+  font-size: var(--text-lead);
+  line-height: 1.55;
+  color: var(--dim);
+  text-wrap: pretty;
+}
+
+/* ---------- The matrix ---------- */
+.matrix {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(140px, 0.72fr) repeat(4, minmax(0, 1fr));
+  column-gap: var(--gap);
+}
+
+.matrix > * {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--ease) calc(0.15s + var(--c, 0) * 90ms),
+    transform 0.8s var(--ease) calc(0.15s + var(--c, 0) * 90ms);
+}
+
+[data-in] .matrix > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* Row washes: a rule on top of every phase row, and a glow on the lit one. */
+.matrix > .wash {
+  z-index: 0;
+  margin: 0 -18px;
+  border-top: 1px solid var(--rule);
+  border-radius: 18px;
+  pointer-events: none;
+  transition: opacity 0.7s var(--ease);
+}
+
+.wash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(91, 46, 255, 0.22), rgba(91, 46, 255, 0.07) 55%, rgba(212, 255, 58, 0.04));
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+
+.wash::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--lime) 20%, #8f74ff 60%, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease);
+}
+
+.wash[data-on]::before {
+  opacity: 1;
+}
+
+.wash[data-on]::after {
+  transform: none;
+}
+
+/* Corner and phase labels */
+.corner {
+  align-self: end;
+  padding-bottom: 22px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.phase {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 26px 0 26px;
+  cursor: default;
+}
+
+.phase span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.35);
+  transition: color 0.4s;
+}
+
+.phase b {
+  font: 600 1.1rem / 1.2 var(--font-display);
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.4s;
+}
+
+.phase em {
+  font-size: 0.82rem;
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.phase[data-on] span {
+  color: var(--lime);
+}
+
+.phase[data-on] b {
+  color: #fff;
+}
+
+/* Story heads */
+.storyHead {
+  display: grid;
+  align-content: end;
+  gap: 6px;
+  padding-bottom: 18px;
+}
+
+.num {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--lime);
+}
+
+.storyHead h3 {
+  margin: 0;
+  font: 700 clamp(1.15rem, 1.6vw, 1.4rem) / 1.15 var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.storyHead p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--dim);
+}
+
+/* The plan band under each head: what you're on as time passes */
+.band {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  gap: 3px;
+  padding-bottom: 22px;
+}
+
+.seg {
+  flex: var(--w) 1 0;
+  min-width: 10px;
+}
+
+.seg i {
+  display: block;
+  height: 8px;
+  border-radius: 8px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s var(--ease) calc(0.5s + var(--c, 0) * 90ms + var(--k) * 120ms);
+}
+
+[data-in] .seg i {
+  transform: none;
+}
+
+.seg[data-tone="lime"] i {
+  background: linear-gradient(90deg, #b8e620, var(--lime));
+  box-shadow: 0 0 16px -4px rgba(212, 255, 58, 0.6);
+}
+
+.seg[data-tone="violet"] i {
+  background: linear-gradient(90deg, var(--violet), #8f74ff);
+  box-shadow: 0 0 16px -4px rgba(91, 46, 255, 0.9);
+}
+
+.seg[data-tone="amber"] i {
+  background: linear-gradient(90deg, #ffb547, #ff8a3d);
+}
+
+.seg[data-tone="muted"] i {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.band em {
+  flex-basis: 100%;
+  margin-top: 9px;
+  font: 500 0.66rem / 1.4 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: pre-wrap;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* Steps on a rail */
+.stop {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding: 26px 0 26px 30px;
+}
+
+/* The rail: from the first pin to the last. */
+.stop::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.4s;
+}
+
+.stop[data-last]::before {
+  bottom: auto;
+  height: 30px;
+}
+
+.stop[data-first]::before {
+  top: 30px;
+}
+
+.stop[data-lit]::before {
+  background: linear-gradient(180deg, var(--violet), #8f74ff);
+  box-shadow: 0 0 12px rgba(143, 116, 255, 0.6);
+}
+
+.pin {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.32);
+  transition:
+    background-color 0.4s,
+    box-shadow 0.4s,
+    transform 0.5s var(--spring);
+}
+
+.stop[data-on] .pin {
+  background: var(--lime);
+  box-shadow:
+    inset 0 0 0 2px var(--lime),
+    0 0 0 6px rgba(212, 255, 58, 0.15),
+    0 0 18px rgba(212, 255, 58, 0.6);
+  transform: scale(1.15);
+}
+
+.stop[data-lit] .pin {
+  box-shadow: inset 0 0 0 2px #8f74ff;
+}
+
+.stop[data-lit][data-on] .pin {
+  box-shadow:
+    inset 0 0 0 2px var(--lime),
+    0 0 0 6px rgba(212, 255, 58, 0.15),
+    0 0 18px rgba(212, 255, 58, 0.6);
+}
+
+.phaseInline {
+  display: none;
+}
+
+.at {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(212, 255, 58, 0.7);
+  transition: color 0.4s;
+}
+
+.stopTitle {
+  font: 600 1.05rem / 1.25 var(--font-display);
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.82);
+  transition: color 0.4s;
+}
+
+.stopText {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+  text-wrap: pretty;
+  transition: color 0.4s;
+}
+
+.stop[data-on] .at {
+  color: var(--lime);
+}
+
+.stop[data-on] .stopTitle {
+  color: #fff;
+}
+
+.stop[data-on] .stopText {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Hovering a column: the others step back. */
+.matrix[data-col] .stop:not([data-lit]),
+.matrix[data-col] .storyHead:not([data-lit]),
+.matrix[data-col] .band:not([data-lit]),
+.matrix[data-col] .note:not([data-lit]) {
+  opacity: 0.4;
+}
+
+/* The note under each column */
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--dim);
+}
+
+.note span {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  font: 600 0.66rem / 1 var(--font-mono);
+  color: #fff;
+}
+
+/* ---------- Facts ---------- */
+.facts {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.72fr) repeat(4, minmax(0, 1fr));
+  column-gap: var(--gap);
+  margin: clamp(56px, 8vh, 84px) 0 0;
+  padding: 26px 0 0;
+  border-top: 1px solid var(--rule);
+  list-style: none;
+}
+
+/* The facts sit under the story columns. */
+.facts li:first-child {
+  grid-column: 2;
+}
+
+.facts li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--dim);
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.7s var(--ease) calc(0.6s + var(--k) * 0.09s),
+    transform 0.8s var(--ease) calc(0.6s + var(--k) * 0.09s);
+}
+
+[data-in] .facts li {
+  opacity: 1;
+  transform: none;
+}
+
+.facts svg {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.facts span {
+  display: grid;
+  gap: 4px;
+}
+
+.facts b {
+  font: 600 0.98rem / 1.2 var(--font-display);
+  color: #fff;
+}
+
+/* ---------- Smaller screens: one story after another ---------- */
+@media (max-width: 1100px) {
+  .matrix,
+  .facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .matrix > .corner,
+  .matrix > .phase {
+    display: none;
+  }
+
+  .matrix > *:not(.wash) {
+    grid-column: calc(var(--c) + 1) !important;
+  }
+
+  .phaseInline {
+    display: block;
+    font: 500 0.64rem / 1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .facts li:first-child {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 960px) {
+  /* One story after another, in order. */
+  .matrix {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .matrix > *:not(.wash) {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    order: var(--o);
+  }
+
+  .matrix > .wash {
+    display: none;
+  }
+
+  .storyHead {
+    padding-top: 34px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .storyHead[data-first] {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .stop {
+    padding: 14px 0 14px 30px;
+  }
+
+  .pin {
+    top: 16px;
+  }
+
+  .stop[data-last]::before {
+    height: 18px;
+  }
+
+  .note {
+    margin-bottom: 18px;
+  }
+
+  .matrix[data-col] .stop:not([data-lit]),
+  .matrix[data-col] .storyHead:not([data-lit]),
+  .matrix[data-col] .band:not([data-lit]),
+  .matrix[data-col] .note:not([data-lit]) {
+    opacity: 1;
+  }
+
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 24px;
+  }
+}
+
+@media (max-width: 560px) {
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head,
+  .matrix > *,
+  .facts li {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .seg i {
+    transform: none;
+    transition: none;
+  }
+}

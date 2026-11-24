@@ -10,7 +10,7 @@ export const privacyPage = {
   eyebrow: { tag: "Privacy", text: "Where every part of your call goes" },
   title: { top: "Your calls live", prefix: "on your", mark: "computer." },
   lead: "MeetFly sends only what it needs to write down the call and answer, to the services that do that work. Here is exactly where each thing goes.",
-  primary: { label: "Download MeetFly", href: "/#download" },
+  primary: { label: "Download MeetFly", href: "/download" },
   secondary: { label: "See your controls", href: "/features#privacy-controls" },
   mapLabel: "Where it goes",
   from: "From your call",

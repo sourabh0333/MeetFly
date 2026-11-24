@@ -31,7 +31,7 @@
 }
 
 .header[data-island] .bar {
-  width: 640px;
+  width: 700px; /* 640 before Pricing joined the menu */
   height: 52px;
   padding: 0 6px 0 8px;
   border-radius: 999px;
@@ -43,6 +43,9 @@
 .brand {
   position: relative;
   display: grid;
+  /* One row exactly as tall as the brand, so both images centre on the bar (the 46px wordmark
+     used to stretch the row and push the icon 3px low). */
+  grid-template-rows: minmax(0, 1fr);
   flex: none;
   height: 40px;
   width: 128px;
@@ -166,6 +169,7 @@
   text-decoration: none;
   font: inherit;
   font-size: 0.92rem;
+  white-space: nowrap;
   padding: 8px 14px;
   border-radius: 999px;
   cursor: pointer;

@@ -1,0 +1,525 @@
+/* The Download page's close: headline + buttons | a big "ready" ring that fills on scroll,
+   then four quick answers across the grid. No boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --pop: cubic-bezier(0.34, 1.6, 0.5, 1);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(60px, 10vh, 120px) var(--gutter) clamp(80px, 12vh, 140px);
+}
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.wrap p,
+.wrap h2,
+.wrap h3,
+.wrap h4 {
+  margin: 0;
+}
+
+/* ---------- Top: words | ring ---------- */
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+  padding-top: clamp(40px, 6vh, 64px);
+  border-top: 1px solid rgba(11, 10, 20, 0.16);
+}
+
+.copy {
+  display: grid;
+  gap: 22px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.eyebrow i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a3cf1f;
+  box-shadow: 0 0 0 4px rgba(212, 255, 58, 0.35);
+}
+
+.title {
+  display: grid;
+  font: 700 clamp(2.8rem, 1.4rem + 4.6vw, 5.6rem) / 0.98 var(--font-display);
+  letter-spacing: -0.055em;
+}
+
+/* "starts here." in violet; a lime highlighter sweeps under it when the ring reaches 100%. */
+.mark {
+  width: fit-content;
+  padding: 0 0.06em;
+  margin-left: -0.06em;
+  color: var(--violet);
+  background: linear-gradient(transparent 58%, rgba(212, 255, 58, 0.85) 58% 92%, transparent 92%) 0 0 / 0% 100% no-repeat;
+  transition: background-size 1.1s var(--ease) 0.15s;
+}
+
+.section[data-done] .mark {
+  background-size: 100% 100%;
+}
+
+.lead {
+  max-width: 46ch;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 60px;
+  padding: 0 12px 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 20, 0.1),
+    0 12px 26px -16px rgba(11, 10, 20, 0.35);
+  color: var(--ink);
+  font: 600 1rem / 1.1 var(--font-display);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease);
+}
+
+.btn[data-mine] {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 18px 40px -16px rgba(11, 10, 20, 0.65);
+}
+
+.btn > svg:first-child {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.btn[data-mine] > svg:first-child {
+  fill: var(--lime);
+}
+
+.btn span {
+  display: grid;
+}
+
+.btn small {
+  font: 500 0.66rem / 1.3 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.arrow {
+  width: 38px;
+  height: 38px;
+  padding: 11px;
+  border-radius: 50%;
+  background: var(--lime);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:hover .arrow {
+  animation: drop 0.7s var(--ease);
+}
+
+@keyframes drop {
+  40% {
+    transform: translateY(4px);
+  }
+}
+
+.btn[aria-disabled="true"] {
+  cursor: default;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.meta span + span::before {
+  content: "·";
+  margin-right: 10px;
+}
+
+.meta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 16px;
+  color: var(--ink);
+  font: 600 0.92rem / 1 var(--font-display);
+  letter-spacing: 0;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat;
+  padding-bottom: 3px;
+  transition: background-size 0.4s var(--ease);
+}
+
+.meta a:hover {
+  background-size: 100% 1.5px;
+}
+
+.meta svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s var(--ease);
+}
+
+.meta a:hover svg {
+  transform: translateX(3px);
+}
+
+/* ---------- The ring ---------- */
+.ring {
+  --p: 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 420px);
+  aspect-ratio: 1;
+  justify-self: center;
+}
+
+/* A soft glow that grows as the ring fills. */
+.ring::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  z-index: -1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(212, 255, 58, 0.55), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(91, 46, 255, 0.28), transparent 60%);
+  filter: blur(36px);
+  opacity: calc(0.35 + var(--p) * 0.65);
+  transform: scale(calc(0.85 + var(--p) * 0.2));
+}
+
+.ticks,
+.arc {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ticks {
+  stroke: rgba(11, 10, 20, 0.22);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  animation: turn 60s linear infinite;
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.arc {
+  transform: rotate(-90deg);
+}
+
+.track,
+.fill {
+  fill: none;
+  stroke-width: 9;
+}
+
+.track {
+  stroke: rgba(11, 10, 20, 0.07);
+}
+
+.fill {
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--p) * 100);
+  filter: drop-shadow(0 6px 12px rgba(91, 46, 255, 0.35));
+}
+
+.core {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.core img {
+  width: clamp(56px, 5.5vw, 76px);
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 18px 30px -16px rgba(43, 26, 120, 0.6);
+  transition: transform 0.6s var(--pop);
+}
+
+.ring[data-done] .core img {
+  transform: translateY(-4px) scale(1.06);
+}
+
+.core b {
+  font: 700 clamp(1.1rem, 0.9rem + 0.6vw, 1.4rem) / 1.1 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+/* "Downloading 72%" and "Ready to install" share one spot. */
+.state {
+  display: grid;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.busy,
+.ready {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    opacity 0.4s,
+    transform 0.5s var(--ease);
+}
+
+.busy {
+  color: var(--color-muted);
+}
+
+.busy em {
+  min-width: 4ch;
+  font-style: normal;
+  color: var(--violet);
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+}
+
+.ready {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  opacity: 0;
+  transform: translateY(8px) scale(0.9);
+}
+
+.ready svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ring[data-done] .busy {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.ring[data-done] .ready {
+  opacity: 1;
+  transform: none;
+  transition-timing-function: ease, var(--pop);
+}
+
+/* ---------- Quick answers ---------- */
+.answers {
+  margin-top: clamp(56px, 9vh, 96px);
+}
+
+.answersTitle {
+  padding-bottom: 18px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.answers ol {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.answers li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 26px clamp(16px, 2vw, 28px) 8px;
+  border-left: 1px solid var(--color-line);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--ease) calc(var(--i) * 0.1s),
+    transform 0.8s var(--ease) calc(var(--i) * 0.1s);
+}
+
+.answers li:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+/* The top rule draws in, then a colour line runs along it on hover. */
+.answers li::before,
+.answers li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform-origin: 0 50%;
+}
+
+.answers li::before {
+  background: rgba(11, 10, 20, 0.16);
+  transform: scaleX(0);
+  transition: transform 0.9s var(--ease) calc(0.15s + var(--i) * 0.1s);
+}
+
+.answers li::after {
+  height: 2px;
+  background: linear-gradient(90deg, var(--violet), #a3cf1f);
+  transform: scaleX(0);
+  transition: transform 0.6s var(--ease);
+}
+
+.answers[data-in] li {
+  opacity: 1;
+  transform: none;
+}
+
+.answers[data-in] li::before {
+  transform: none;
+}
+
+.answers li:hover::after {
+  transform: none;
+}
+
+.n {
+  font: 500 0.74rem / 1 var(--font-mono);
+  color: var(--violet);
+}
+
+.answers h4 {
+  font: 700 1.18rem / 1.2 var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.answers li p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 1000px) {
+  .top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ring {
+    width: min(100%, 340px);
+    order: -1;
+  }
+
+  .answers ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 28px;
+  }
+
+  .answers li:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .answers ol {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 8px;
+  }
+
+  .answers li {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .btn span {
+    flex: 1;
+  }
+
+  .meta a {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticks {
+    animation: none;
+  }
+
+  .mark {
+    transition: none;
+  }
+
+  .answers li,
+  .answers li::before {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

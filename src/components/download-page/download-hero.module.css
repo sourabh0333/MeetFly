@@ -1,0 +1,394 @@
+/* The Download hero's platform split: macOS | Windows across the full grid, a glowing rule and an
+   "or" between them, the visitor's own system lit. No boxes. */
+.wrap {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: clamp(44px, 7vh, 72px) auto 0;
+  padding: 0 var(--gutter);
+  animation: rise 1s var(--ease) 0.8s both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(18px);
+  }
+}
+
+.split {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0 minmax(0, 1fr);
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* The glowing rule and the "or" between the two sides. */
+.or {
+  position: relative;
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+}
+
+.or::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+  background: linear-gradient(transparent, var(--violet) 30%, #a3cf1f 70%, transparent);
+  opacity: 0.6;
+}
+
+.or {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.or::after {
+  content: "or";
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: 0 0 0 1px var(--color-line);
+  color: var(--color-muted);
+}
+
+.or {
+  color: transparent;
+}
+
+/* ---------- One side: fills its half ---------- */
+.side {
+  --rx: 0deg;
+  --ry: 0deg;
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: clamp(22px, 3vh, 30px);
+  padding: clamp(44px, 6vh, 60px) clamp(24px, 4vw, 64px) clamp(34px, 5vh, 52px);
+  transition: background-color 0.4s;
+}
+
+.side[data-mine] {
+  background: radial-gradient(80% 60% at 30% 0%, rgba(212, 255, 58, 0.24), transparent 70%);
+}
+
+.side:not([data-mine]):hover {
+  background: radial-gradient(80% 60% at 30% 0%, rgba(91, 46, 255, 0.07), transparent 70%);
+}
+
+/* Logo + name + line, with the "For this computer" pill on the right. */
+.top {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.forYou {
+  position: absolute;
+  top: 16px;
+  right: clamp(16px, 2vw, 24px);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  font: 500 0.66rem / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.forYou i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+  animation: ping 1.8s ease-out infinite;
+}
+
+@keyframes ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 255, 58, 0.7);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px rgba(212, 255, 58, 0);
+  }
+}
+
+/* The logo, tilting gently towards the pointer, with a soft ring when it's yours. */
+.logo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(68px, 6.5vw, 88px);
+  aspect-ratio: 1;
+  border-radius: 24px;
+  background: linear-gradient(150deg, #fff, #f1f0fb);
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 20, 0.06),
+    0 20px 34px -20px rgba(43, 26, 120, 0.45);
+  transform: perspective(600px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.35s var(--ease);
+}
+
+.logo svg {
+  width: 46%;
+  height: 46%;
+  fill: var(--ink);
+}
+
+.side[data-mine] .logo::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 29px;
+  border: 2px solid rgba(163, 207, 31, 0.7);
+  animation: halo 2.4s ease-out infinite;
+}
+
+@keyframes halo {
+  from {
+    transform: scale(0.96);
+    opacity: 0.9;
+  }
+
+  to {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+}
+
+.name {
+  margin: 0;
+  font: 700 clamp(2.2rem, 1.3rem + 2.6vw, 3.6rem) / 1 var(--font-display);
+  letter-spacing: -0.05em;
+}
+
+.line {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  color: var(--color-muted);
+}
+
+/* The spec sheet: ruled rows across the whole half, label left, value right. */
+.specs {
+  margin: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.specs div {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--color-line);
+  animation: row 0.7s var(--ease) calc(1s + var(--k) * 0.08s) both;
+}
+
+@keyframes row {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* A colour line runs along each rule when you hover the side. */
+.specs div::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--violet), #a3cf1f);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.6s var(--ease) calc(var(--k) * 0.06s);
+}
+
+.side:hover .specs div::after,
+.side:focus-within .specs div::after {
+  transform: scaleX(1);
+}
+
+.specs dt {
+  font: 500 var(--text-label) / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.specs dd {
+  margin: 0;
+  font: 600 0.98rem / 1.4 var(--font-display);
+  text-align: right;
+}
+
+/* The download button, full width of the side. */
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  height: 64px;
+  padding: 0 12px 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 20, 0.1),
+    0 12px 26px -16px rgba(11, 10, 20, 0.35);
+  color: var(--ink);
+  font: 600 1.05rem / 1.1 var(--font-display);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease);
+}
+
+.side[data-mine] .btn {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 18px 40px -16px rgba(11, 10, 20, 0.65);
+}
+
+.btn > svg:first-child {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.side[data-mine] .btn > svg:first-child {
+  fill: var(--lime);
+}
+
+.btn span {
+  display: grid;
+  flex: 1;
+}
+
+.btn small {
+  font: 500 0.66rem / 1.3 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.arrow {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  padding: 12px;
+  border-radius: 50%;
+  background: var(--lime);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:hover .arrow {
+  animation: drop 0.7s var(--ease);
+}
+
+@keyframes drop {
+  40% {
+    transform: translateY(4px);
+  }
+}
+
+.btn[aria-disabled="true"] {
+  cursor: default;
+}
+
+/* ---------- Facts ---------- */
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 32px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.92rem;
+  color: var(--color-muted);
+}
+
+.facts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.facts svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Phones: stacked, "or" on a horizontal rule ---------- */
+@media (max-width: 760px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .or {
+    height: 0;
+  }
+
+  .or::before {
+    top: 0;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--violet) 30%, #a3cf1f 70%, transparent);
+  }
+
+  .facts {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap,
+  .forYou i,
+  .side[data-mine] .logo::after,
+  .specs div {
+    animation: none;
+  }
+
+  .logo {
+    transition: none;
+  }
+}
