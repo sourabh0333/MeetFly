@@ -32,6 +32,7 @@ export const featureGroups = [
       { id: "voice-commands", icon: "mic", name: "“MeetFly, …” commands", text: "Say or type “MeetFly, …” to ask something privately, make something, or pause and resume listening." },
       { id: "created", icon: "doc", name: "Make it mid-call", text: "Ask for a document, a diagram or a slide outline and it is made from the call, saved with the meeting, ready to copy or export.", chips: ["Doc", "Diagram", "Slides"] },
       { id: "live-translation", icon: "globe", name: "Live translation", text: "The other side’s captions, translated live into any of 14 languages." },
+      { id: "accent", icon: "voice", name: "Accent voice", text: "People on the call hear what you say in the accent you pick, spoken by a native voice, about 1 to 1.5 seconds later. 17 English accents.", byPlan: true },
       { id: "live-notes", icon: "notes", name: "Live notes", text: "A rolling summary, action items and open questions, refreshed every 30 seconds." },
       { id: "bookmarks", icon: "bookmark", name: "Bookmarks", text: "Press B to mark a key moment. It’s highlighted in your notes." },
       { id: "floating-panel", icon: "panel", name: "Floating panel", text: "A small see-through panel over your meeting. It stays above full screen, remembers where you put it, and has an opacity slider and a full-window button." },
@@ -158,6 +159,7 @@ export const duringCall = {
       answer: "They said the price is higher than their current tool, and they want to see the value first.",
       note: "ask-box",
     },
+    { stamp: "1:08", who: "you", text: "We can start the pilot next Monday, with ten seats.", mark: "Accent on · British", note: "accent" },
     { stamp: "1:12", who: "you", text: "MeetFly, make a slide outline for the pilot plan.", mark: "Voice command", note: "voice-commands" },
     {
       stamp: "1:14",
@@ -472,7 +474,7 @@ export const control = {
 
 // The film in the Features hero: a real, unedited screen recording of MeetFly in a practice sales
 // call (public/video/hero/app.mp4, 51s, recorded 2026-11-14). It is cropped to the meeting area
-// (no sidebar or call bar, which show voice features the site leaves out). `from` is when each step
+// (no sidebar or call bar). Accent voice has its own section (`accentVoice`); cloned voices stay off the site. `from` is when each step
 // starts, in seconds of the video.
 export const film = {
   title: "Pilot call",
@@ -485,5 +487,56 @@ export const film = {
     { key: "writes", from: 3, title: "Writes it down", text: "Every line of the other side, live." },
     { key: "reply", from: 9, title: "Suggests a reply", text: "The moment they stop, with key points." },
     { key: "recap", from: 44, title: "Sums it up", text: "Discussed, agreed and still open." },
+  ],
+};
+
+// "Accent voice" (2026-11-25), after During the call. One sentence travels the app's real path:
+// your microphone → speech recognition → a voice native to the accent (Cartesia presets) →
+// "MeetFly Microphone" (VB-CABLE on Windows) → the meeting app. From the app's accent page
+// (voice/AccentPage.tsx, voice-store.ts, accent-presets.ts, AccentSetup.tsx, CallBar.tsx,
+// PrepDialog.tsx): 17 English presets, Female / Male voice, six tones, speed 0.6×–1.5×, "Try it"
+// with Play, V to switch it on, "Turn my accent on" when preparing a call. Timing: about 1–1.5 s
+// behind; they hear only the accent voice. Cloned voices ("My voice") stay off the site.
+// Plan numbers: keep in step with src/content/pricing.js.
+export const accentVoice = {
+  eyebrow: "Accent voice",
+  title: "Speak the way you speak. Be heard in the accent you pick.",
+  lead: "After each sentence, the people on your call hear it spoken by a native voice in the accent you chose. They hear only that voice.",
+  sentence: "We can start the pilot next Monday, with ten seats.",
+  stations: [
+    { id: "speak", title: "You speak", hint: "Your microphone, your own accent" },
+    { id: "write", title: "MeetFly writes it down", hint: "Speech recognition" },
+    { id: "voice", title: "A native voice says it", hint: "Each accent uses a native speaker" },
+    { id: "call", title: "Your call hears it", hint: "Through MeetFly Microphone" },
+  ],
+  lag: "about 1–1.5 s, start to finish",
+  micLabel: "Microphone",
+  mic: "MeetFly Microphone",
+  apps: ["Meet", "Zoom", "Teams"],
+  honest: "It says what speech recognition heard. Be open with the people on your call about using it.",
+  dialLabel: "Accent bank",
+  dialHint: "17 English accents · click one to tune in",
+  voiceLabel: "Voice",
+  voices: ["Female", "Male"],
+  toneLabel: "Tone",
+  tones: ["Natural", "Calm", "Warm", "Neutral", "Soft", "Firm"],
+  speedLabel: "Speed",
+  speed: { min: 0.6, max: 1.5, value: 1 },
+  tryLabel: "Try it",
+  tryText: "Type a line and press Play to hear it before the call.",
+  facts: [
+    {
+      title: "On in one key",
+      text: "Press V, or use the Accent button on the call bar and the floating panel. You can also tick “Turn my accent on” while you prepare a call.",
+    },
+    {
+      title: "Set up once",
+      text: "On Mac, MeetFly Microphone installs with one password. On Windows it works straight away in meetings you join from MeetFly; for the desktop apps, MeetFly adds a virtual microphone.",
+    },
+    {
+      title: "Included in Pro + Voice",
+      text: "8 hours a month on Pro + Voice, 8 hours in the Interview Pass’s 7 days. Free has 10 minutes to try it.",
+      link: { label: "See plans", href: "/pricing" },
+    },
   ],
 };

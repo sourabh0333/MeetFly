@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { faq } from "@/content/home";
 import { SectionHead } from "@/components/section-head/section-head";
@@ -10,7 +11,8 @@ import styles from "./faq.module.css";
 // FAQ as a large editorial accordion. No pinning, no boxes, full width. Each question is a big
 // row (number, question, plus); a lime underline sweeps across on hover; opening it expands the
 // row smoothly, turns the plus into a cross and decodes the answer in, set to the right with
-// MeetFly's icon. One open at a time; the first starts open. Every answer is in the HTML.
+// MeetFly's icon (and an optional link under it, e.g. the price answer → /pricing). One open at a
+// time; the first starts open. Every answer is in the HTML.
 export function Faq() {
   const ref = useRef(null);
   const seen = useSeen(ref);
@@ -46,6 +48,14 @@ export function Faq() {
                   <p className={styles.a}>
                     <img src="/brand/icon.svg" alt="" width="28" height="28" />
                     <span>{isOpen ? <DecodeText text={it.a} delay={120} duration={900} /> : it.a}</span>
+                    {it.link && (
+                      <Link className={styles.more} href={it.link.href} tabIndex={isOpen ? undefined : -1}>
+                        {it.link.label}
+                        <svg viewBox="0 0 16 16" aria-hidden="true">
+                          <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" />
+                        </svg>
+                      </Link>
+                    )}
                   </p>
                 </div>
               </div>

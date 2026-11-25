@@ -1,0 +1,893 @@
+/* Accent voice on the Features page: a signal path (four stations on one rail, a fill and a pulse
+   running along it), a radio-dial accent bank with a gliding needle, a ruled strip of controls and
+   three ruled facts. Hairlines only, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --lime-ink: #5e7d00;
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--gutter) clamp(72px, 10vh, 120px);
+}
+
+.section > :not(header) {
+  max-width: 1240px;
+  margin-inline: auto;
+}
+
+.section[data-paused] * {
+  animation-play-state: paused !important;
+}
+
+/* ---------- The signal path ---------- */
+.path {
+  position: relative;
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.8s var(--ease) 0.2s,
+    transform 0.9s var(--ease) 0.2s;
+}
+
+[data-in] .path {
+  opacity: 1;
+  transform: none;
+}
+
+/* The rail runs across the top, through the four nodes. */
+.rail {
+  position: absolute;
+  top: 9px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-line);
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--p) * 100%);
+  background: linear-gradient(90deg, var(--violet), #8f74ff 55%, var(--lime));
+  transition: width 1s var(--ease);
+}
+
+.pulse {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--p) * 100%);
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow:
+    0 0 0 4px rgba(212, 255, 58, 0.35),
+    0 0 18px rgba(91, 46, 255, 0.45);
+  transition: left 1s var(--ease);
+}
+
+/* An arrowhead where the rail reaches the call. */
+.rail::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid var(--color-line);
+  border-right: 2px solid var(--color-line);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.stations {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.station {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto auto auto 1fr;
+  align-content: start;
+  gap: 6px;
+  padding: 0 clamp(14px, 2vw, 28px) 0 0;
+  color: var(--color-muted);
+  transition: color 0.5s;
+}
+
+.station[data-on] {
+  color: var(--ink);
+}
+
+.node {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 2px var(--color-line);
+  transition:
+    box-shadow 0.4s,
+    background 0.4s;
+}
+
+.station[data-on] .node {
+  background: var(--ink);
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    inset 0 0 0 6px var(--lime);
+}
+
+.station[data-now] .node {
+  animation: ping 1.2s ease-out infinite;
+}
+
+@keyframes ping {
+  0% {
+    box-shadow:
+      inset 0 0 0 2px var(--ink),
+      inset 0 0 0 6px var(--lime),
+      0 0 0 0 rgba(91, 46, 255, 0.4);
+  }
+  100% {
+    box-shadow:
+      inset 0 0 0 2px var(--ink),
+      inset 0 0 0 6px var(--lime),
+      0 0 0 14px rgba(91, 46, 255, 0);
+  }
+}
+
+.num {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  color: var(--violet);
+}
+
+.stTitle {
+  font: 700 clamp(1.1rem, 0.9rem + 0.6vw, 1.35rem) / 1.15 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.stHint {
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}
+
+/* What each station shows, under a dashed rule. */
+.show {
+  margin-top: 16px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--color-line);
+  min-height: 132px;
+  opacity: 0.35;
+  transition: opacity 0.5s;
+}
+
+.station[data-on] .show {
+  opacity: 1;
+}
+
+/* 01 · You speak: a mic meter and the words lighting up as they are said. */
+.meter {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+  margin-bottom: 10px;
+}
+
+.meter i {
+  width: 4px;
+  height: 30%;
+  border-radius: 2px;
+  background: var(--color-line);
+}
+
+.station[data-now] .meter i {
+  background: var(--violet);
+  animation: level 0.5s ease-in-out infinite alternate;
+  animation-delay: calc(var(--b) * -0.17s);
+}
+
+@keyframes level {
+  to {
+    height: 100%;
+  }
+}
+
+.said {
+  margin: 0;
+  font: 600 1.08rem / 1.45 var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.said span {
+  color: var(--color-muted);
+  opacity: 0.5;
+  transition:
+    color 0.25s,
+    opacity 0.25s;
+}
+
+.station[data-on] .said span {
+  animation: word 0.3s var(--ease) both;
+  animation-delay: calc(var(--w) * 0.14s);
+}
+
+@keyframes word {
+  from {
+    color: var(--color-muted);
+    opacity: 0.5;
+  }
+  to {
+    color: var(--ink);
+    opacity: 1;
+  }
+}
+
+/* 02 · Written down: the same words typed in mono, with a caret. */
+.text {
+  margin: 0;
+  font: 500 0.92rem / 1.6 var(--font-mono);
+  color: var(--ink);
+}
+
+.text span {
+  background: linear-gradient(transparent 64%, rgba(91, 46, 255, 0.14) 64%);
+  opacity: 0;
+}
+
+.station[data-on] .text span {
+  animation: type 0.01s linear forwards;
+  animation-delay: calc(var(--w) * 0.09s);
+}
+
+.station[data-now] .text::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -2px;
+  background: var(--violet);
+  animation: blink 0.8s steps(1) infinite;
+}
+
+@keyframes type {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* 03 · A native voice: the accent, big, and its settings. */
+.speaker {
+  display: grid;
+  gap: 8px;
+}
+
+.speaker b {
+  font: 700 clamp(1.8rem, 1rem + 2.2vw, 2.7rem) / 1 var(--font-display);
+  letter-spacing: -0.04em;
+  background: linear-gradient(100deg, var(--violet), #8f74ff 60%, #9dc61f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: swap 0.6s var(--ease);
+}
+
+@keyframes swap {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+}
+
+.speaker span {
+  font: 500 var(--text-label) / 1.3 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* 04 · Your call hears it: the meeting's mic picker, the voice going out, the apps. */
+.call {
+  display: grid;
+  gap: 12px;
+}
+
+.micRow {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.micRow span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.micRow b {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 1rem / 1.2 var(--font-display);
+}
+
+.micRow i {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--lime);
+  font-size: 0.7rem;
+  font-style: normal;
+  color: var(--ink);
+}
+
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 34px;
+}
+
+.wave i {
+  flex: 1;
+  height: calc(var(--h) * 100%);
+  border-radius: 2px;
+  background: var(--color-line);
+  transform: scaleY(0.4);
+  transition: transform 0.4s var(--ease);
+}
+
+.station[data-on] .wave i {
+  background: linear-gradient(var(--violet), #9dc61f);
+  animation: speak 0.9s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.07s);
+}
+
+@keyframes speak {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.apps {
+  margin: 0;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* The time it takes, ruled under all four. */
+.lag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 28px 0 0;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.lag i {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--color-line);
+}
+
+.lag i::before,
+.lag i::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  width: 1px;
+  height: 11px;
+  background: var(--color-line);
+}
+
+.lag i::before {
+  left: 0;
+}
+
+.lag i::after {
+  right: 0;
+}
+
+.lag span:last-child {
+  color: var(--violet);
+}
+
+.honest {
+  margin: 12px 0 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* ---------- The accent bank: a radio dial ---------- */
+.bank {
+  margin-top: clamp(56px, 8vh, 88px);
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.8s var(--ease) 0.4s,
+    transform 0.9s var(--ease) 0.4s;
+}
+
+[data-in] .bank {
+  opacity: 1;
+  transform: none;
+}
+
+.bankHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 20px;
+  margin: 0 0 8px;
+}
+
+.bankHead b {
+  font: 700 1.1rem / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.bankHead span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.dialScroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dialScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.dial {
+  position: relative;
+  height: 132px;
+  min-width: 100%;
+}
+
+/* The scale: a baseline with fine ticks, like a radio. */
+.scale {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 16px;
+  margin-top: -8px;
+  background:
+    linear-gradient(var(--ink), var(--ink)) 0 50% / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--color-line) 0 1px, transparent 1px 12px) 0 50% / 100% 10px no-repeat;
+}
+
+.needle {
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  left: calc((var(--k) + 0.5) / var(--n) * 100%);
+  width: 2px;
+  margin-left: -1px;
+  background: var(--violet);
+  transition: left 0.9s var(--ease);
+}
+
+.needle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow:
+    0 0 0 2px var(--violet),
+    0 0 16px rgba(91, 46, 255, 0.5);
+}
+
+/* A station: a tick on the scale and its name, above or below in turn. */
+.station2 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--x) * 100%);
+  width: 84px;
+  margin-left: -42px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.station2::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1px;
+  height: 22px;
+  margin-top: -11px;
+  background: var(--ink);
+}
+
+.station2 span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  font: 500 0.7rem / 1.15 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-muted);
+  transition: color 0.3s;
+}
+
+.station2[data-up] span {
+  top: 6px;
+  bottom: auto;
+}
+
+.station2:hover span,
+.station2:focus-visible span {
+  color: var(--ink);
+}
+
+.station2[aria-checked="true"] span {
+  color: var(--violet);
+  font-weight: 700;
+}
+
+.station2:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+/* ---------- The other controls, one ruled strip ---------- */
+.controls {
+  display: grid;
+  grid-template-columns: 0.8fr 1.5fr 1fr 1.1fr;
+  margin-top: 20px;
+  border-block: 1px solid var(--color-line);
+  opacity: 0;
+  transition: opacity 0.8s var(--ease) 0.55s;
+}
+
+[data-in] .controls {
+  opacity: 1;
+}
+
+.ctl {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 22px clamp(14px, 2vw, 26px);
+}
+
+.ctl + .ctl {
+  border-left: 1px solid var(--color-line);
+}
+
+.ctl:first-child {
+  padding-left: 0;
+}
+
+.ctl:last-child {
+  padding-right: 0;
+}
+
+.ctlLabel {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.ctlLabel b {
+  margin-left: 6px;
+  color: var(--violet);
+}
+
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.keys button {
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  font: 500 0.85rem / 1 var(--font-display);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background 0.25s,
+    color 0.25s,
+    box-shadow 0.25s;
+}
+
+.keys button:hover {
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.keys button[aria-checked="true"] {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: inset 0 -2px 0 var(--lime);
+}
+
+.fader {
+  position: relative;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--violet) calc(var(--v) * 100%), var(--color-line) 0);
+}
+
+.fader i {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--v) * 100%);
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: inset 0 0 0 4px var(--lime);
+}
+
+.faderScale {
+  display: flex;
+  justify-content: space-between;
+  font: 500 0.7rem / 1 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.tryText {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+}
+
+.play {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 9px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: 600 0.9rem / 1 var(--font-display);
+  cursor: pointer;
+  transition: background 0.25s;
+}
+
+.play svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--lime);
+}
+
+.play:hover {
+  background: var(--violet);
+}
+
+.play:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- Facts ---------- */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px clamp(24px, 3.4vw, 48px);
+  margin-top: clamp(48px, 7vh, 72px);
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ink);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--ease) calc(0.6s + var(--k) * 0.1s),
+    transform 0.8s var(--ease) calc(0.6s + var(--k) * 0.1s);
+}
+
+[data-in] .facts li {
+  opacity: 1;
+  transform: none;
+}
+
+.facts span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--violet);
+}
+
+.facts b {
+  font: 700 1.1rem / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.facts p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+.factLink {
+  justify-self: start;
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: none;
+}
+
+.factLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 980px) {
+  .stations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 36px;
+  }
+
+  .rail {
+    display: none;
+  }
+
+  .controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ctl:nth-child(3) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .ctl:nth-child(2) {
+    padding-right: 0;
+  }
+
+  .ctl:nth-child(n + 3) {
+    border-top: 1px solid var(--color-line);
+  }
+
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Phones: the path runs down the left; the dial scrolls sideways. */
+@media (max-width: 640px) {
+  .stations {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .station {
+    padding: 0 0 28px 36px;
+  }
+
+  .station::before {
+    content: "";
+    position: absolute;
+    left: 9px;
+    top: 20px;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-line);
+  }
+
+  .station[data-on]::before {
+    background: linear-gradient(var(--violet), #9dc61f);
+  }
+
+  .station:last-child::before {
+    display: none;
+  }
+
+  .node {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+  }
+
+  .show {
+    min-height: 0;
+  }
+
+  .dial {
+    min-width: 1060px;
+  }
+
+  .controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ctl,
+  .ctl:nth-child(n) {
+    padding-inline: 0;
+    border-left: 0;
+  }
+
+  .ctl + .ctl {
+    border-top: 1px solid var(--color-line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .path,
+  .bank,
+  .controls,
+  .facts li {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .fill,
+  .pulse,
+  .needle {
+    transition: none;
+  }
+
+  .section * {
+    animation: none !important;
+  }
+
+  .text span {
+    opacity: 1;
+  }
+
+  .said span {
+    color: var(--ink);
+    opacity: 1;
+  }
+}

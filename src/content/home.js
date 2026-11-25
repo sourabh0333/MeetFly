@@ -347,7 +347,8 @@ export const privacy = {
 };
 
 // FAQ, told as a chat. Every answer is from the app's code or our own test call (2026-11-14).
-// No pricing (not decided yet) and nothing on stealth mode.
+// Nothing on stealth mode. The price answer (added 2026-11-25) uses the plans in
+// src/content/pricing.js: keep the numbers in step if those change. An item may carry a `link`.
 export const faq = {
   eyebrow: "Questions",
   title: "Ask us anything",
@@ -386,6 +387,11 @@ export const faq = {
       a: "Yes. Settings show your usage, and you can set monthly limits on transcription minutes and AI requests.",
     },
     {
+      q: "How much does it cost?",
+      a: "There’s a Free plan with every feature: 3 hours of listening and 10 minutes of accent voice a month. Paid plans start at $29 (₹1,999) a month for 20 hours. Every account starts with 7 days of Pro + Voice, no card needed.",
+      link: { label: "See all plans", href: "/pricing" },
+    },
+    {
       q: "Which computers does it run on?",
       a: "MeetFly is a desktop app for Mac and Windows.",
     },
@@ -401,6 +407,12 @@ export const download = {
   mac: "Download for Mac",
   windows: "Download for Windows",
   soon: "Coming soon",
+  // Keep in step with the trial in src/content/pricing.js.
+  trial: {
+    tag: "7 days free",
+    text: "Every account starts with Pro + Voice. No card needed.",
+    link: { label: "See plans", href: "/pricing" },
+  },
   points: ["No bot joins your call", "Works with any call app", "Notes stay on your computer"],
 };
 
@@ -693,5 +705,195 @@ export const roles = {
     { role: "Hiring", line: "Stay present in interviews, not buried in notes.", uses: ["Live transcript", "Structured notes", "Search past calls"] },
     { role: "Job seekers", line: "Rehearse until the real interview feels easy.", uses: ["Practice mode", "Answer styles", "Notes after"] },
     { role: "Multilingual teams", line: "Follow every word and answer with confidence.", uses: ["Live translation", "Short answers", "Live transcript"] },
+  ],
+};
+
+// Pricing teaser on the homepage (2026-11-25), after "Built for". The plans, prices and hours come
+// from src/content/pricing.js (the app's own defaults); only the words live here.
+export const pricingTeaser = {
+  eyebrow: "Pricing",
+  title: "Every feature, on every plan.",
+  lead: "Plans differ only in how many hours MeetFly listens each month, and whether the accent voice is included.",
+  points: ["7 days of Pro + Voice free", "No card needed", "Change or cancel any time"],
+  primary: { label: "See all plans", href: "/pricing" },
+  secondary: { label: "Start free trial", href: "/download" },
+  chartLabel: "Hours a month on each plan",
+  listen: "Listening",
+  voice: "Accent voice",
+  calls: "about {n} one-hour calls",
+  pass: "in 7 days",
+  perPerson: "per person",
+};
+
+// "Accent voice" (2026-11-25), after Live translation. Every line is from the app: the accent page
+// and docs (MeetFly-App: src/renderer/features/voice/*, docs/HOW-MEETFLY-WORKS.md). The voices are
+// native to each accent (17 presets, feminine and masculine); the words go to "MeetFly Microphone",
+// which the meeting app uses as its microphone; about 1–1.5 s behind; it says what speech
+// recognition heard. Nothing about copying your own voice ("My voice" is left out on purpose).
+export const accent = {
+  eyebrow: "Accent voice",
+  title: "Your words, in the accent you choose.",
+  lead: "Turn it on and the people on your call hear what you say, spoken by a voice native to the accent you picked.",
+  sentence: ["Thanks", "for", "joining.", "Let", "me", "walk", "you", "through", "the", "plan."],
+  you: { title: "You say", hint: "your microphone" },
+  they: { title: "They hear", hint: "MeetFly Microphone" },
+  lag: "about 1–1.5 s behind",
+  accentLabel: "Accent",
+  voiceLabel: "Voice",
+  voices: ["Feminine", "Masculine"],
+  toneLabel: "Tone",
+  tones: ["Natural", "Calm", "Warm", "Neutral", "Soft", "Firm"],
+  bankLabel: "Up to 17 English accents",
+  accents: [
+    "American",
+    "British",
+    "Australian",
+    "Indian",
+    "Canadian",
+    "Irish",
+    "Scottish",
+    "New Zealand",
+    "South African",
+    "Southern US",
+    "New York",
+    "Californian",
+    "Midwestern US",
+    "African American",
+    "Singaporean",
+    "Filipino",
+    "Arabic English",
+  ],
+  facts: [
+    {
+      title: "Set up once",
+      text: "MeetFly installs MeetFly Microphone. Pick it as the microphone in Meet, Zoom or Teams, and the call hears the accent voice.",
+    },
+    {
+      title: "Honest about timing",
+      text: "The voice runs about 1 to 1.5 seconds behind you, and says what speech recognition heard.",
+    },
+    {
+      title: "On Pro + Voice and the Pass",
+      text: "8 hours a month on Pro + Voice, 8 hours in the Interview Pass’s 7 days. Free has 10 minutes to try it.",
+      link: { label: "See plans", href: "/pricing" },
+    },
+  ],
+};
+
+// "Make it mid-call" (2026-11-25), after the Floating panel. From the app (MeetFly-App
+// src/server/session/commands.ts, meeting-tools.ts, src/renderer/features/live/CreatedTab.tsx):
+// say "MeetFly, …" into your microphone or type it in the Ask box (or /doc, /diagram, /slides);
+// it is made from the conversation so far, streams in as it is written and is saved with the
+// meeting (Created tab: Copy, Export .md, Delete). The examples follow the homepage's pilot call.
+export const make = {
+  eyebrow: "Make it mid-call",
+  title: "Ask for a doc, a diagram or slides. Get it before the call ends.",
+  lead: "Say “MeetFly, …” or type it, and MeetFly makes it from the conversation so far.",
+  requestsLabel: "Ask for",
+  working: "Working on it from the conversation so far…",
+  saved: "Saved with the meeting",
+  actions: ["Copy", "Export .md"],
+  items: [
+    {
+      kind: "diagram",
+      tag: "Diagram",
+      how: "Said",
+      ask: "MeetFly, make a flowchart of the pilot rollout.",
+      title: "Pilot rollout",
+      nodes: ["Kickoff Monday", "Set up 10 seats", "Two-week pilot", "Did it work?", "Yearly plan", "Extend the pilot"],
+    },
+    {
+      kind: "doc",
+      tag: "Doc",
+      how: "Typed",
+      ask: "/doc follow-up plan",
+      title: "Pilot follow-up plan",
+      blocks: [
+        { h: "Goal" },
+        { p: "Prove the value in two weeks, with 10 seats." },
+        { h: "Next steps" },
+        { li: "Send pricing for the yearly plan" },
+        { li: "Book the kickoff for Monday" },
+        { li: "Share the setup guide before the pilot" },
+        { h: "Open question" },
+        { p: "Who signs off on the yearly plan?" },
+      ],
+    },
+    {
+      kind: "slides",
+      tag: "Slides",
+      how: "Said",
+      ask: "MeetFly, draft slides for Monday’s kickoff.",
+      title: "Pilot kickoff",
+      slides: [
+        { t: "Pilot kickoff", s: "Two weeks · 10 seats" },
+        { t: "How the two weeks run", s: "Setup · daily use · review" },
+        { t: "What success looks like", s: "Agreed before we start" },
+      ],
+    },
+  ],
+  points: [
+    { title: "Say it or type it", text: "“MeetFly, …” into your microphone, the Ask box, or /doc, /diagram and /slides." },
+    { title: "From the call so far", text: "Plans, summaries, emails, agendas, flowcharts, mind maps, timelines, slide outlines." },
+    { title: "Saved with the meeting", text: "Find it in Created after the call. Copy it, or export it as Markdown." },
+  ],
+};
+
+// "Where your notes go" (2026-11-25), after the Library. From the app (MeetFly-App
+// src/renderer/features/meetings/ExportMenu.tsx, src/renderer/lib/export.ts,
+// src/server/services/webhook.ts): copy (summary, Markdown, rich text, for Slack), email the
+// follow-up in your mail app, save as PDF / Word (.docx) / Markdown (.md), send to a webhook
+// (Zapier, Make, n8n, or a Slack incoming webhook) as JSON. The webhook's field names are the
+// app's own; the transcript only if you choose; the call's private context is never sent.
+export const share = {
+  eyebrow: "Share and export",
+  title: "Your notes, wherever your team works.",
+  lead: "Copy them, save them as a file, email the follow-up, or send them on to Zapier, Make, n8n or Slack.",
+  meeting: { title: "Pilot call", meta: "Today · 24 min · Sales" },
+  summary: "They like the proposal; price is the main worry. We agreed a two-week pilot for 10 seats.",
+  actions: [
+    { task: "Send pricing for the yearly plan", owner: "You", due: "Friday" },
+    { task: "Book the kickoff for Monday", owner: "You", due: "" },
+  ],
+  email: {
+    to: "Everyone invited",
+    subject: "Follow-up: Pilot call",
+    body: "Hi, thanks for your time today. As promised, here’s the plan for the two-week pilot…",
+  },
+  groups: [
+    {
+      id: "copy",
+      label: "Copy",
+      items: [
+        { id: "summary", label: "Summary", hint: "plain text", view: "summary" },
+        { id: "markdown", label: "Markdown", hint: "for docs and wikis", view: "markdown" },
+        { id: "rich", label: "Rich text", hint: "keeps the formatting", view: "page" },
+        { id: "slack", label: "For Slack", hint: "paste into a channel", view: "slack" },
+      ],
+    },
+    {
+      id: "save",
+      label: "Save",
+      items: [
+        { id: "pdf", label: "PDF", hint: "pilot-call.pdf", view: "page", file: "pilot-call.pdf" },
+        { id: "word", label: "Word", hint: "pilot-call.docx", view: "page", file: "pilot-call.docx" },
+        { id: "md", label: "Markdown file", hint: "pilot-call.md", view: "markdown", file: "pilot-call.md" },
+      ],
+    },
+    {
+      id: "send",
+      label: "Send",
+      items: [
+        { id: "email", label: "Follow-up email", hint: "opens in your mail app", view: "email" },
+        { id: "webhook", label: "Webhook", hint: "Zapier · Make · n8n", view: "json", target: "POST https://hooks.zapier.com/…" },
+        { id: "slack-hook", label: "Slack webhook", hint: "straight to a channel", view: "slack", target: "POST https://hooks.slack.com/…" },
+      ],
+    },
+  ],
+  previewLabel: "What lands",
+  facts: [
+    { title: "Your context stays private", text: "The notes you gave MeetFly before the call are never sent with a webhook." },
+    { title: "Transcript only if you choose", text: "A webhook sends the notes; add the full transcript with one switch." },
+    { title: "Set it once", text: "Save a default webhook in Settings, then send any meeting in one click." },
   ],
 };

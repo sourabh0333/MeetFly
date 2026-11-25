@@ -19,7 +19,11 @@ import styles from "./pricing-compare.module.css";
 // until someone picks. Prices follow the hero's USD / INR switch.
 const options = [...plans, pass];
 const byId = Object.fromEntries(options.map((p) => [p.id, p]));
-const groups = [...featureGroups].sort((a, b) => a.n.localeCompare(b.n));
+// Features whose amount differs by plan (`byPlan`, i.e. accent voice) have their own row above,
+// so they are left out of the "same on every plan" list.
+const groups = [...featureGroups]
+  .sort((a, b) => a.n.localeCompare(b.n))
+  .map((g) => ({ ...g, items: g.items.filter((f) => !f.byPlan) }));
 const total = groups.reduce((n, g) => n + g.items.length, 0);
 const PAIRS = [
   ["pro", "pro_voice"],

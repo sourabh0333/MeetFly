@@ -1,6 +1,7 @@
 import { FeaturesHero } from "@/components/features/features-hero";
 import { BeforeCall } from "@/components/features/before-call";
 import { DuringCall } from "@/components/features/during-call";
+import { AccentVoice } from "@/components/features/accent-voice";
 import { AfterCall } from "@/components/features/after-call";
 import { Everywhere } from "@/components/features/everywhere";
 import { Templates } from "@/components/features/templates";
@@ -14,7 +15,7 @@ export const metadata = {
     "Everything MeetFly does: live transcript and instant replies, answer styles, read my screen, live translation, call prep and practice, structured notes, recording and search across every call.",
 };
 
-// The Features page is built one section at a time. So far: the hero, Before the call, During the call, After the call, Everywhere, and the close.
+// The Features page is built one section at a time. Hero, Before, During, Accent voice, After, Note templates, Everywhere, Your data, the close.
 export default function Page() {
   return (
     <>
@@ -22,6 +23,7 @@ export default function Page() {
       <FeaturesHero />
       <BeforeCall />
       <DuringCall />
+      <AccentVoice />
       <AfterCall />
       <Templates />
       <Everywhere />

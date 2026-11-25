@@ -187,6 +187,60 @@
   color: var(--color-muted);
 }
 
+/* The trial line: a lime tag, the offer, a link. Ruled top and bottom, no box. */
+.trial {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 14px;
+  margin: 0;
+  padding: 10px 4px;
+  border-block: 1px dashed var(--color-line);
+  font-size: 0.95rem;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.trial b {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--lime);
+  box-shadow: inset 0 0 0 1px rgba(11, 10, 20, 0.12);
+  font: 600 0.7rem / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.trial a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: none;
+}
+
+.trial a svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: translate 0.3s var(--ease);
+}
+
+.trial a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.trial a:hover svg {
+  translate: 3px 0;
+}
+
 .buttons {
   display: flex;
   flex-wrap: wrap;

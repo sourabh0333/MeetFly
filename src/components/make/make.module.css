@@ -1,0 +1,657 @@
+/* "Make it mid-call": requests on the left, an open drafting canvas on a dot grid on the right
+   where the flowchart, doc or slides build themselves. No boxes around the layout: rules, a dot
+   grid and type. One run (7.2 s): the request types and the result builds at the same time
+   (0.25–2.2 s), "Working…" shows meanwhile, then "Saved with the meeting" (2.4 s). */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --rule: var(--color-line);
+  --t0: 0.25s; /* the result starts building at once, while the request types */
+
+  position: relative;
+  isolation: isolate;
+  max-width: calc(1240px + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(80px, 11vh, 130px) var(--gutter);
+  overflow-x: clip;
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: radial-gradient(closest-side, var(--color-bg) 88%, transparent);
+  pointer-events: none;
+}
+
+.section[data-paused] * {
+  animation-play-state: paused !important;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: stretch;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.9s var(--ease) 0.15s,
+    transform 1s var(--ease) 0.15s;
+}
+
+[data-in] .layout {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Requests ---------- */
+.requests {
+  display: grid;
+  align-content: start;
+  border-top: 2px solid var(--ink);
+}
+
+.request {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 14px;
+  padding: 24px 0 26px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.request:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.num {
+  padding-top: 3px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--color-muted);
+  transition: color 0.3s;
+}
+
+.request[aria-selected="true"] .num {
+  color: var(--violet);
+}
+
+.reqBody {
+  display: grid;
+  gap: 10px;
+}
+
+.reqMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--rule);
+  font: 600 0.74rem / 1 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    box-shadow 0.3s;
+}
+
+.kind svg,
+.statusKind svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.request[aria-selected="true"] .kind {
+  background: var(--ink);
+  color: var(--lime);
+  box-shadow: none;
+}
+
+.reqMeta em {
+  font: 500 0.72rem / 1 var(--font-mono);
+  font-style: normal;
+  color: var(--color-muted);
+}
+
+.ask {
+  font: italic 400 clamp(1.1rem, 1.6vw, 1.35rem) / 1.35 var(--font-serif, Georgia, serif);
+  color: rgba(11, 10, 20, 0.45);
+  transition: color 0.3s;
+}
+
+.request:hover .ask {
+  color: rgba(11, 10, 20, 0.7);
+}
+
+.request[aria-selected="true"] .ask {
+  color: var(--ink);
+}
+
+.typed[data-play] span {
+  opacity: 0;
+  animation: char 0.01s linear calc(0.2s + var(--c) * 32ms) forwards;
+}
+
+@keyframes char {
+  to {
+    opacity: 1;
+  }
+}
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+}
+
+.progress i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--violet), var(--lime));
+  transform-origin: left;
+  animation: grow var(--step) linear both;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- Canvas ---------- */
+.canvas {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 420px;
+  border-top: 2px solid var(--ink);
+}
+
+/* The drafting table: a dot grid that fades at the edges. */
+.canvas::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(rgba(91, 46, 255, 0.18) 1px, transparent 1.3px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(closest-side, #000 60%, transparent);
+}
+
+.status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.statusKind {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 0.95rem / 1 var(--font-display);
+  color: var(--ink);
+}
+
+.statusKind svg {
+  color: var(--violet);
+}
+
+.working,
+.saved {
+  position: absolute;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 500 0.76rem / 1 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.working {
+  opacity: 0;
+}
+
+.working i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--violet);
+}
+
+[data-play] .working {
+  animation: workOn 2.2s linear 0.1s both;
+}
+
+[data-play] .working i {
+  animation: dot 0.9s ease-in-out infinite;
+}
+
+[data-play] .working i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+[data-play] .working i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes workOn {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  6%,
+  92% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot {
+  50% {
+    transform: translateY(-3px);
+    opacity: 0.4;
+  }
+}
+
+.saved b {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--lime);
+  font-size: 0.66rem;
+  color: var(--ink);
+}
+
+.saved em {
+  margin-left: 4px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--rule);
+  font-style: normal;
+  color: var(--ink);
+}
+
+[data-play] .saved {
+  animation: pop 0.6s var(--spring) 2.4s both;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.9);
+  }
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 4vw, 44px) 0;
+}
+
+/* Diagram */
+.diagram {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  overflow: visible;
+}
+
+.node rect,
+.node path {
+  fill: #fff;
+  stroke: rgba(91, 46, 255, 0.45);
+  stroke-width: 1.5;
+}
+
+.node[data-kind="diamond"] path {
+  fill: rgba(212, 255, 58, 0.35);
+  stroke: var(--ink);
+}
+
+.node[data-kind="end"] rect {
+  fill: var(--ink);
+  stroke: var(--ink);
+}
+
+.node text {
+  font: 600 13px var(--font-display);
+  fill: var(--ink);
+}
+
+.node[data-kind="end"] text {
+  fill: var(--lime);
+}
+
+.edge path {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 1.8;
+  marker-end: url(#mk-arrow);
+  stroke-dasharray: 1;
+}
+
+.edge text {
+  font: 500 11px var(--font-mono);
+  fill: var(--color-muted);
+}
+
+.diagram marker path {
+  fill: var(--violet);
+}
+
+[data-play] .node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nodeIn 0.5s var(--spring) calc(var(--t0) + var(--k) * 0.28s) both;
+}
+
+[data-play] .edge path {
+  animation: draw 0.4s var(--ease) calc(var(--t0) + var(--k) * 0.28s) both;
+}
+
+[data-play] .edge text {
+  animation: fade 0.3s var(--ease) calc(var(--t0) + var(--k) * 0.28s + 0.2s) both;
+}
+
+@keyframes nodeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* The arrowhead belongs to the line, so it fades in with it instead of waiting at the end. */
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Doc */
+.doc {
+  justify-self: stretch;
+  display: grid;
+  gap: 8px;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 22px;
+  border-left: 3px solid var(--lime);
+}
+
+.doc p {
+  margin: 0;
+}
+
+.docTitle {
+  margin-bottom: 6px !important;
+  font: 700 1.5rem / 1.15 var(--font-display);
+  letter-spacing: -0.025em;
+}
+
+.docH {
+  margin-top: 8px !important;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.docP,
+.docLi {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.docLi {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.docLi i {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1.5px var(--violet);
+  transform: translateY(2px);
+}
+
+[data-play] .doc > * {
+  animation: lineIn 0.45s var(--ease) calc(var(--t0) + var(--k) * 0.16s) both;
+}
+
+@keyframes lineIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+}
+
+/* Slides */
+.slides {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slides li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  aspect-ratio: 16 / 10;
+  padding: 14px 14px 12px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px var(--rule),
+    0 18px 34px -22px rgba(43, 26, 120, 0.55);
+}
+
+.slides li[data-first] {
+  background: var(--ink);
+  color: #fff;
+}
+
+.slideNum {
+  font: 500 0.66rem / 1 var(--font-mono);
+  color: var(--color-muted);
+}
+
+.slides li[data-first] .slideNum {
+  color: var(--lime);
+}
+
+.slides b {
+  font: 700 clamp(0.9rem, 1.3vw, 1.1rem) / 1.15 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.slides span:not(.slideNum) {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+.slides li[data-first] span:not(.slideNum) {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* A violet → lime bar along each slide's foot */
+.slides i {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  width: 36%;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--violet), var(--lime));
+}
+
+[data-play] .slides li {
+  animation: slideIn 0.6s var(--spring) calc(var(--t0) + var(--k) * 0.25s) both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) rotate(-3deg) scale(0.92);
+  }
+}
+
+/* ---------- Points ---------- */
+.points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px clamp(24px, 3.4vw, 48px);
+  margin: clamp(48px, 7vh, 72px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points li {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ink);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--ease) calc(0.4s + var(--k) * 0.1s),
+    transform 0.8s var(--ease) calc(0.4s + var(--k) * 0.1s);
+}
+
+[data-in] .points li {
+  opacity: 1;
+  transform: none;
+}
+
+.points span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--violet);
+}
+
+.points b {
+  font: 700 1.1rem / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.points p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .points {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .canvas {
+    min-height: 0;
+  }
+
+  .status {
+    flex-wrap: wrap;
+    min-height: 0;
+  }
+
+  .working,
+  .saved {
+    position: static;
+  }
+
+  [data-play] .working {
+    display: none;
+  }
+
+  .saved em {
+    display: none;
+  }
+
+  .slides {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 320px;
+  }
+
+  /* The flowchart keeps a readable size and scrolls sideways. */
+  .stage[data-kind="diagram"],
+  .canvas[data-kind="diagram"] .stage {
+    place-items: start;
+    margin: 0 calc(-1 * var(--gutter));
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .diagram {
+    min-width: 560px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layout,
+  .points li {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

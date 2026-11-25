@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { download } from "@/content/home";
 import { siteConfig } from "@/config/site";
@@ -96,6 +97,16 @@ export function Download() {
 
       <div className={styles.under}>
         <p className={styles.lead}>{download.lead}</p>
+        <p className={styles.trial}>
+          <b>{download.trial.tag}</b>
+          <span>{download.trial.text}</span>
+          <Link href={download.trial.link.href}>
+            {download.trial.link.label}
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" />
+            </svg>
+          </Link>
+        </p>
         <div className={styles.buttons}>
           <OsButton href={mac} label={download.mac} soon={download.soon} icon={<Apple />} primary />
           <OsButton href={windows} label={download.windows} soon={download.soon} icon={<Windows />} />
