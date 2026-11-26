@@ -46,6 +46,9 @@ function OsButton({ href, label, soon, icon, primary }) {
   );
 }
 
+const two = topics.length > 5;
+const cols = two ? Math.ceil(topics.length / 2) : topics.length;
+
 export function FaqClose() {
   const ref = useRef(null);
   const seen = useSeen(ref, 0.3);
@@ -107,9 +110,10 @@ export function FaqClose() {
 
       <nav className={styles.jumps} aria-label={faqClose.jumpLabel}>
         <p className={styles.jumpLabel}>{faqClose.jumpLabel}</p>
-        <ul style={{ "--cols": topics.length }}>
+        {/* More than five topics: two rows. */}
+        <ul data-two={two || undefined} style={{ "--cols": cols }}>
           {topics.map((t, i) => (
-            <li key={t.id} style={{ "--tone": "var(--violet)", "--i": i }}>
+            <li key={t.id} data-top={(two && i < cols) || undefined} data-start={(two && i % cols === 0) || undefined} style={{ "--tone": "var(--violet)", "--i": i }}>
               <a href={`#topic-${t.id}`}>
                 <span className={styles.jn}>{String(i + 1).padStart(2, "0")}</span>
                 <span className={styles.jl}>{t.label}</span>

@@ -34,6 +34,17 @@ export const privacyPage = {
       },
     },
     {
+      id: "accent",
+      what: "Your accent voice",
+      sub: "Only when you turn it on",
+      cells: {
+        computer: ["none", ""],
+        server: ["none", ""],
+        speech: ["send", "Your words as text, back as speech"],
+        ai: ["none", ""],
+      },
+    },
+    {
       id: "words",
       what: "Words from the call",
       sub: "The transcript, and screenshots for Read my screen",
@@ -105,6 +116,14 @@ export const border = {
       then: null,
     },
     {
+      id: "accent",
+      what: "Your accent voice",
+      sub: "Only when you turn it on",
+      here: null,
+      to: { kind: "send", title: "Speech service", by: "Cartesia", text: "Your words go as text and come back as speech." },
+      then: null,
+    },
+    {
       id: "words",
       what: "Words from the call",
       sub: "The transcript, and screenshots for Read my screen",
@@ -139,13 +158,13 @@ export const orbit = {
   items: ["Notes", "Transcripts", "Recordings", "Call profiles"],
   edge: "Your computer’s edge",
   places: {
-    speech: { name: "Speech service", by: "Cartesia", status: "Turns audio into text" },
+    speech: { name: "Speech service", by: "Cartesia", status: "Speech to text, and accent voice" },
     server: { name: "MeetFly’s server", by: "Google Cloud", status: "Passes text on, keeps none of it" },
     ai: { name: "AI service", by: "Google Gemini", status: "Writes answers and notes" },
   },
   flows: [
     { id: "meetings", label: "Your meetings", line: "Never leave your computer" },
-    { id: "audio", label: "Audio", line: "Straight to the speech service, never through our server" },
+    { id: "audio", label: "Audio", line: "Straight to the speech service, never through our server. With accent voice, your words go as text and come back as speech" },
     { id: "words", label: "Words", line: "Through our server, not stored or logged, to the AI" },
     { id: "meta", label: "Account and errors", line: "Your account, usage and error reports, to our server" },
   ],
@@ -205,22 +224,24 @@ export const promises = {
   ],
 };
 
-// "Everything our server knows about you": the server's whole record, from the policy's "What our
+// "What our server knows about you": the server's record (cloned voices left out, as everywhere on the site), from the policy's "What our
 // servers keep" (voice cloning left out: not on the site), as four groups. `never` lists what is
 // not in it (it stays on your computer or never reaches MeetFly at all).
 export const record = {
   eyebrow: "What we keep",
-  title: "Everything our server knows about you",
-  lead: "This is the whole record. Your meetings are not in it, and never were.",
+  title: "What our server knows about you",
+  lead: "Here is what it keeps, line by line from our privacy policy. Your meetings are not in it, and never were.",
   cols: { what: "What we keep", fields: "Exactly what’s in it", why: "Why, and for how long" },
   groups: [
     { id: "install", what: "Your copy of the app", fields: ["A random ID", "First and last seen", "System", "App version", "Scrambled IP address"], why: "To run the app and limit abuse.", when: "Always" },
     { id: "account", what: "Your account", fields: ["Email", "Name and picture, from Google", "Plan", "Sign-in times"], why: "Only if you sign in. Ask us and we delete it.", when: "While your account exists" },
-    { id: "usage", what: "Usage", fields: ["AI requests per day", "Speech sessions per day", "Transcription minutes per month"], why: "Numbers only, for limits and plans.", when: "While your account exists" },
-    { id: "logs", what: "Logs", fields: ["What happened", "How long it took", "A short app ID"], why: "Never your transcripts, questions or answers.", when: "For a limited time" },
+    { id: "usage", what: "Usage", fields: ["AI requests per day", "Speech sessions per day", "Transcription minutes per month", "Accent voice minutes per month"], why: "Numbers only, for limits and plans.", when: "While your account exists" },
+    { id: "signin", what: "Sign-in requests", fields: ["Your email", "The sign-in link request"], why: "Your email is removed from the request once you finish signing in. A request you never finish stays until we delete it.", when: "Until you sign in" },
+    { id: "waitlist", what: "The waitlist", fields: ["Your email", "The plan you asked about"], why: "Only if you tap “Notify me” for a plan.", when: "Only if you ask" },
+    { id: "logs", what: "Logs", fields: ["What happened", "How long it took", "A short app ID", "Each request’s time, address and IP, recorded by our host"], why: "Never your transcripts, questions or answers.", when: "For a limited time" },
   ],
   neverTitle: "Never on our server",
-  never: ["Transcripts", "Audio recordings", "Notes and summaries", "Your questions and its answers", "Screenshots", "Typed notes and bookmarks", "Calendar links", "Passwords"],
+  never: ["Transcripts", "Audio recordings", "Notes and summaries", "Your questions and its answers", "Documents it made for you", "Screenshots", "Typed notes and bookmarks", "Calendar links", "Invitees’ names and emails", "Passwords"],
   neverNote: "These stay on your computer, or never reach us at all.",
 };
 
@@ -324,7 +345,136 @@ export const privacyClose = {
     { href: "#privacy-top", label: "Where it goes" },
     { href: "#promises", label: "Six promises" },
     { href: "#server-record", label: "What we keep" },
+    { href: "#processors", label: "Who handles it" },
     { href: "#consent", label: "Consent" },
+    { href: "#your-rights", label: "Your rights" },
     { href: "#privacy-questions", label: "Questions" },
+  ],
+};
+
+// "Who handles your data" (2026-11-26, after the server record): the outside services the policy
+// names (backend/src/legal/privacy.ts, "What MeetFly sends to other services" and "What our
+// servers keep"), as a who-gets-what grid. Values: get = processes it to do the work, pass =
+// passes it on and keeps none, keep = keeps it, no = never gets it. Cloned voices left out, as
+// everywhere on the site. Payments (Stripe) wait until the policy names them.
+export const processors = {
+  eyebrow: "Who handles your data",
+  title: "Four services, and exactly what each one gets",
+  lead: "MeetFly can’t transcribe or answer on its own. These are the services it uses, straight from our privacy policy.",
+  cols: [
+    { id: "audio", label: "Audio", note: "Your mic and your computer’s sound" },
+    { id: "words", label: "Your words", note: "Transcript parts, questions, typed notes, background" },
+    { id: "screen", label: "A screenshot", note: "Only when you ask about your screen" },
+    { id: "meetings", label: "Past meetings", note: "Only when you ask across them" },
+    { id: "email", label: "Your email", note: "Only if you sign in" },
+    { id: "usage", label: "Usage counts", note: "Numbers only" },
+  ],
+  rows: [
+    {
+      id: "cartesia",
+      name: "Cartesia",
+      role: "Speech",
+      does: "Turns audio into text, and speaks your accent voice.",
+      gets: {
+        audio: ["get", "Streamed straight from your computer, never through our server."],
+        words: ["get", "Only with accent voice: the words you say, to speak them."],
+        screen: ["no"],
+        meetings: ["no"],
+        email: ["no"],
+        usage: ["no"],
+      },
+    },
+    {
+      id: "gemini",
+      name: "Google Gemini",
+      by: "on Google Cloud’s Vertex AI",
+      role: "AI",
+      does: "Writes answers, notes, translations and documents.",
+      gets: {
+        audio: ["no"],
+        words: ["get", "Parts of the transcript, your questions, typed notes, bookmarks and the background you gave."],
+        screen: ["get", "One screenshot, sent with that question."],
+        meetings: ["get", "Parts of past meetings, when you ask a question across them."],
+        email: ["no"],
+        usage: ["no"],
+      },
+    },
+    {
+      id: "server",
+      name: "MeetFly’s server",
+      by: "on Google Cloud",
+      role: "Ours",
+      does: "Passes text to the AI and keeps a small record.",
+      gets: {
+        audio: ["no", "Audio never passes through it."],
+        words: ["pass", "Passed on to the AI. Not stored, not written to its logs."],
+        screen: ["pass", "Passed on with your question. Not stored."],
+        meetings: ["pass", "Passed on with your question. Not stored."],
+        email: ["keep", "With your account, if you sign in."],
+        usage: ["keep", "How much you used, as numbers."],
+      },
+    },
+    {
+      id: "identity",
+      name: "Google Identity Platform",
+      role: "Sign-in",
+      does: "Emails your sign-in link, or signs you in with Google. We never receive a password.",
+      gets: {
+        audio: ["no"],
+        words: ["no"],
+        screen: ["no"],
+        meetings: ["no"],
+        email: ["get", "To send your sign-in link, or sign you in with Google."],
+        usage: ["no"],
+      },
+    },
+  ],
+  legend: { get: "Gets it, to do the work", pass: "Passes it on, keeps none", keep: "Keeps it", no: "Never gets it" },
+  nobody: "Gets none of it",
+  notes: [
+    "Your saved meetings live only on your computer. No service holds a copy.",
+    "If our server can’t be reached, the app sends the same text straight to Google’s Gemini API, and asks Cartesia directly, so your call keeps going.",
+    "Cartesia and Google handle what they receive under their own terms and privacy policies. Everything travels over encrypted connections.",
+  ],
+};
+
+// "Your rights" (2026-11-26, after Consent): the policy's "Your choices", "How long things are
+// kept", "Children" and "Changes to this policy", as one sentence whose verbs open how to do each.
+// Settings paths are the app's own labels. The contact address shows only once
+// siteConfig.legal.contactEmail is set.
+export const rights = {
+  eyebrow: "Your rights",
+  title: "Yours to delete, keep or take back",
+  lead: "Most of it you can do yourself, right now, in the app. For the rest, ask us.",
+  sentence: [
+    "You can ",
+    { id: "delete", verb: "delete" },
+    " any meeting or all of them, ",
+    { id: "keep", verb: "choose" },
+    " how long meetings stay, keep ",
+    { id: "transcripts", verb: "transcripts only" },
+    ", ",
+    { id: "errors", verb: "switch off" },
+    " error reports and ",
+    { id: "signout", verb: "sign out" },
+    " without losing a thing. Or ",
+    { id: "ask", verb: "ask us" },
+    " for a copy of your account record, to correct it, or to delete it.",
+  ],
+  whereLabel: "Where",
+  whoLabel: "Who",
+  whenLabel: "When",
+  items: {
+    delete: { where: ["Settings", "Privacy", "Delete all meetings"], text: "Every meeting, its notes and its recording, gone from this computer. Or delete a single meeting on its own.", who: "You, in the app", when: "Right away" },
+    keep: { where: ["Settings", "Privacy", "Keep meetings for"], text: "7, 30 or 90 days, or forever. Older meetings are cleared once a day.", who: "You, in the app", when: "Once a day" },
+    transcripts: { where: ["Settings", "Privacy", "Keep audio recordings"], text: "Switch it off and recordings are no longer saved, and the ones you have are deleted.", who: "You, in the app", when: "Right away" },
+    errors: { where: ["Settings", "Privacy", "Send error reports"], text: "When it’s off, nothing is sent.", who: "You, in the app", when: "Right away" },
+    signout: { where: ["Settings", "Account", "Sign out"], text: "Your meetings stay on your computer.", who: "You, in the app", when: "Right away" },
+    ask: { where: ["Write to us"], text: "Ask for a copy of your account record, or to correct or delete it. Depending on where you live, the law may give you more rights over your personal data. Contact us and we will help.", who: "Us, on request", when: "When you ask" },
+  },
+  contact: "Write to",
+  footnotes: [
+    { title: "Made for adults", text: "MeetFly isn’t meant for children, and we don’t knowingly collect information from anyone under 16. If a child has given us information, contact us and we will delete it." },
+    { title: "When the policy changes", text: "We update the policy and its date. If a change is important, we also say so in the app." },
   ],
 };

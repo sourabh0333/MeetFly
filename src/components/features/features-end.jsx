@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { featureGroups, featuresEnd } from "@/content/features";
 import { siteConfig } from "@/config/site";
@@ -10,7 +11,7 @@ import styles from "./features-end.module.css";
 // "29 features. One download." — the 29 rolls up from 00 like the Before numerals while the feature
 // names flash past underneath like a slot machine, then it settles on one line. Mac / Windows
 // buttons ("Coming soon" while siteConfig.downloads has no links, as on the homepage) and Watch it
-// work. Then a ruled row of four links back to each part of the page, with their counts.
+// work, with the free-trial line (tag · offer · See plans) just above them. Then a ruled row of four links back to each part of the page, with their counts.
 const all = featureGroups.flatMap((g) => g.items.map((f) => f.name));
 const total = all.length;
 const DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -113,6 +114,19 @@ export function FeaturesEnd() {
           <span className={styles.settled}>{featuresEnd.settle}</span>
         )}
       </p>
+
+      {featuresEnd.trial && (
+        <p className={styles.trial}>
+          <b>{featuresEnd.trial.tag}</b>
+          <span>{featuresEnd.trial.text}</span>
+          <Link href={featuresEnd.trial.link.href}>
+            {featuresEnd.trial.link.label}
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" />
+            </svg>
+          </Link>
+        </p>
+      )}
 
       <div className={styles.actions}>
         <OsButton href={mac} label={featuresEnd.mac} soon={featuresEnd.soon} icon={<Apple />} primary />

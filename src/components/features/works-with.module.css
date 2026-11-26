@@ -1,0 +1,480 @@
+/* "Works with": a through-line. In | MeetFly spine | Out on one grid, so rows line up across;
+   each row's wire runs into the spine and out of it, a lime pulse travels the lit row. Hairlines
+   only, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spine: 200px;
+  --wire-y: 30px;
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--gutter) clamp(72px, 10vh, 120px);
+}
+
+.section[data-paused] * {
+  animation-play-state: paused !important;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--spine) minmax(0, 1fr);
+  grid-template-rows: auto repeat(var(--rows), auto);
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.colHead {
+  grid-row: 1;
+  margin: 0;
+  padding-bottom: 14px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.colHead[data-side="in"] {
+  grid-column: 1;
+}
+
+.colHead[data-side="out"] {
+  grid-column: 3;
+  text-align: right;
+}
+
+/* ---------- The spine ---------- */
+.spine {
+  position: relative;
+  grid-column: 2;
+  grid-row: 2 / -1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  z-index: 1;
+}
+
+.spineLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: linear-gradient(var(--color-line), var(--ink) 18%, var(--ink) 82%, var(--color-line));
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.1s var(--ease) 0.2s;
+}
+
+[data-in] .spineLine {
+  transform: none;
+}
+
+.hub {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow:
+    0 0 0 6px var(--color-bg),
+    0 0 0 8px var(--lime),
+    0 20px 40px -14px rgba(91, 46, 255, 0.55);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.6s var(--ease) 0.6s,
+    transform 0.8s var(--ease) 0.6s;
+}
+
+[data-in] .hub {
+  opacity: 1;
+  transform: none;
+}
+
+.hub::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid var(--lime);
+  opacity: 0;
+}
+
+[data-in] .hub::after {
+  animation: hubPing 3.4s ease-out 1.4s infinite;
+}
+
+@keyframes hubPing {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+.hub img {
+  width: 34px;
+  height: 34px;
+}
+
+.hubName,
+.hubHint {
+  position: relative;
+  padding: 0 8px;
+  background: var(--color-bg);
+}
+
+.hubName {
+  margin-top: 14px;
+  font: 700 1.05rem / 1.1 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.hubHint {
+  font: 500 0.68rem / 1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* ---------- The cells ---------- */
+.cell {
+  position: relative;
+  grid-row: var(--r);
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 22px 32px 30px 0;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  outline: none;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    color 0.4s,
+    opacity 0.7s var(--ease) calc(0.3s + var(--r) * 0.08s),
+    transform 0.8s var(--ease) calc(0.3s + var(--r) * 0.08s);
+}
+
+[data-in] .cell {
+  opacity: 1;
+  transform: none;
+}
+
+.cell[data-side="in"] {
+  grid-column: 1;
+}
+
+.cell[data-side="out"] {
+  grid-column: 3;
+  padding: 22px 0 30px 32px;
+}
+
+.cell[data-lit] {
+  color: var(--ink);
+}
+
+.cell:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.kind i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-line);
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
+}
+
+.cell[data-lit] .kind {
+  color: var(--violet);
+}
+
+.cell[data-lit] .kind i {
+  background: var(--lime);
+  box-shadow: 0 0 0 2px var(--violet);
+}
+
+.title {
+  font: 700 clamp(1.15rem, 0.95rem + 0.6vw, 1.45rem) / 1.15 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.names li {
+  padding: 6px 11px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  font: 500 0.85rem / 1 var(--font-display);
+  white-space: nowrap;
+  transition:
+    box-shadow 0.3s,
+    background 0.3s,
+    color 0.3s;
+}
+
+.cell[data-lit] .names li {
+  box-shadow: inset 0 0 0 1px var(--ink);
+  color: var(--ink);
+}
+
+.cell[data-lit] .names li:first-child {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: inset 0 -2px 0 var(--lime);
+}
+
+.note {
+  max-width: 46ch;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* The wire from the cell to the spine (in) or from the spine to the cell (out). */
+.wire {
+  position: absolute;
+  top: var(--wire-y);
+  width: calc(var(--spine) / 2);
+  height: 0;
+  border-top: 1px dashed var(--color-line);
+  transition: border-color 0.3s;
+}
+
+.cell[data-side="in"] .wire {
+  left: 100%;
+}
+
+.cell[data-side="out"] .wire {
+  right: 100%;
+}
+
+/* A node where each wire meets the spine. */
+.wire::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.cell[data-side="in"] .wire::after {
+  right: -4.5px;
+}
+
+.cell[data-side="out"] .wire::after {
+  left: -4.5px;
+}
+
+.cell[data-lit] .wire {
+  border-top: 2px solid var(--violet);
+  margin-top: -0.5px;
+}
+
+.cell[data-lit][data-side="out"] .wire {
+  border-top-color: #9dc61f;
+}
+
+.cell[data-lit] .wire::after {
+  background: var(--lime);
+}
+
+/* The pulse: in → spine, then spine → out. */
+.wire i {
+  position: absolute;
+  top: -6px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow:
+    0 0 0 3px rgba(91, 46, 255, 0.35),
+    0 0 14px rgba(212, 255, 58, 0.8);
+  opacity: 0;
+}
+
+.cell[data-side="in"] .wire i {
+  animation: pulse 1s var(--ease) 0.1s both;
+}
+
+.cell[data-side="out"] .wire i {
+  animation: pulse 1s var(--ease) 1.1s both;
+}
+
+@keyframes pulse {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* ---------- Runs on ---------- */
+.runs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 36px;
+  max-width: 1240px;
+  margin: 8px auto 0;
+  padding: 18px 0;
+  border-block: 1px solid var(--color-line);
+  font-size: 0.92rem;
+  color: var(--color-muted);
+  opacity: 0;
+  transition: opacity 0.8s var(--ease) 0.8s;
+}
+
+[data-in] .runs {
+  opacity: 1;
+}
+
+.runs span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.runs b {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+/* ---------- Smaller screens: In, then MeetFly, then Out, down the page ---------- */
+@media (max-width: 860px) {
+  .board {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .colHead,
+  .colHead[data-side="out"],
+  .cell,
+  .cell[data-side="in"],
+  .cell[data-side="out"],
+  .spine {
+    grid-column: 1;
+    grid-row: auto;
+    text-align: left;
+  }
+
+  .colHead[data-side="in"] {
+    order: 0;
+  }
+
+  .cell[data-side="in"] {
+    order: 1;
+  }
+
+  .spine {
+    order: 2;
+    grid-auto-flow: column;
+    justify-content: start;
+    align-items: center;
+    gap: 14px;
+    padding: 26px 0;
+  }
+
+  .spineLine {
+    top: 0;
+    bottom: 0;
+    left: 38px;
+  }
+
+  .hub {
+    width: 64px;
+    height: 64px;
+    margin-left: 6px;
+  }
+
+  .hubName {
+    margin-top: 0;
+  }
+
+  .colHead[data-side="out"] {
+    order: 3;
+    padding-top: 8px;
+  }
+
+  .cell[data-side="out"] {
+    order: 4;
+  }
+
+  .cell,
+  .cell[data-side="out"] {
+    padding: 20px 0 26px;
+  }
+
+  .wire {
+    display: none;
+  }
+
+  .runs {
+    display: grid;
+    gap: 10px;
+  }
+
+  .runs span {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spineLine,
+  .hub,
+  .cell,
+  .runs {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .section * {
+    animation: none !important;
+  }
+}

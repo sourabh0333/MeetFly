@@ -6,7 +6,7 @@ import { SectionHead } from "@/components/section-head/section-head";
 import { useSeen } from "@/components/use-seen";
 import styles from "./record.module.css";
 
-// "Everything our server knows about you" as an aligned ledger: one heading row, then four rows on
+// "What our server knows about you" as an aligned ledger: one heading row, then a row per record on
 // the same grid (what we keep | exactly what's in it | why, and for how long). Each row's field
 // chips pop in when it is reached. Under it, a full-width "Never on our server" band whose items
 // are struck through one by one. Phones: each row stacks, labels stay.

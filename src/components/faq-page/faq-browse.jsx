@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { browse, faqs, topics } from "@/content/faq";
@@ -122,6 +123,14 @@ export function FaqBrowse() {
                 <span className={styles.pointer} aria-hidden="true" />
                 <p className={styles.aq}>{o.q}</p>
                 <p className={styles.a}>{o.a}</p>
+                {o.link && (
+                  <Link className={styles.more} href={o.link.href}>
+                    {o.link.label}
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" />
+                    </svg>
+                  </Link>
+                )}
               </li>,
             ];
           })}

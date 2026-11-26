@@ -3,6 +3,7 @@ import { UseCasesSetup } from "@/components/use-cases/uc-setup";
 import { UseCasesTools } from "@/components/use-cases/uc-tools";
 import { UseCasesAsk } from "@/components/use-cases/uc-ask";
 import { UseCasesMore } from "@/components/use-cases/uc-more";
+import { UseCasesPlans } from "@/components/use-cases/uc-plans";
 import { UseCasesClose } from "@/components/use-cases/uc-close";
 import { PageWave } from "@/components/page-wave/page-wave";
 
@@ -14,7 +15,7 @@ export const metadata = {
 
 // The Use cases page is built one section at a time. So far: the hero, then how each role sets
 // MeetFly up, then the tools each role connects it to,
-// then the questions each role asks, more kinds of call, and the close.
+// then the questions each role asks, more kinds of call, which plan fits each role, and the close.
 export default function Page() {
   return (
     <>
@@ -24,6 +25,7 @@ export default function Page() {
       <UseCasesTools />
       <UseCasesAsk />
       <UseCasesMore />
+      <UseCasesPlans />
       <UseCasesClose />
     </>
   );

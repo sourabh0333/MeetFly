@@ -76,7 +76,7 @@ export const roles = [
     type: "Negotiation",
     them: "What happens if a bigger company copies this?",
     reply: "They could try, but those EHR integrations took us a full year to build and secure. Plus, big software companies rarely build for small clinics because the workflows are too niche, while we iterate with our users every single week.",
-    uses: ["Call prep", "Live notes", "Ask across meetings"],
+    uses: ["Call prep", "Make it mid-call", "Ask across meetings"],
     call: "Seed round · Harbor Ventures",
     who: "Investor · Harbor Ventures",
     video: { length: 10.21, talk: [0.85, 2.61], replyAt: 3.71 },
@@ -120,7 +120,7 @@ export const roles = [
     them: "Hola, ¿podemos mover la entrega al viernes?",
     lang: "es",
     reply: "Hola, we can move it to Friday as long as testing is fully wrapped up by Wednesday evening and we notify the client today. Does that timeline work for your team?",
-    uses: ["Live translation", "Short answers", "Live transcript"],
+    uses: ["Live translation", "Accent voice", "Short answers"],
     call: "Weekly sync · Madrid team",
     who: "Madrid team · Weekly sync",
     video: { length: 9.93, talk: [0.85, 2.37], replyAt: 3.43 },
@@ -204,7 +204,7 @@ export const setup = {
       notes: "Release due Wednesday. Friday works if testing is confirmed by Wednesday evening. Reply in English.",
       files: ["release-plan.md"],
       length: "Short",
-      extras: [["Record the meeting", true], ["Translate their words to English", true]],
+      extras: [["Record the meeting", true], ["Translate their words to English", true], ["Turn my accent on", true]],
       template: ["Summary", "Key points", "Decisions", "Action items", "Open questions", "Follow-up email draft"],
     },
   },
@@ -212,7 +212,7 @@ export const setup = {
 
 // "From your calendar to wherever your notes go": a switchboard. Every source and destination the
 // app really supports is a port (checked 2026-11-17/20 against its code): calendars by private link
-// (Google, Outlook, iCloud); joining Meet, Zoom, Teams, Webex and Whereby inside MeetFly, or a
+// (Google, Outlook, iCloud); joining Meet, Zoom, Teams, Webex, Whereby and Slack huddles inside MeetFly, or a
 // pasted link, or Practice mode; export as PDF, Word, Markdown, rich text, copy for Slack, "Open in
 // mail app" for the follow-up email, and a webhook to Zapier, Make or n8n. Each role lights a
 // typical set of ports; `makes` are sections from that call type's real notes template (or a live
@@ -225,7 +225,7 @@ export const tools = {
   destsTitle: "Notes go to",
   sources: [
     { group: "Calendars", note: "by private link", items: ["Google Calendar", "Outlook", "iCloud"] },
-    { group: "Call apps", note: "joined inside MeetFly", items: ["Meet", "Zoom", "Teams", "Webex", "Whereby"] },
+    { group: "Call apps", note: "joined inside MeetFly", items: ["Meet", "Zoom", "Teams", "Webex", "Whereby", "Slack huddle"] },
     { group: "On your own", note: "", items: ["Pasted link", "Practice mode"] },
   ],
   dests: [
@@ -237,7 +237,7 @@ export const tools = {
   rows: {
     sales: { from: ["Google Calendar", "Zoom"], makes: ["Objections and how they were handled", "Next steps", "Follow-up email draft"], to: ["Open in mail app", "Slack", "Zapier"] },
     support: { from: ["Outlook", "Teams"], makes: ["Troubleshooting steps taken", "Resolution", "Customer sentiment"], to: ["Markdown", "n8n"] },
-    founders: { from: ["Google Calendar", "Meet"], makes: ["Agreed terms", "Open issues", "Follow-up email draft"], to: ["PDF", "Word", "Slack"] },
+    founders: { from: ["Google Calendar", "Meet"], makes: ["Agreed terms", "Slide outline, made mid-call", "Follow-up email draft"], to: ["PDF", "Word", "Slack"] },
     hiring: { from: ["Outlook", "Teams"], makes: ["Key points", "Decisions", "Open questions"], to: ["PDF", "Slack", "Make"] },
     "job-seekers": { from: ["Pasted link", "Practice mode"], makes: ["Questions asked", "How I answered", "What to improve next time"], to: ["Word", "Markdown", "Open in mail app"] },
     "multilingual-teams": { from: ["iCloud", "Webex", "Whereby"], makes: ["Captions in English, live", "Decisions", "Action items"], to: ["Rich text", "Slack", "Markdown"] },
@@ -270,12 +270,14 @@ export const ask = {
     { role: "support", q: "Can it help with what the customer is sharing?", a: "Yes. Read my screen looks at what’s shared, like an error message or a settings page, and answers with that in mind.", features: ["read-my-screen", "ask-box"] },
     { role: "support", q: "Where do the notes go after the call?", a: "They’re saved on your computer in the Customer support template: issue, steps taken, resolution, sentiment. Copy them as Markdown or for Slack, or send them to Zapier, Make or n8n with a webhook.", features: ["notes", "export"] },
     { role: "founders", q: "Can I ask about earlier calls with the same investor?", a: "Yes. Search every meeting by word, or ask a question and get an answer drawn from all your past calls.", features: ["library", "ask-across"] },
+    { role: "founders", q: "Can it make slides or a doc while we talk?", a: "Yes. Say or type “MeetFly, make a slide outline for the pilot plan” and it builds one from the call, saved with the meeting and ready to copy or export. Docs and diagrams work the same way.", features: ["created", "voice-commands"] },
     { role: "founders", q: "Where is my call data kept?", a: "Notes, transcripts and recordings are saved on your computer. While you talk, audio and transcript text are sent to the speech and AI services MeetFly uses, so it can write down the call and answer.", features: ["privacy"] },
     { role: "hiring", q: "Should I tell the candidate MeetFly is on?", a: "MeetFly reminds you to ask for consent at the start, with a notice you can paste into the meeting chat. Recording is your choice, and you can turn it off.", features: ["recording"] },
     { role: "hiring", q: "Which template fits interviews I run?", a: "Use Team meeting: key points, decisions, open questions and a follow-up. The Interview template is written for the candidate’s side.", features: ["notes", "rewrite"] },
     { role: "job-seekers", q: "Can I practise without a real interviewer?", a: "Yes. In Practice mode your microphone plays the other person: read the question aloud and MeetFly answers as it would in the real interview.", features: ["practice", "answer-styles"] },
     { role: "job-seekers", q: "Will it tell me what to improve?", a: "The Interview notes list the questions asked, how you answered, and what to improve next time, plus a thank-you email draft.", features: ["notes", "follow-up"] },
     { role: "multilingual-teams", q: "Which languages can it translate?", a: "Fourteen: English, Hindi, Spanish, French, German, Portuguese, Italian, Japanese, Korean, Chinese, Arabic, Russian, Tamil and Bengali. Their words are translated into yours, live.", features: ["live-translation", "live-transcript"] },
+    { role: "multilingual-teams", q: "Can people hear me in a different accent?", a: "Yes, with accent voice. After each sentence, the people on your call hear it spoken by a native voice in the accent you pick, about 1 to 1.5 seconds later. There are 17 English accents, on Pro + Voice and the Interview Pass.", features: ["accent", "live-translation"] },
     { role: "multilingual-teams", q: "Will its replies be in my language?", a: "Say so in the notes for the AI, like “Reply in English”, and it answers in that language even when the other side speaks another.", features: ["call-prep", "live-replies"] },
   ],
 };
@@ -301,6 +303,32 @@ export const moreRoles = {
   ],
 };
 
+// "Which plan fits your calls?" (2026-11-26, after More calls it fits): a suggested plan for each
+// role, labelled as a suggestion. Plans, prices and hours come from src/content/pricing.js; only
+// the reasons live here. Every plan has every feature; plans differ in hours and accent voice.
+// Interviews are framed as practice.
+export const planByRole = {
+  eyebrow: "Plans by role",
+  title: "Which plan fits your calls?",
+  lead: "Every plan has every feature, so pick by how much you talk and whether you want the accent voice. Every account starts with 7 days of Pro + Voice free.",
+  rolesLabel: "Your calls",
+  plansLabel: "A good place to start",
+  listen: "listening",
+  voice: "accent voice",
+  noVoice: "no accent voice",
+  why: "Why",
+  more: { label: "Compare every plan", href: "/pricing" },
+  roles: [
+    { id: "sales", plan: "pro", why: "You’re on calls most days. 20 hours a month is about an hour of calls every working day." },
+    { id: "support", plan: "pro", why: "Every feature for your own calls. If the whole support team uses it, Team gives each person their own 20 hours." },
+    { id: "founders", plan: "pro", why: "Pitches, investor updates and customer calls, all searchable later, with 20 hours a month." },
+    { id: "hiring", plan: "team", why: "Everyone on the hiring panel gets their own 20 hours a month, billed per person." },
+    { id: "job-seekers", plan: "interview_pass", why: "A week of interview practice ahead? 20 hours over 7 days with accent voice included. One payment, no subscription." },
+    { id: "multilingual-teams", plan: "pro_voice", why: "Live translation is on every plan. Pro + Voice adds 8 hours of accent voice a month, so people hear you in the accent you pick." },
+    { id: "trying", label: "Just trying it", plan: "free", why: "3 hours of listening and 10 minutes of accent voice every month, with every feature. Free for good." },
+  ],
+};
+
 // The close of the Use cases page: the bookend to the hero (shared styles with the Features close).
 export const ucClose = {
   eyebrow: "Whatever you talk about",
@@ -311,5 +339,7 @@ export const ucClose = {
   windows: "Download for Windows",
   soon: "Coming soon",
   features: { label: "See every feature", href: "/features" },
+  // Keep in step with the trial in src/content/pricing.js.
+  trial: { tag: "7 days free", text: "Every account starts with Pro + Voice. No card needed.", link: { label: "See plans", href: "#plans" } },
   jumpLabel: "Jump back to a role",
 };

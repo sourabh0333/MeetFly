@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { moreRoles, roles, ucClose } from "@/content/use-cases";
 import { siteConfig } from "@/config/site";
@@ -90,6 +91,19 @@ export function UseCasesClose() {
           <span className={styles.settled}>{ucClose.lead}</span>
         )}
       </p>
+
+      {ucClose.trial && (
+        <p className={styles.trial}>
+          <b>{ucClose.trial.tag}</b>
+          <span>{ucClose.trial.text}</span>
+          <Link href={ucClose.trial.link.href}>
+            {ucClose.trial.link.label}
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" />
+            </svg>
+          </Link>
+        </p>
+      )}
 
       <div className={styles.actions}>
         <OsButton href={mac} label={ucClose.mac} soon={ucClose.soon} icon={<Apple />} primary />

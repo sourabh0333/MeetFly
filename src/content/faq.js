@@ -1,6 +1,12 @@
 // The FAQ page. Every answer is from the app's code and its privacy policy (checked 2026-11-17 to
-// 2026-11-23), or from our own test call where it says so. No pricing (not decided yet), nothing on
-// voice cloning or stealth mode. `topic` is one of the ids in `topics`.
+// 2026-11-26), or from our own test call where it says so. Nothing on voice cloning or stealth mode.
+// `topic` is one of the ids in `topics`; an optional `link` shows under the answer. Plans and prices
+// come from src/content/pricing.js, so they follow it.
+import { pass, plans } from "./pricing";
+
+const byId = Object.fromEntries([...plans, pass].map((p) => [p.id, p]));
+const price = (id) => `$${byId[id].usd} (₹${byId[id].inr.toLocaleString("en-IN")})`;
+const hrs = (min) => (min >= 60 ? `${min / 60} hours` : `${min} minutes`);
 
 export const faqPage = {
   eyebrow: { tag: "FAQ", text: "Straight answers, from the app itself" },
@@ -8,7 +14,7 @@ export const faqPage = {
   lead: "Everything people ask about MeetFly, answered from what the app actually does.",
   search: {
     label: "Search every answer",
-    examples: ["Does a bot join my call?", "Zoom", "translate", "where are my notes kept", "practice"],
+    examples: ["Does a bot join my call?", "Zoom", "free trial", "translate", "where are my notes kept", "practice"],
     clear: "Clear",
     results: "answers",
     result: "answer",
@@ -32,6 +38,7 @@ export const browse = {
 
 export const topics = [
   { id: "start", line: "What MeetFly is and how to begin.", label: "Getting started" },
+  { id: "plans", line: "What it costs, the trial and billing.", label: "Plans and pricing" },
   { id: "calls", line: "Help while you talk.", label: "During calls" },
   { id: "after", line: "Notes, search and sharing.", label: "Notes and after" },
   { id: "privacy", line: "Where your calls go.", label: "Privacy" },
@@ -44,6 +51,14 @@ export const faqs = [
   { topic: "start", q: "Does a bot join my call?", a: "No. MeetFly listens on your own computer, through your microphone and your computer’s sound, so nobody sees an extra guest in the meeting." },
   { topic: "start", q: "Which call apps does it work with?", a: "Zoom, Google Meet, Microsoft Teams, Webex, Whereby and Slack huddles, and any other call your computer can hear. Paste a meeting link and supported calls open right inside MeetFly." },
   { topic: "start", q: "How do I get ready for a call?", a: "Click Prepare on a meeting, or start a new one. Pick the call type, set your goal, add notes for the AI and attach documents. Suggestions use all of it." },
+
+  // Plans and pricing (2026-11-26; facts from src/content/pricing.js and its pricing FAQ)
+  { topic: "plans", q: "How much does it cost?", a: `There’s a Free plan, and paid plans start at ${price("pro")} a month. Pro is ${price("pro")} a month, Pro + Voice ${price("pro_voice")}, and Team ${price("team")} per person. The Interview Pass is ${price("interview_pass")} for 7 days.`, link: { label: "See all plans", href: "/pricing" } },
+  { topic: "plans", q: "Is anything locked on the Free plan?", a: `No. Every feature is on every plan, Free included. Plans differ only in hours: Free has ${hrs(byId.free.minutes)} of listening and ${hrs(byId.free.voice)} of accent voice a month.` },
+  { topic: "plans", q: "How does the free trial work?", a: "Sign up and you get 7 days of Pro + Voice, no card needed. When it ends you move to the Free plan. Nothing is charged unless you choose a plan." },
+  { topic: "plans", q: "What is the Interview Pass?", a: `One payment of ${price("interview_pass")} for 7 days of Pro + Voice: ${hrs(pass.minutes)} of listening and ${hrs(pass.voice)} of accent voice, for a big week of interview practice and prep. It ends by itself and nothing renews, so there’s nothing to cancel.` },
+  { topic: "plans", q: "Can I change or cancel any time?", a: "Yes. In MeetFly, Settings → Account → Change plan → Change or cancel opens Stripe’s page, where you can move between plans or cancel. When a plan ends you’re back on Free, and your notes stay on your computer." },
+  { topic: "plans", q: "What counts towards my hours?", a: "The time MeetFly transcribes your calls, to the second. The accent voice has its own allowance. A fresh allowance starts on the 1st of every month and unused hours don’t roll over. If you run out, new transcription pauses until the 1st, or you can upgrade; your notes and past meetings all stay.", link: { label: "Pricing questions", href: "/pricing#pricing-faq" } },
 
   // During calls
   { topic: "calls", q: "How fast is a suggested reply?", a: "It starts writing the moment the other person stops talking. In our own test call, replies appeared in about a second." },

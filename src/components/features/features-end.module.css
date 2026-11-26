@@ -70,6 +70,7 @@
 .eyebrow,
 .title,
 .ticker,
+.trial,
 .actions,
 .jumps {
   transition:
@@ -78,7 +79,7 @@
     filter 0.9s var(--ease);
 }
 
-.section:not([data-in]) :is(.eyebrow, .title, .ticker, .actions, .jumps) {
+.section:not([data-in]) :is(.eyebrow, .title, .ticker, .trial, .actions, .jumps) {
   opacity: 0;
   filter: blur(8px);
   transform: translateY(24px);
@@ -90,6 +91,10 @@
 
 .ticker {
   transition-delay: 0.2s;
+}
+
+.trial {
+  transition-delay: 0.26s;
 }
 
 .actions {
@@ -190,12 +195,70 @@
 }
 
 /* ---------- Buttons ---------- */
+/* The free-trial line: a lime tag, the offer, a link. Dashed rules above and below, no box. */
+.trial {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 14px;
+  margin: 26px 0 0;
+  padding: 10px 4px;
+  border-block: 1px dashed var(--color-line);
+  font-size: 0.95rem;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.trial b {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--lime);
+  box-shadow: inset 0 0 0 1px rgba(11, 10, 20, 0.12);
+  font: 600 0.7rem / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.trial a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: none;
+}
+
+.trial a svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: translate 0.3s var(--ease);
+}
+
+.trial a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.trial a:hover svg {
+  translate: 3px 0;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
   margin-top: 34px;
+}
+
+.trial + .actions {
+  margin-top: 28px;
 }
 
 .btn {
@@ -311,6 +374,18 @@
 
 .jumps li + li {
   border-left: 1px solid var(--color-line);
+}
+
+/* Many links: two rows, split by a rule. Each item says if it's on the top row or starts a row
+   (wide screens; narrower ones have their own grid). */
+@media (min-width: 861px) {
+  .jumps ul[data-two] li[data-top] {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .jumps ul[data-two] li[data-start] {
+    border-left: 0;
+  }
 }
 
 .jumps a {

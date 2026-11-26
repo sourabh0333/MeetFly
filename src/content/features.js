@@ -50,7 +50,7 @@ export const featureGroups = [
       { id: "profiles", icon: "user", name: "Context profiles", text: "Save what you reuse, like your resume, product facts or pricing, and add it to any call." },
       { id: "practice", icon: "mic", name: "Practice mode", text: "Your mic plays the other person, so you can rehearse before the real thing." },
       { id: "reminders", icon: "bell", name: "Meeting reminders", text: "A reminder a minute before each meeting and when it starts, with Join and Take notes. MeetFly can take notes on its own for all meetings, or all but one-on-ones." },
-      { id: "join", icon: "link", name: "Join from MeetFly", text: "Paste a Meet, Zoom, Teams, Webex or Whereby link and the meeting opens inside MeetFly. Sign in once to Google, Microsoft or Zoom." },
+      { id: "join", icon: "link", name: "Join from MeetFly", text: "Paste a Meet, Zoom, Teams, Webex, Whereby or Slack huddle link and the meeting opens inside MeetFly. Sign in once to Google, Microsoft or Zoom." },
     ],
   },
   {
@@ -400,6 +400,8 @@ export const featuresEnd = {
   mac: "Download for Mac",
   windows: "Download for Windows",
   soon: "Coming soon",
+  // Keep in step with the trial in src/content/pricing.js.
+  trial: { tag: "7 days free", text: "Every account starts with Pro + Voice. No card needed.", link: { label: "See plans", href: "/pricing" } },
   watch: { label: "Watch it work", href: "/#demo" },
   jumpLabel: "Jump back to",
   jumps: [
@@ -537,6 +539,137 @@ export const accentVoice = {
       title: "Included in Pro + Voice",
       text: "8 hours a month on Pro + Voice, 8 hours in the Interview Pass’s 7 days. Free has 10 minutes to try it.",
       link: { label: "See plans", href: "/pricing" },
+    },
+  ],
+};
+
+// "Works with" (2026-11-26, after Note templates): what comes into MeetFly and where notes go out,
+// from the app's code: shared/meeting-links.ts (Google Meet, Zoom, Microsoft Teams, Webex, Whereby,
+// Slack huddle), calendar by private iCal link (Google Calendar, Outlook, iCloud), desktop audio
+// from any app; ExportMenu.tsx / lib/export.ts (rich text "pastes into Notion, Google Docs or an
+// email", copy for Slack), PDF / Word / Markdown files, WebhookDialog.tsx + server webhook.ts
+// (Zapier, Make, n8n, Slack incoming webhook, your own tool), the follow-up email in your mail app.
+export const worksWith = {
+  eyebrow: "Works with",
+  title: "Fits the tools you already use",
+  lead: "Meetings come in from your calendar and any call app. Notes go out to wherever your team works.",
+  hub: "MeetFly",
+  hubHint: "on your computer",
+  inLabel: "In",
+  outLabel: "Out",
+  rows: [
+    {
+      in: {
+        kind: "Calendar",
+        title: "Your meetings, on Home",
+        names: ["Google Calendar", "Outlook", "iCloud"],
+        note: "Paste the calendar’s private link. Today’s and tomorrow’s meetings get Join and Prepare.",
+      },
+      out: {
+        kind: "Paste",
+        title: "Copied, ready to paste",
+        names: ["Notion", "Google Docs", "Email", "Slack"],
+        note: "Rich text keeps its headings and lists. There’s a copy made for Slack too.",
+      },
+    },
+    {
+      in: {
+        kind: "Meeting links",
+        title: "Paste a link, join from MeetFly",
+        names: ["Google Meet", "Zoom", "Microsoft Teams", "Webex", "Whereby", "Slack huddle"],
+        note: "Sign in once to Google, Microsoft or Zoom for meetings you open in MeetFly.",
+      },
+      out: {
+        kind: "Files",
+        title: "Saved as a file",
+        names: ["PDF", "Word", "Markdown"],
+        note: "Notes, action items and the summary, laid out to share.",
+      },
+    },
+    {
+      in: {
+        kind: "Any call app",
+        title: "Everything else, too",
+        names: ["Desktop call apps", "Browser calls"],
+        note: "The desktop app hears your computer’s sound, so any call that plays on it works. No bot joins.",
+      },
+      out: {
+        kind: "Send",
+        title: "Sent where your team works",
+        names: ["Zapier", "Make", "n8n", "Slack", "Your own tool"],
+        note: "A webhook sends the meeting as JSON, only when you ask. The follow-up email opens in your mail app.",
+      },
+    },
+  ],
+  runs: [
+    { label: "Mac", text: "One app for Apple silicon and Intel" },
+    { label: "Windows", text: "x64 and ARM64, no admin rights needed" },
+    { label: "Accent voice", text: "MeetFly Microphone in Meet, Zoom and Teams" },
+  ],
+};
+
+// Feature questions (2026-11-26, before the close; 4 of 6 comparable feature pages end with an
+// FAQ). Answers are only what the app does; `links` jump to the section on this page that shows
+// it. Never stealth mode or "100% local"; interviews only as practice. Plan facts: keep in step
+// with src/content/pricing.js.
+export const featuresFaq = {
+  eyebrow: "Questions",
+  title: "Feature questions, answered",
+  lead: "The ones people ask before they try it. Every answer links to where it shows on this page.",
+  label: "Questions about features",
+  more: { label: "All questions", href: "/faq" },
+  linksLabel: "See it on this page",
+  items: [
+    {
+      q: "Does a bot join my call?",
+      a: "No. MeetFly listens on your computer, through your microphone and your computer’s sound. Nothing joins the meeting and no one gets an invite.",
+      key: "Nothing joins the meeting",
+      links: [
+        { label: "Live transcript", href: "#during-live-transcript" },
+        { label: "Works with", href: "#works-with" },
+      ],
+    },
+    {
+      q: "Which call apps does it work with?",
+      a: "Any call that plays on your computer. Paste a Google Meet, Zoom, Teams, Webex, Whereby or Slack huddle link and it opens from MeetFly; desktop and browser calls work as they are.",
+      key: "Any call that plays on your computer",
+      links: [
+        { label: "Join from MeetFly", href: "#before-join" },
+        { label: "Works with", href: "#works-with" },
+      ],
+    },
+    {
+      q: "Where are my notes kept?",
+      a: "Notes, transcripts and recordings are saved on your computer, and you choose how long meetings stay. While you talk, audio and transcript text go to the speech and AI services MeetFly uses.",
+      key: "saved on your computer",
+      links: [
+        { label: "Your data, your rules", href: "#privacy-controls" },
+        { label: "Stored on your computer", href: "#everywhere-privacy" },
+      ],
+    },
+    {
+      q: "Can I rehearse before a real call?",
+      a: "Yes. In Practice mode your microphone plays the other person, so you can run a sales pitch or an interview answer and get replies and notes as if it were live.",
+      key: "your microphone plays the other person",
+      links: [
+        { label: "Practice mode", href: "#before-practice" },
+        { label: "Call prep", href: "#before-call-prep" },
+      ],
+    },
+    {
+      q: "What about other languages and accents?",
+      a: "The other side’s captions can be translated live into any of 14 languages. With accent voice, people hear you in one of 17 English accents.",
+      key: "14 languages",
+      links: [
+        { label: "Live translation", href: "#during-live-translation" },
+        { label: "Accent voice", href: "#accent-voice" },
+      ],
+    },
+    {
+      q: "Is every feature on every plan?",
+      a: "Yes, Free included. Plans differ only in how many hours MeetFly listens each month and how much accent voice you get. Every account starts with 7 days of Pro + Voice, no card needed.",
+      key: "Free included",
+      links: [{ label: "See plans", href: "/pricing" }],
     },
   ],
 };

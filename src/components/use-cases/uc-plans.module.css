@@ -1,0 +1,473 @@
+/* "Which plan fits your calls?": roles (left) matched to plans (right) by curves; the picked
+   role's curve draws in violet → lime and its plan lights. Then a ruled verdict row. Hairlines
+   only, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow-x: clip;
+  padding: clamp(80px, 12vh, 140px) var(--gutter) clamp(56px, 8vh, 96px);
+}
+
+.section[data-paused] * {
+  animation-play-state: paused !important;
+}
+
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(120px, 3fr) minmax(0, 4.4fr);
+  align-items: start;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.roles {
+  grid-column: 1;
+}
+
+.plans {
+  grid-column: 3;
+}
+
+.colLabel {
+  margin: 0 0 12px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.roles ol,
+.plans ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ink);
+}
+
+/* ---------- The curves ---------- */
+.wires {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease) 0.5s;
+}
+
+[data-in] .wires {
+  opacity: 1;
+}
+
+.wire {
+  fill: none;
+  stroke: var(--color-line);
+  stroke-width: 1.5;
+  transition:
+    stroke 0.4s,
+    stroke-width 0.4s;
+}
+
+/* Other roles that land on the same plan: a little stronger. */
+.wire[data-same] {
+  stroke: rgba(91, 46, 255, 0.28);
+  stroke-dasharray: 4 5;
+}
+
+.wireOn {
+  fill: none;
+  stroke: url(#ucPlanWire);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 0.9s var(--ease) forwards;
+  filter: drop-shadow(0 4px 10px rgba(91, 46, 255, 0.3));
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ---------- Roles ---------- */
+.roles li {
+  border-bottom: 1px solid var(--color-line);
+  opacity: 0;
+  transform: translateX(-14px);
+  transition:
+    opacity 0.6s var(--ease) calc(0.1s + var(--k) * 0.05s),
+    transform 0.7s var(--ease) calc(0.1s + var(--k) * 0.05s);
+}
+
+[data-in] .roles li {
+  opacity: 1;
+  transform: none;
+}
+
+.roles button {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 12px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 0;
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.roles button:hover,
+.roles button[aria-checked="true"] {
+  color: var(--ink);
+}
+
+.roles button:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.rNum {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--violet);
+}
+
+.rName {
+  font: 700 clamp(1.15rem, 0.9rem + 0.8vw, 1.6rem) / 1.1 var(--font-display);
+  letter-spacing: -0.03em;
+  transition: transform 0.45s var(--ease);
+}
+
+.roles button[aria-checked="true"] .rName {
+  transform: translateX(8px);
+}
+
+.roles button[data-soft] .rName {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 2px var(--color-line);
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
+}
+
+.roles button[aria-checked="true"] .dot,
+.plan[data-on] .dot {
+  background: var(--lime);
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    0 0 0 4px rgba(212, 255, 58, 0.35);
+}
+
+/* ---------- Plans ---------- */
+.plan {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "dot name price"
+    ". hours hours";
+  align-items: center;
+  gap: 4px 14px;
+  padding: 16px 0 16px;
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-muted);
+  opacity: 0;
+  transform: translateX(14px);
+  transition:
+    color 0.35s,
+    opacity 0.6s var(--ease) calc(0.25s + var(--k) * 0.06s),
+    transform 0.7s var(--ease) calc(0.25s + var(--k) * 0.06s);
+}
+
+[data-in] .plan {
+  opacity: 1;
+  transform: none;
+}
+
+.plan .dot {
+  grid-area: dot;
+}
+
+/* A soft violet wash on the lit plan. */
+.plan::after {
+  content: "";
+  position: absolute;
+  inset: 0 -12px;
+  z-index: -1;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(91, 46, 255, 0.08), rgba(212, 255, 58, 0.06));
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.plan[data-on] {
+  color: var(--ink);
+}
+
+.plan[data-on]::after {
+  opacity: 1;
+}
+
+.pName {
+  grid-area: name;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font: 700 clamp(1.1rem, 0.95rem + 0.5vw, 1.35rem) / 1.15 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.pName em {
+  font: 500 0.7rem / 1 var(--font-mono);
+  font-style: normal;
+  color: var(--violet);
+}
+
+.pPrice {
+  grid-area: price;
+  font: 500 0.78rem / 1 var(--font-mono);
+  color: var(--color-muted);
+  text-align: right;
+}
+
+.pPrice b {
+  font: 700 1.05rem / 1 var(--font-display);
+  color: var(--ink);
+}
+
+.pHours {
+  grid-area: hours;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+/* ---------- The verdict ---------- */
+.verdict {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 20px 40px;
+  max-width: 1240px;
+  margin: clamp(36px, 5vh, 56px) auto 0;
+  padding: 26px 0;
+  border-block: 2px solid var(--ink);
+  opacity: 0;
+  transition: opacity 0.8s var(--ease) 0.6s;
+}
+
+[data-in] .verdict {
+  opacity: 1;
+}
+
+.vRead {
+  display: grid;
+  gap: 12px;
+  animation: rise 0.55s var(--ease) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+}
+
+.vMatch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  margin: 0;
+  font: 700 clamp(1.5rem, 1rem + 1.6vw, 2.4rem) / 1.1 var(--font-display);
+  letter-spacing: -0.035em;
+}
+
+.vMatch span {
+  color: var(--color-muted);
+}
+
+.vMatch svg {
+  align-self: center;
+  width: 0.9em;
+  height: 0.9em;
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vMatch b {
+  background: linear-gradient(transparent 62%, var(--lime) 62%);
+  padding: 0 0.06em;
+}
+
+.vMatch em {
+  font: 500 0.95rem / 1 var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0;
+  color: var(--violet);
+}
+
+.vWhy {
+  max-width: 68ch;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+.vWhy span {
+  margin-right: 10px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.vActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px 13px 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: 600 0.95rem / 1 var(--font-display);
+  text-decoration: none;
+  box-shadow: inset 0 -2px 0 var(--lime);
+  transition: background 0.25s;
+}
+
+.primary svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s var(--ease);
+}
+
+.primary:hover {
+  background: var(--violet);
+}
+
+.primary:hover svg {
+  transform: translateX(3px);
+}
+
+.secondary {
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: none;
+}
+
+.secondary:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Smaller screens: no curves; roles, then plans, then the verdict ---------- */
+@media (max-width: 860px) {
+  .board {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .roles,
+  .plans {
+    grid-column: 1;
+  }
+
+  .roles ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 14px;
+    border-top: 0;
+  }
+
+  .roles li {
+    border: 0;
+  }
+
+  .roles button {
+    display: inline-flex;
+    width: auto;
+    padding: 9px 14px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--color-line);
+  }
+
+  .roles button[aria-checked="true"] {
+    background: var(--ink);
+    color: #fff;
+    box-shadow: inset 0 -2px 0 var(--lime);
+  }
+
+  .roles button .rNum,
+  .roles button .dot {
+    display: none;
+  }
+
+  .rName {
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+
+  .roles button[aria-checked="true"] .rName {
+    transform: none;
+  }
+
+  .plan::after {
+    inset: 0 -8px;
+  }
+
+  .verdict {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wires,
+  .roles li,
+  .plan,
+  .verdict {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .section * {
+    animation: none !important;
+  }
+
+  .wireOn {
+    stroke-dashoffset: 0;
+  }
+}

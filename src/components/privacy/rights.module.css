@@ -1,0 +1,285 @@
+/* "Your rights": a large sentence whose verbs are buttons; the lit verb's how-to sits under it
+   (breadcrumb path, what happens, who and when). Hairlines only, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--gutter) clamp(64px, 9vh, 110px);
+}
+
+.section > :not(header) {
+  max-width: 1240px;
+  margin-inline: auto;
+}
+
+/* ---------- The sentence ---------- */
+.sentence {
+  max-width: 1100px;
+  margin: 0;
+  font: 600 clamp(1.5rem, 0.9rem + 2.2vw, 2.9rem) / 1.32 var(--font-display);
+  letter-spacing: -0.035em;
+  color: var(--color-muted);
+  text-wrap: pretty;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.8s var(--ease) 0.15s,
+    transform 0.9s var(--ease) 0.15s;
+}
+
+[data-in] .sentence {
+  opacity: 1;
+  transform: none;
+}
+
+.verb {
+  display: inline;
+  margin: 0;
+  padding: 0 0.08em;
+  border: 0;
+  border-radius: 0.12em;
+  background: linear-gradient(transparent 62%, var(--lime) 62%) no-repeat 0 0 / 0% 100%;
+  color: var(--ink);
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(91, 46, 255, 0.4);
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.16em;
+  cursor: pointer;
+  transition:
+    background-size 0.6s var(--ease),
+    text-decoration-color 0.3s,
+    color 0.3s;
+}
+
+.verb:hover {
+  text-decoration-color: var(--violet);
+}
+
+.verb[aria-pressed="true"] {
+  background-size: 100% 100%;
+  text-decoration-color: transparent;
+}
+
+.verb[data-ask] {
+  color: var(--violet);
+}
+
+.verb:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+}
+
+/* ---------- The how-to line ---------- */
+.how {
+  position: relative;
+  margin-top: clamp(30px, 4.5vh, 48px);
+  padding: 26px 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--color-line);
+  min-height: 150px;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease) 0.35s;
+}
+
+[data-in] .how {
+  opacity: 1;
+}
+
+.howIn {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 3fr);
+  gap: 20px clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+
+.col {
+  display: grid;
+  gap: 12px;
+}
+
+.label,
+.facts dt {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* The path in the app, step by step. */
+.path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.path li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  font: 600 0.92rem / 1 var(--font-display);
+  color: var(--ink);
+  animation: step 0.45s var(--ease) both;
+  animation-delay: calc(var(--k) * 0.16s);
+}
+
+.path li {
+  position: relative;
+}
+
+.path li + li {
+  margin-left: 16px;
+}
+
+.path li + li::before {
+  content: "›";
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform: translateY(-52%);
+  color: var(--violet);
+  font-weight: 700;
+}
+
+.path li[data-last] {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: inset 0 -2px 0 var(--lime);
+}
+
+.path li[data-last]::before {
+  color: var(--violet);
+}
+
+@keyframes step {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+.text {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--ink);
+  text-wrap: pretty;
+  animation: step 0.5s var(--ease) 0.2s both;
+}
+
+.mail {
+  justify-self: start;
+  font-weight: 600;
+  color: var(--violet);
+}
+
+.facts {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  animation: step 0.5s var(--ease) 0.3s both;
+}
+
+.facts div {
+  display: grid;
+  gap: 6px;
+}
+
+.facts dd {
+  margin: 0;
+  font: 700 1rem / 1.2 var(--font-display);
+}
+
+.facts dd[data-us] {
+  color: var(--violet);
+}
+
+.timer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  overflow: hidden;
+}
+
+.timer i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--violet), var(--lime));
+  transform-origin: left;
+  animation: run var(--step) linear forwards;
+}
+
+@keyframes run {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- Footnotes ---------- */
+.foot {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px clamp(24px, 4vw, 56px);
+  margin-top: clamp(32px, 5vh, 48px);
+  padding: 0;
+  list-style: none;
+}
+
+.foot li {
+  display: grid;
+  gap: 8px;
+  padding-left: 16px;
+  border-left: 2px solid var(--violet);
+}
+
+.foot b {
+  font: 700 1.02rem / 1.2 var(--font-display);
+}
+
+.foot p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 900px) {
+  .howIn {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .how {
+    min-height: 270px;
+  }
+
+  .foot {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sentence,
+  .how {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .section * {
+    animation: none !important;
+  }
+}

@@ -46,6 +46,10 @@ function OsButton({ href, label, soon, icon, primary }) {
   );
 }
 
+// Seven links: two rows (4 + 3).
+const two = privacyClose.jumps.length > 6;
+const cols = two ? Math.ceil(privacyClose.jumps.length / 2) : privacyClose.jumps.length;
+
 export function PrivacyClose() {
   const ref = useRef(null);
   const seen = useSeen(ref, 0.3);
@@ -108,9 +112,9 @@ export function PrivacyClose() {
 
       <nav className={styles.jumps} aria-label={privacyClose.jumpLabel}>
         <p className={styles.jumpLabel}>{privacyClose.jumpLabel}</p>
-        <ul style={{ "--cols": privacyClose.jumps.length }}>
+        <ul data-two={two || undefined} style={{ "--cols": cols }}>
           {privacyClose.jumps.map((j, i) => (
-            <li key={j.href} style={{ "--tone": "var(--violet)", "--i": i }}>
+            <li key={j.href} data-top={(two && i < cols) || undefined} data-start={(two && i % cols === 0) || undefined} style={{ "--tone": "var(--violet)", "--i": i }}>
               <a href={j.href}>
                 <span className={styles.jn}>{String(i + 1).padStart(2, "0")}</span>
                 <span className={styles.jl}>{j.label}</span>

@@ -1,0 +1,368 @@
+/* Feature questions: a ruled index of questions (5fr) beside a reading stage (7fr) with the open
+   answer, large, its key phrase under a lime highlighter. Hairlines only, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) var(--gutter) clamp(40px, 6vh, 72px);
+}
+
+.section[data-paused] * {
+  animation-play-state: paused !important;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 5vw, 80px);
+  max-width: 1240px;
+  margin: 0 auto;
+  border-top: 2px solid var(--ink);
+}
+
+/* ---------- The index ---------- */
+.index {
+  display: grid;
+  align-content: start;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list li {
+  position: relative;
+  border-bottom: 1px solid var(--color-line);
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.6s var(--ease) calc(0.15s + var(--k) * 0.06s),
+    transform 0.7s var(--ease) calc(0.15s + var(--k) * 0.06s);
+}
+
+[data-in] .list li {
+  opacity: 1;
+  transform: none;
+}
+
+/* The violet bar on the open question. */
+.list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--violet);
+  transform: scaleY(0);
+  transition: transform 0.45s var(--ease);
+}
+
+.list li[data-open]::before {
+  transform: none;
+}
+
+.list button {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 4px 20px 0;
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 0.3s,
+    padding 0.45s var(--ease);
+}
+
+.list li[data-open] button {
+  padding-left: 18px;
+  color: var(--ink);
+}
+
+.list button:hover {
+  color: var(--ink);
+}
+
+.list button:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: -2px;
+  border-radius: 6px;
+}
+
+.num {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--violet);
+}
+
+.q {
+  font: 600 clamp(1.02rem, 0.92rem + 0.35vw, 1.2rem) / 1.3 var(--font-display);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.list button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.4;
+  transition:
+    opacity 0.3s,
+    transform 0.35s var(--ease);
+}
+
+.list li[data-open] button svg {
+  opacity: 1;
+  color: var(--violet);
+  transform: translateX(4px);
+}
+
+/* The timer line under the open question. */
+.timer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  overflow: hidden;
+}
+
+.timer i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--violet), var(--lime));
+  transform-origin: left;
+  animation: run var(--step) linear forwards;
+}
+
+@keyframes run {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.more {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  padding: 11px 18px 11px 20px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: 600 0.92rem / 1 var(--font-display);
+  text-decoration: none;
+  transition: background 0.25s;
+}
+
+.more svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--lime);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s var(--ease);
+}
+
+.more:hover {
+  background: var(--violet);
+}
+
+.more:hover svg {
+  transform: translateX(3px);
+}
+
+/* Phones only. */
+.inline {
+  display: none;
+}
+
+/* ---------- The stage ---------- */
+.stage {
+  position: relative;
+  padding: 28px 0 0;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease) 0.3s;
+}
+
+[data-in] .stage {
+  opacity: 1;
+}
+
+.read {
+  display: grid;
+  gap: 18px;
+  animation: rise 0.6s var(--ease) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(5px);
+  }
+}
+
+.meta {
+  margin: 0;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.meta b {
+  color: var(--violet);
+}
+
+.stageQ {
+  margin: 0;
+  font: 600 1.05rem / 1.35 var(--font-display);
+  color: var(--color-muted);
+}
+
+.stageA {
+  margin: 0;
+  font: 600 clamp(1.45rem, 1rem + 1.3vw, 2.15rem) / 1.3 var(--font-display);
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.aMark {
+  margin-right: 0.35em;
+  background: linear-gradient(100deg, var(--violet), #9dc61f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* The key phrase: a lime highlighter that sweeps in. */
+.stageA mark,
+.inlineA mark {
+  padding: 0 0.08em;
+  background: linear-gradient(transparent 60%, var(--lime) 60%) no-repeat 0 0 / 0% 100%;
+  color: inherit;
+  animation: sweep 0.8s var(--ease) 0.45s forwards;
+}
+
+@keyframes sweep {
+  to {
+    background-size: 100% 100%;
+  }
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin: 6px 0 0;
+  padding-top: 18px;
+  border-top: 1px dashed var(--color-line);
+}
+
+.links span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: none;
+}
+
+.links a i {
+  font-style: normal;
+  transition: transform 0.3s var(--ease);
+}
+
+.links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.links a:hover i {
+  transform: translateY(-2px);
+}
+
+/* ---------- Phones and narrow tablets: the answer opens under its question ---------- */
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stage {
+    display: none;
+  }
+
+  .inline {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s var(--ease);
+  }
+
+  .inline > div {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .list li[data-open] .inline {
+    grid-template-rows: 1fr;
+  }
+
+  .list li[data-open] .inline > div {
+    padding: 0 0 22px 18px;
+  }
+
+  .inlineA {
+    margin: 0;
+    font: 500 1.05rem / 1.5 var(--font-display);
+    color: var(--ink);
+  }
+
+  .list li .timer {
+    bottom: -1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list li,
+  .stage {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .section * {
+    animation: none !important;
+  }
+
+  .stageA mark,
+  .inlineA mark {
+    background-size: 100% 100%;
+  }
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { faqPage, faqs, topics } from "@/content/faq";
 import { DecodeText } from "@/components/hero/decode-text";
@@ -217,6 +218,14 @@ export function FaqHero() {
                   <Marked text={best.q} words={words} />
                 </h2>
                 <p className={styles.a}>{words.length ? <Marked text={best.a} words={words} /> : <DecodeText text={best.a} delay={150} duration={900} />}</p>
+                {best.link && (
+                  <Link className={styles.more} href={best.link.href}>
+                    {best.link.label}
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" />
+                    </svg>
+                  </Link>
+                )}
               </div>
             ) : (
               <p className={styles.none}>{faqPage.search.none}</p>
