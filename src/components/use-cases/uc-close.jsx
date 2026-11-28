@@ -79,6 +79,7 @@ export function UseCasesClose() {
       <p className={styles.eyebrow}>{ucClose.eyebrow}</p>
       <h2 id="uc-end-title" className={styles.title}>
         <span className={styles.line1}>{ucClose.before}</span>
+        {" "}
         <span className={styles.line2}>{ucClose.after}</span>
       </h2>
 

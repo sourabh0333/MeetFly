@@ -7,7 +7,7 @@ import { hoursText, planById, trialLine } from "./pricing";
 export const featuresPage = {
   eyebrow: { tag: "features", text: "One app for the whole call" },
   title: { top: "Everything MeetFly does,", prefix: "from hello to", mark: "follow-up." },
-  lead: "A prep desk before you start, a live copilot while you talk, and notes that write themselves when you hang up.",
+  lead: "A prep desk before you start, a real-time AI copilot while you talk, and meeting notes that write themselves when you hang up.",
   primary: { label: "Download MeetFly", href: "/download" },
   secondary: { label: "Watch it work", href: "/#demo" },
   stageLabel: "A call from start to finish. Each feature sits where it helps; hover or tap one to read what it does.",

@@ -6,12 +6,14 @@ import { UseCasesMore } from "@/components/use-cases/uc-more";
 import { UseCasesPlans } from "@/components/use-cases/uc-plans";
 import { UseCasesClose } from "@/components/use-cases/uc-close";
 import { PageWave } from "@/components/page-wave/page-wave";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata = {
-  title: "Use cases · MeetFly",
+export const metadata = pageMeta({
+  path: "/use-cases",
+  title: "Use cases: sales, support and interview practice · MeetFly",
   description:
-    "How MeetFly helps in sales calls, support calls, founder pitches, hiring interviews, interview practice and calls in another language.",
-};
+    "How MeetFly helps on sales calls, support calls, founder pitches, hiring interviews, interview practice and calls in another language, with a plan for each.",
+});
 
 // The Use cases page is built one section at a time. So far: the hero, then how each role sets
 // MeetFly up, then the tools each role connects it to,

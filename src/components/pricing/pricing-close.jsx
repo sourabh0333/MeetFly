@@ -83,6 +83,7 @@ export function PricingClose() {
       <p className={styles.eyebrow}>{c.eyebrow}</p>
       <h2 id="pricing-end-title" className={styles.title}>
         <span className={styles.line1}>{c.before}</span>
+        {" "}
         <span className={styles.line2}>{c.after}</span>
       </h2>
 

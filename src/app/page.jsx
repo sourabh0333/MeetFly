@@ -19,6 +19,15 @@ import { Privacy } from "@/components/privacy/privacy";
 import { Faq } from "@/components/faq/faq";
 import { Download } from "@/components/download/download";
 import { PageWave } from "@/components/page-wave/page-wave";
+import { JsonLd, pageMeta, appJsonLd, faqJsonLd } from "@/lib/seo";
+import { faq } from "@/content/home";
+
+export const metadata = pageMeta({
+  path: "/",
+  title: "MeetFly · AI meeting copilot with live answers and notes",
+  description:
+    "MeetFly is an AI copilot for your calls on Mac and Windows: a live transcript, instant replies, live translation and notes, with no bot in the meeting. Try it free.",
+});
 
 // The homepage, top to bottom: the demo, where it works (paste a link and MeetFly joins) and the numbers; why a copilot beats a
 // note-taker; the whole call (before, during, after) with the call types as the "before" detail,
@@ -28,6 +37,8 @@ import { PageWave } from "@/components/page-wave/page-wave";
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={appJsonLd} />
+      <JsonLd data={faqJsonLd(faq.items)} />
       {/* The sound wave that snakes down the whole page, behind everything. */}
       <PageWave from="demo" />
       <Hero />

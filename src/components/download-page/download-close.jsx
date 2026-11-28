@@ -113,6 +113,7 @@ export function DownloadClose() {
             </p>
             <h2 id="dl-end-title" className={styles.title}>
               <span>{c.title.top}</span>
+              {" "}
               <span className={styles.mark}>{c.title.mark}</span>
             </h2>
             <p className={styles.lead}>{c.lead}</p>

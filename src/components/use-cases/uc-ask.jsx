@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ask, roles } from "@/content/use-cases";
 import { featureGroups } from "@/content/features";
 import { SectionHead } from "@/components/section-head/section-head";
+import { UntilFound } from "@/components/until-found";
 import { useOnScreen, useSeen } from "@/components/use-seen";
 import styles from "./uc-ask.module.css";
 
@@ -15,7 +16,7 @@ import styles from "./uc-ask.module.css";
 // card inside a rotating gradient border: a "thinking" beat, then the answer streams in word by
 // word, then the features it uses spring in as links. A spotlight follows the cursor over the card
 // and an aurora drifts behind the stage. Plays while on screen until someone picks; reduced motion
-// shows the answer at once and stops the rails. Every answer is in the HTML.
+// shows the answer at once and stops the rails. Every answer is also in the HTML (hidden until found).
 const STEP = 9000; // ms per question while it plays
 const THINK = 650; // ms of "thinking" before the answer streams
 const features = Object.fromEntries(featureGroups.flatMap((g) => g.items).map((f) => [f.id, f.name]));
@@ -223,6 +224,14 @@ export function UseCasesAsk() {
           </div>
         </div>
       </div>
+
+      {/* Every question and answer, in the page for search engines and find-in-page (finding one picks it). */}
+      {items.map((x, i) => (
+        <UntilFound key={x.q} className={styles.found} onFound={() => choose(i)}>
+          <h4>{x.q}</h4>
+          <p>{x.a}</p>
+        </UntilFound>
+      ))}
     </section>
   );
 }

@@ -14,7 +14,7 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
   gap: 40px;
   padding: 36px 0;
   border-top: 1px solid var(--color-line);
@@ -51,7 +51,7 @@
 
 .groups {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 32px;
 }
 
@@ -125,5 +125,12 @@
 @media (max-width: 760px) {
   .top {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Phones: the three link groups as two columns, Works with under them. */
+@media (max-width: 560px) {
+  .groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

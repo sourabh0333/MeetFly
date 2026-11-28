@@ -4,7 +4,13 @@ export const siteConfig = {
   // From the app's README. Replace when the team writes its own.
   description:
     "MeetFly is an AI copilot for your calls. It transcribes both sides live, suggests what to say next, writes the notes and records the call.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3200",
+  // The public address. Set NEXT_PUBLIC_SITE_URL (e.g. https://meetfly.com) in the hosting
+  // settings once the domain is bought; until then the site runs on localhost.
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3200").replace(/\/+$/, ""),
+  // Search engines may list the site only once a real public address is set. While it's unset (or
+  // localhost / a preview), every page says "noindex" and robots.txt blocks crawling, so the
+  // unfinished site can't end up in Google by accident. Nothing to remove on launch day.
+  isLive: /^https:\/\/(?!localhost)/.test(process.env.NEXT_PUBLIC_SITE_URL || ""),
 
   // Not decided yet: there are no public installers. While these are null,
   // download buttons point to the #download anchor instead of a file.

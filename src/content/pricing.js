@@ -8,7 +8,7 @@
 export const pricingPage = {
   eyebrow: { tag: "Pricing", text: "7 days free · No card needed" },
   title: { top: "Every feature, every plan.", prefix: "Pay for the", mark: "hours.", suffix: "" },
-  lead: "Plans differ only in how many hours MeetFly listens each month and whether the accent voice is included. Start with 7 days of Pro + Voice, free.",
+  lead: "Every plan has every feature, the free plan included. Plans differ only in how many hours MeetFly listens each month and whether the accent voice is included. Start with 7 days of Pro + Voice, free.",
   currency: { label: "Prices in", usd: "USD", inr: "INR" },
   scaleNote: "Hours a month MeetFly listens to your calls",
   voiceLabel: "Accent voice",

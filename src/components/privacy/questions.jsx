@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { questions } from "@/content/privacy";
 import { SectionHead } from "@/components/section-head/section-head";
+import { UntilFound } from "@/components/until-found";
 import { DecodeText } from "@/components/hero/decode-text";
 import { useOnScreen, useSeen } from "@/components/use-seen";
 import styles from "./questions.module.css";
@@ -105,6 +106,14 @@ export function Questions() {
           />
         </span>
       </div>
+
+      {/* Every question and answer, in the page for search engines and find-in-page (finding one picks it). */}
+      {items.map((x, i) => (
+        <UntilFound key={x.q} className={styles.found} onFound={() => pick(i)}>
+          <h4>{x.q}</h4>
+          <p>{x.a}</p>
+        </UntilFound>
+      ))}
     </section>
   );
 }

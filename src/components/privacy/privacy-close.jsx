@@ -84,6 +84,7 @@ export function PrivacyClose() {
       <p className={styles.eyebrow}>{privacyClose.eyebrow}</p>
       <h2 id="privacy-end-title" className={styles.title}>
         <span className={styles.line1}>{privacyClose.before}</span>
+        {" "}
         <span className={styles.line2}>{privacyClose.after}</span>
       </h2>
 

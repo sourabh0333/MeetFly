@@ -82,6 +82,7 @@ export function FaqClose() {
       <p className={styles.eyebrow}>{faqClose.eyebrow}</p>
       <h2 id="faq-end-title" className={styles.title}>
         <span className={styles.line1}>{faqClose.before}</span>
+        {" "}
         <span className={styles.line2}>{faqClose.after}</span>
       </h2>
 

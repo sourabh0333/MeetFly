@@ -46,7 +46,8 @@ export function Answers() {
     let current = -1;
     const update = () => {
       frame = 0;
-      if (!mq.matches) return;
+      // Leaving the page clears the ref before the cleanup runs; a queued frame can still arrive.
+      if (!mq.matches || !trackRef.current) return;
       const r = trackRef.current.getBoundingClientRect();
       const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - window.innerHeight)));
       const pos = p * (N - 1);

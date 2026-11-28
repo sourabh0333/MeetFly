@@ -324,3 +324,18 @@
     grid-column: 1;
   }
 }
+
+/* An answer that's in the page but hidden until found (see components/until-found.jsx). If the
+   browser's find-in-page reveals it before the row opens, it shows quietly inside the cell. */
+.found {
+  margin: 0;
+  padding: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* Spacing only once revealed: a hidden-until-found box keeps its padding and margins. */
+.found:not([hidden]) {
+  padding: 0 clamp(16px, 2vw, 28px) 18px;
+}

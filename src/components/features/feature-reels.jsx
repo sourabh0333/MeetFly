@@ -71,10 +71,16 @@ export function FeatureReels() {
       if (r.target != null) r.target += shift;
     };
 
+    // On leaving the page React clears the refs before this effect's cleanup runs, so a frame,
+    // timer or resize can still arrive with no elements: every entry point checks first.
+    const gone = () => !wrapRef.current || windows.current.some((w) => !w);
+
     const paint = (i) => {
       const r = rows.current[i];
       const g = geo[i];
-      const track = windows.current[i].firstChild;
+      const win = windows.current[i];
+      if (!win || !g) return;
+      const track = win.firstChild;
       track.style.transform = `translate3d(${r.x.toFixed(2)}px,0,0)`;
       const mid = g.W / 2;
       let near = -1;
@@ -128,6 +134,7 @@ export function FeatureReels() {
 
     const tick = (now) => {
       frame = 0;
+      if (gone()) return;
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
       last = now;
       const dy = window.scrollY - lastScroll;
@@ -161,7 +168,7 @@ export function FeatureReels() {
     // Auto-pick: the next row slides its nearest name into the lens.
     let rowTurn = 0;
     const auto = () => {
-      if (touched.current || !onScreen) return;
+      if (touched.current || !onScreen || gone()) return;
       const i = rowTurn % ORDER.length;
       rowTurn += 1;
       const { k, it } = nearest(i);
@@ -179,6 +186,7 @@ export function FeatureReels() {
     });
     io.observe(wrapRef.current);
     const onResize = () => {
+      if (gone()) return;
       measure();
       rows.current.forEach((_, i) => paint(i));
     };

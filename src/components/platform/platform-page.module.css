@@ -1,0 +1,385 @@
+/* The "works with" pages: ruled paths, a ruled grid, a Where | Mac | Windows table, an open Q&A
+   list and a centred close. Hairlines only, no boxes. */
+.section {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  padding: clamp(72px, 10vh, 120px) var(--gutter) 0;
+}
+
+.section > :not(header) {
+  max-width: 1240px;
+  margin-inline: auto;
+}
+
+/* ---------- Two paths ---------- */
+.paths {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 2px solid var(--ink);
+}
+
+.path {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 30px clamp(20px, 3vw, 44px) 10px 0;
+}
+
+.path + .path {
+  padding: 30px 0 10px clamp(20px, 3vw, 44px);
+  border-left: 1px solid var(--color-line);
+}
+
+.pathTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.pathTag i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 2px var(--violet);
+}
+
+.path h3 {
+  margin: 0;
+  font: 700 clamp(1.5rem, 1.1rem + 1vw, 2rem) / 1.1 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.path ol {
+  display: grid;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.path li {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px dashed var(--color-line);
+}
+
+.stepN {
+  font: 700 2rem / 1 var(--font-display);
+  letter-spacing: -0.04em;
+  background: linear-gradient(160deg, var(--violet), #9dc61f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.path li p {
+  margin: 0;
+  padding-top: 4px;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* The "or" / "+" badge on the rule between the paths. */
+.join {
+  position: absolute;
+  top: 26px;
+  right: -18px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  font: 600 0.8rem / 1 var(--font-mono);
+  color: var(--violet);
+}
+
+/* ---------- What it does ---------- */
+.does {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 2px solid var(--ink);
+}
+
+.does li {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 26px clamp(16px, 2vw, 28px) 28px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.does li:not(:nth-child(3n + 1)) {
+  border-left: 1px solid var(--color-line);
+}
+
+.does li:nth-child(3n + 1) {
+  padding-left: 0;
+}
+
+.doesN {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--violet);
+}
+
+.does h3 {
+  margin: 0;
+  font: 700 1.2rem / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.does p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* ---------- Accent table ---------- */
+.table {
+  border-top: 2px solid var(--ink);
+}
+
+.tHead,
+.tRow {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr) minmax(0, 2fr);
+  gap: 0 clamp(20px, 3vw, 44px);
+}
+
+.tHead {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-line);
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.tRow {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.tRow b {
+  font: 700 1.1rem / 1.3 var(--font-display);
+}
+
+.tRow p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+
+/* ---------- Questions ---------- */
+.faq {
+  margin: 0 auto;
+  border-top: 2px solid var(--ink);
+}
+
+.faq > div {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 10px clamp(24px, 4vw, 64px);
+  padding: 24px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.faq dt {
+  display: flex;
+  gap: 14px;
+  font: 700 1.15rem / 1.3 var(--font-display);
+  letter-spacing: -0.015em;
+}
+
+.faq dt span {
+  flex: none;
+  padding-top: 5px;
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  color: var(--violet);
+}
+
+.faq dd {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* ---------- Close ---------- */
+.close {
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+  padding: clamp(96px, 14vh, 150px) var(--gutter) clamp(64px, 9vh, 100px);
+  text-align: center;
+}
+
+.closeTitle {
+  display: grid;
+  margin: 0;
+  font: 700 clamp(2.2rem, 1rem + 3.6vw, 4.2rem) / 1 var(--font-display);
+  letter-spacing: -0.05em;
+}
+
+.closeMark {
+  color: var(--violet);
+}
+
+.trial {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 14px;
+  margin: 0;
+  padding: 10px 4px;
+  border-block: 1px dashed var(--color-line);
+  font-size: 0.95rem;
+  text-wrap: balance;
+}
+
+.trial b {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--lime);
+  box-shadow: inset 0 0 0 1px rgba(11, 10, 20, 0.12);
+  font: 600 0.7rem / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.trial a,
+.also a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: none;
+}
+
+.trial svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trial a:hover,
+.also a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.also {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px 18px;
+  max-width: 760px;
+  margin-top: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-line);
+}
+
+.also > span {
+  font: 500 var(--text-label) / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.also p {
+  flex-basis: 100%;
+  margin: 4px 0 0;
+  font-size: 0.92rem;
+  color: var(--color-muted);
+}
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 900px) {
+  .does {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .does li:nth-child(n) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .does li:nth-child(2n) {
+    border-left: 1px solid var(--color-line);
+    padding-left: clamp(16px, 2vw, 28px);
+  }
+}
+
+@media (max-width: 760px) {
+  .paths {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .path,
+  .path + .path {
+    padding: 26px 0 8px;
+    border-left: 0;
+  }
+
+  .path + .path {
+    border-top: 1px solid var(--color-line);
+  }
+
+  .join {
+    top: auto;
+    bottom: -18px;
+    right: 50%;
+    margin-right: -18px;
+  }
+
+  .does {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .does li:nth-child(n) {
+    border-left: 0;
+    padding: 22px 0;
+  }
+
+  .tHead {
+    display: none;
+  }
+
+  .tRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .tRow p::before {
+    content: attr(data-os) " · ";
+    font: 500 var(--text-label) / 1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--violet);
+  }
+
+  .faq > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -55,7 +55,7 @@ export const hero = {
     // What screen readers hear: the sentence once, without the rotation.
     label: "Always know what to say in your next call.",
   },
-  lead: "MeetFly listens to your call, writes down both sides as you talk, and suggests your reply the moment the other person stops speaking.",
+  lead: "MeetFly is an AI meeting assistant for Mac and Windows. It writes down both sides as you talk and suggests your reply the moment the other person stops, with no bot in the call.",
   primary: { label: "Download MeetFly", href: "/download" },
   secondary: { label: "Watch it work", href: "/#demo" },
   trust: ["macOS and Windows", "No bot joins your call", "Notes stay on your computer"],
@@ -437,10 +437,21 @@ export const footer = {
         { label: "Pricing", href: "/pricing" },
         { label: "Privacy", href: "/privacy" },
         { label: "FAQ", href: "/faq" },
+        { label: "Guides", href: "/guides" },
         { label: "Live notes", href: "/#notes" },
         { label: "Meeting library", href: "/#library" },
         { label: "Getting started", href: "/#start" },
         { label: "Download", href: "/download" },
+      ],
+    },
+    {
+      // The "works with" pages (content/platforms.js), linked from every page so search engines find them.
+      title: "Works with",
+      links: [
+        { label: "Zoom", href: "/works-with/zoom" },
+        { label: "Google Meet", href: "/works-with/google-meet" },
+        { label: "Microsoft Teams", href: "/works-with/microsoft-teams" },
+        { label: "Any other call", href: "/features#works-with" },
       ],
     },
   ],

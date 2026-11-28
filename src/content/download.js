@@ -10,7 +10,7 @@ import { hoursText, planById, trialLine } from "./pricing";
 export const downloadPage = {
   eyebrow: { tag: "v1.4.0", text: "The desktop app for your calls" },
   title: { top: "Get MeetFly", prefix: "on your", mark: "desktop." },
-  lead: "One app for Mac and Windows. It sits beside any call app, hears both sides and helps from the first word.",
+  lead: "The AI meeting assistant for Mac and Windows. It sits beside any call app, hears both sides and helps from the first word.",
   version: "1.4.0",
   versionLabel: "Version",
   soon: "Coming soon",

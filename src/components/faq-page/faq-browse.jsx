@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { browse, faqs, topics } from "@/content/faq";
 import { SectionHead } from "@/components/section-head/section-head";
+import { UntilFound } from "@/components/until-found";
 import { useSeen } from "@/components/use-seen";
 import styles from "./faq-browse.module.css";
 
@@ -110,6 +111,12 @@ export function FaqBrowse() {
                   <span className={styles.q}>{f.q}</span>
                   <span className={styles.plus} aria-hidden="true" />
                 </button>
+                {/* The answer is in the page for search engines and find-in-page; it shows in the row below when open. */}
+                {!isOpen && (
+                  <UntilFound as="p" className={styles.found} onFound={() => setOpen(f.i)}>
+                    {f.a}
+                  </UntilFound>
+                )}
               </li>
             );
             // After the last cell of the open cell's row, the answer as its own full row.

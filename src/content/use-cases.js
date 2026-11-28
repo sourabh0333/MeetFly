@@ -12,7 +12,7 @@ import { hoursText, planById, trialLine } from "./pricing";
 export const useCasesPage = {
   eyebrow: { tag: "6 roles", text: "One copilot, many kinds of calls" },
   title: { top: "Made for people", prefix: "who talk for a", mark: "living." },
-  lead: "Sales calls, support calls, pitches, interviews on either side of the table, and calls in another language. See how MeetFly helps in each.",
+  lead: "Sales calls, support calls, pitches, interviews on either side of the table, and calls in another language. See how the AI meeting assistant helps in each.",
   primary: { label: "Download MeetFly", href: "/download" },
   secondary: { label: "See all features", href: "/features" },
   example: "Example moment",

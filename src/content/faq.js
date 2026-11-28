@@ -7,7 +7,7 @@ import { hoursText as hrs, pass, planById as byId, priceText as price } from "./
 export const faqPage = {
   eyebrow: { tag: "FAQ", text: "Straight answers, from the app itself" },
   title: { top: "Every question you have,", prefix: "answered by", mark: "MeetFly." },
-  lead: "Everything people ask about MeetFly, answered from what the app actually does.",
+  lead: "Everything people ask about MeetFly, the AI meeting assistant: bots, call apps, pricing, privacy and setup, answered from what the app actually does.",
   search: {
     label: "Search every answer",
     examples: ["Does a bot join my call?", "Zoom", "free trial", "translate", "where are my notes kept", "practice"],
