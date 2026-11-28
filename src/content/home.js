@@ -1,3 +1,5 @@
+import { hoursText, planById, priceText, trialLine } from "./pricing";
+
 // Homepage copy. Every product claim here comes from the app's README or its code.
 // The hero video is a real recording of the app, labelled with how it was made.
 
@@ -364,7 +366,7 @@ export const faq = {
     },
     {
       q: "Which call apps does it work with?",
-      a: "Zoom, Google Meet, Microsoft Teams, Webex, Slack huddles, Whereby, and any other call your computer can hear. You can also open Meet, Zoom, Teams, Webex and Whereby links right inside MeetFly.",
+      a: "Zoom, Google Meet, Microsoft Teams, Webex, Slack huddles, Whereby, and any other call your computer can hear. Zoom, Teams, Webex, Whereby and Slack huddle links open right inside MeetFly; Google Meet opens in your browser, with MeetFly floating over it.",
     },
     {
       q: "How fast is a suggested reply?",
@@ -384,11 +386,11 @@ export const faq = {
     },
     {
       q: "Can I keep an eye on how much it uses?",
-      a: "Yes. Settings show your usage, and you can set monthly limits on transcription minutes and AI requests.",
+      a: "Yes. Settings → Usage shows this month’s transcription minutes, accent voice and AI requests, and you can set your own monthly limit on each.",
     },
     {
       q: "How much does it cost?",
-      a: "There’s a Free plan with every feature: 3 hours of listening and 10 minutes of accent voice a month. Paid plans start at $29 (₹1,999) a month for 20 hours. Every account starts with 7 days of Pro + Voice, no card needed.",
+      a: `There’s a Free plan with every feature: ${hoursText(planById.free.minutes)} of listening and ${hoursText(planById.free.voice)} of accent voice a month. Paid plans start at ${priceText("pro")} a month for ${hoursText(planById.pro.minutes)}. Every account starts with 7 days of Pro + Voice, no card needed.`,
       link: { label: "See all plans", href: "/pricing" },
     },
     {
@@ -408,11 +410,7 @@ export const download = {
   windows: "Download for Windows",
   soon: "Coming soon",
   // Keep in step with the trial in src/content/pricing.js.
-  trial: {
-    tag: "7 days free",
-    text: "Every account starts with Pro + Voice. No card needed.",
-    link: { label: "See plans", href: "/pricing" },
-  },
+  trial: trialLine,
   points: ["No bot joins your call", "Works with any call app", "Notes stay on your computer"],
 };
 
@@ -673,20 +671,21 @@ export const languages = {
 };
 
 // "Join from MeetFly" (replaces the plain Works-with strip; keeps the #platforms anchor). From
-// the app: paste a Meet, Zoom, Teams, Webex or Whereby link (or click Join on a calendar meeting)
-// and the meeting opens inside MeetFly; sign in once to Google, Microsoft or Zoom. Any other call
-// (Slack huddles and the rest) works alongside, because MeetFly hears the call on your computer.
-// The links below are made-up examples.
+// the app (shared/meeting-links.ts, features/join/join.ts): paste a Zoom, Teams, Webex, Whereby or
+// Slack huddle link (or click Join on a calendar meeting) and the meeting opens inside MeetFly;
+// sign in once to Microsoft or Zoom. Google Meet always opens in your browser (Google refuses
+// sign-in inside apps), with MeetFly floating over it. Any other call works alongside, because
+// MeetFly hears the call on your computer. The links below are made-up examples.
 export const join = {
   eyebrow: "Works with",
   title: "Paste a link. MeetFly joins the call.",
-  lead: "Meet, Zoom, Teams, Webex and Whereby open right inside MeetFly. Any other call works too.",
+  lead: "Zoom, Teams, Webex, Whereby and Slack huddles open right inside MeetFly. Google Meet opens in your browser, with MeetFly over it, and any other call works too.",
   flow: [
-    { link: "meet.google.com/abc-defg-hij", app: "Google Meet" },
     { link: "zoom.us/j/8812345678", app: "Zoom" },
     { link: "teams.microsoft.com/l/meetup-join/…", app: "Microsoft Teams" },
     { link: "acme.webex.com/meet/pilot", app: "Webex" },
     { link: "whereby.com/pilot-call", app: "Whereby" },
+    { link: "app.slack.com/huddle/T0ACME/C0PILOT", app: "Slack huddle" },
   ],
   pasted: "Paste a link",
   joined: "Joined",
@@ -766,7 +765,7 @@ export const accent = {
   facts: [
     {
       title: "Set up once",
-      text: "MeetFly installs MeetFly Microphone. Pick it as the microphone in Meet, Zoom or Teams, and the call hears the accent voice.",
+      text: "On Mac, MeetFly installs MeetFly Microphone: pick it as the microphone in Meet, Zoom or Teams. On Windows, meetings that open inside MeetFly hear it with nothing to set up.",
     },
     {
       title: "Honest about timing",
@@ -774,7 +773,7 @@ export const accent = {
     },
     {
       title: "On Pro + Voice and the Pass",
-      text: "8 hours a month on Pro + Voice, 8 hours in the Interview Pass’s 7 days. Free has 10 minutes to try it.",
+      text: `${hoursText(planById.pro_voice.voice)} a month on Pro + Voice, ${hoursText(planById.interview_pass.voice)} in the Interview Pass’s 7 days. Free has ${hoursText(planById.free.voice)} to try it.`,
       link: { label: "See plans", href: "/pricing" },
     },
   ],

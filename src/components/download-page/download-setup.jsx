@@ -6,13 +6,13 @@ import { SectionHead } from "@/components/section-head/section-head";
 import { useOnScreen } from "@/components/use-seen";
 import styles from "./download-setup.module.css";
 
-// "From download to your first call": a guided walkthrough of the app's first-run setup.
-// Top: a ruled meta line (about a minute · a four-part progress meter · "n of 4 done") and a
+// "From download to your first call": a guided walkthrough of the app's first run.
+// Top: a ruled meta line (about a minute · a progress meter per step · "n of 6 done") and a
 // Mac / Windows switch (preset to the visitor's system). Middle: the step on the left (a giant
 // gradient numeral that rolls, title, text, a tip, back / next) and on the right a live mock of
 // the app's own setup screen for that step (the .dmg drag or the Windows installer, Test mic with
-// a level meter, the sound permission + "MeetFly can hear it.", how every meeting works). Bottom: a
-// full-width track with four stations; the line fills towards the next station while you watch,
+// a level meter, the sign-in screen with its trial offer, the sound permission + "MeetFly can hear
+// it.", the optional accent, how every meeting works). Bottom: a full-width track, one station per step; the line fills towards the next station while you watch,
 // then moves on by itself (a timer, so it also runs with reduced motion). It waits only while off
 // screen; stations, arrows and keys jump.
 const STEP_MS = 6500;
@@ -97,6 +97,52 @@ function mock(step, os) {
         <p className={styles.ok}>
           <Check />
           {m.done}
+        </p>
+      </div>
+    );
+  if (step.id === "signin")
+    return (
+      <div className={styles.signin}>
+        <b className={styles.signinTitle}>{m.title}</b>
+        <p className={styles.signinLead}>{m.lead}</p>
+        <span className={styles.google}>
+          <svg viewBox="0 0 18 18" aria-hidden="true">
+            <path fill="#4285F4" d="M17.6 9.2c0-.6-.1-1.2-.2-1.8H9v3.4h4.8a4.1 4.1 0 0 1-1.8 2.7v2.2h2.9c1.7-1.6 2.7-3.9 2.7-6.5z" />
+            <path fill="#34A853" d="M9 18c2.4 0 4.5-.8 6-2.2l-2.9-2.2c-.8.5-1.8.9-3.1.9-2.4 0-4.4-1.6-5.1-3.8H.9v2.3A9 9 0 0 0 9 18z" />
+            <path fill="#FBBC05" d="M3.9 10.7a5.4 5.4 0 0 1 0-3.4V5H.9a9 9 0 0 0 0 8z" />
+            <path fill="#EA4335" d="M9 3.6c1.3 0 2.5.5 3.5 1.4l2.6-2.6A9 9 0 0 0 .9 5l3 2.3C4.6 5.2 6.6 3.6 9 3.6z" />
+          </svg>
+          {m.google}
+        </span>
+        <span className={styles.or}>{m.or}</span>
+        <span className={styles.email}>
+          <span className={styles.typed}>{m.email}</span>
+        </span>
+        <span className={styles.pressBtn} data-wide data-late>
+          {m.button}
+        </span>
+      </div>
+    );
+  if (step.id === "accent")
+    return (
+      <div className={styles.accentMock}>
+        <p className={styles.field}>
+          <span>{m.power}</span>
+          <span className={styles.keyCap} aria-hidden="true">
+            {m.key}
+          </span>
+          <span className={styles.toggle} aria-hidden="true">
+            <i />
+          </span>
+        </p>
+        <div className={styles.hearAs}>
+          <span>{m.label}</span>
+          <b>{m.accent}</b>
+          <small>{m.voice}</small>
+        </div>
+        <p className={styles.ok}>
+          <Check />
+          {m.done[os]}
         </p>
       </div>
     );
@@ -222,7 +268,10 @@ export function DownloadSetup() {
               <span key={step}>{String(step + 1).padStart(2, "0")}</span>
             </span>
             <div key={`${step}-${os}`} className={styles.words}>
-              <h3>{s.title}</h3>
+              <h3>
+                {s.title}
+                {s.optional && <span className={styles.optional}>{s.optional}</span>}
+              </h3>
               <p>{s.text[os]}</p>
               <p className={styles.tip}>
                 <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -271,8 +320,8 @@ export function DownloadSetup() {
           </figure>
         </div>
 
-        {/* The track: four stations, the line fills towards the next one. */}
-        <ol className={styles.track} data-run={running || undefined}>
+        {/* The track: one station per step, the line fills towards the next one. */}
+        <ol className={styles.track} data-run={running || undefined} style={{ "--n": total }}>
           {setup.steps.map((x, i) => (
             <li key={x.id} data-done={i < step || undefined} data-now={i === step || undefined}>
               <span className={styles.line} aria-hidden="true">

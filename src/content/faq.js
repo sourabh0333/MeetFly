@@ -2,11 +2,7 @@
 // 2026-11-26), or from our own test call where it says so. Nothing on voice cloning or stealth mode.
 // `topic` is one of the ids in `topics`; an optional `link` shows under the answer. Plans and prices
 // come from src/content/pricing.js, so they follow it.
-import { pass, plans } from "./pricing";
-
-const byId = Object.fromEntries([...plans, pass].map((p) => [p.id, p]));
-const price = (id) => `$${byId[id].usd} (₹${byId[id].inr.toLocaleString("en-IN")})`;
-const hrs = (min) => (min >= 60 ? `${min / 60} hours` : `${min} minutes`);
+import { hoursText as hrs, pass, planById as byId, priceText as price } from "./pricing";
 
 export const faqPage = {
   eyebrow: { tag: "FAQ", text: "Straight answers, from the app itself" },
@@ -49,8 +45,9 @@ export const faqs = [
   // Getting started
   { topic: "start", q: "What is MeetFly?", a: "A desktop copilot for your calls. It writes down both sides as you talk, suggests what to say the moment the other person stops, and turns the call into notes, a recording and a follow-up when you hang up." },
   { topic: "start", q: "Does a bot join my call?", a: "No. MeetFly listens on your own computer, through your microphone and your computer’s sound, so nobody sees an extra guest in the meeting." },
-  { topic: "start", q: "Which call apps does it work with?", a: "Zoom, Google Meet, Microsoft Teams, Webex, Whereby and Slack huddles, and any other call your computer can hear. Paste a meeting link and supported calls open right inside MeetFly." },
+  { topic: "start", q: "Which call apps does it work with?", a: "Zoom, Google Meet, Microsoft Teams, Webex, Whereby and Slack huddles, and any other call your computer can hear. Paste a Zoom, Teams, Webex, Whereby or Slack huddle link and it opens right inside MeetFly; Google Meet opens in your browser, with MeetFly floating over it." },
   { topic: "start", q: "How do I get ready for a call?", a: "Click Prepare on a meeting, or start a new one. Pick the call type, set your goal, add notes for the AI and attach documents. Suggestions use all of it." },
+  { topic: "start", q: "Do I need an account?", a: "Yes. Sign in with a link sent to your email, or with Continue with Google. We never receive a password. Signing up also starts your 7 days of Pro + Voice." },
 
   // Plans and pricing (2026-11-26; facts from src/content/pricing.js and its pricing FAQ)
   { topic: "plans", q: "How much does it cost?", a: `There’s a Free plan, and paid plans start at ${price("pro")} a month. Pro is ${price("pro")} a month, Pro + Voice ${price("pro_voice")}, and Team ${price("team")} per person. The Interview Pass is ${price("interview_pass")} for 7 days.`, link: { label: "See all plans", href: "/pricing" } },
@@ -64,8 +61,10 @@ export const faqs = [
   { topic: "calls", q: "How fast is a suggested reply?", a: "It starts writing the moment the other person stops talking. In our own test call, replies appeared in about a second." },
   { topic: "calls", q: "Can I change how long the answers are?", a: "Yes. Pick Short, Normal, Bullets or Script, and turn automatic answers off if you only want help when you ask." },
   { topic: "calls", q: "Can it help when they speak another language?", a: "Yes. Their captions can be translated live into 14 languages: English, Hindi, Spanish, French, German, Portuguese, Italian, Japanese, Korean, Chinese, Arabic, Russian, Tamil and Bengali." },
+  { topic: "calls", q: "Can people hear me in a different accent?", a: "Yes, with accent voice. After each sentence, the people on your call hear it spoken by a native voice in the accent you pick, about 1 to 1.5 seconds later. There are 17 English accents, a female or male voice and six tones. Turn it on with V, or the Accent button on the call bar.", link: { label: "See accent voice", href: "/features#accent-voice" } },
   { topic: "calls", q: "Can it see what’s shared on screen?", a: "Yes. Read my screen looks at what’s shared, like slides, a form or a coding problem, and helps with it in the context of the call." },
-  { topic: "calls", q: "Can I ask it something mid-call?", a: "Yes. Type in the Ask box, or say “MeetFly, …”. It answers privately from the call and the context you gave it, and can make a document, diagram or slide outline." },
+  { topic: "calls", q: "Can I ask it something mid-call?", a: "Yes. Type in the Ask box, or say “MeetFly, …”. It answers privately from the call and the context you gave it." },
+  { topic: "calls", q: "Can it make a doc, diagram or slides during the call?", a: "Yes. Ask for one, out loud with “MeetFly, …” or by typing, and it’s made from the call so far: a document, a flowchart or a slide outline. It’s saved with the meeting, ready to copy or export.", link: { label: "See Make it mid-call", href: "/#make" } },
   { topic: "calls", q: "Can I practise before a real call?", a: "Yes. Turn on Practice mode and your microphone plays the other person, so you can rehearse your answers first." },
 
   // Notes and after
@@ -77,14 +76,17 @@ export const faqs = [
   // Privacy
   { topic: "privacy", q: "Where are my notes and recordings kept?", a: "On your computer, in MeetFly’s data folder. While you talk, audio goes to the speech service and transcript text to the AI service, only so MeetFly can write down the call and answer." },
   { topic: "privacy", q: "Can MeetFly read my meetings?", a: "No. Your meetings are not sent to our servers, and we cannot see them." },
+  { topic: "privacy", q: "Who else handles my data?", a: "Four services, each only for its part: Cartesia turns audio into text and speaks your accent voice; Google Gemini writes answers and notes; MeetFly’s server on Google Cloud passes text on and keeps a small record; Google Identity Platform signs you in.", link: { label: "Who gets what", href: "/privacy#processors" } },
   { topic: "privacy", q: "Should I tell people MeetFly is on?", a: "Yes, and where the law requires it, ask for their consent. MeetFly reminds you when each meeting starts, with a notice you can paste into the chat." },
   { topic: "privacy", q: "How long are meetings kept?", a: "As long as you like: forever, or 90, 30 or 7 days. You can delete any meeting, or all of them, any time." },
+  { topic: "privacy", q: "How do I get a copy of my data, or delete it?", a: "Your meetings are on your computer: delete any of them, or all of them, in Settings → Privacy. For your account record on our server, ask us for a copy, a correction or to delete it.", link: { label: "Your rights", href: "/privacy#your-rights" } },
 
   // Setup and devices
   { topic: "setup", q: "Which computers does it run on?", a: "MeetFly is a desktop app for Mac and Windows, with light, dark and system themes." },
   { topic: "setup", q: "Can I choose my microphone?", a: "Yes. Pick it in Settings → General → Audio. The setup guide tests your mic and your computer’s sound before your first call." },
+  { topic: "setup", q: "How do I set up accent voice?", a: "Once. On Mac, MeetFly Microphone installs with your password, and you pick it as the microphone in Meet, Zoom or Teams. On Windows it works straight away in meetings that open inside MeetFly; for Google Meet and the Zoom or Teams desktop apps, MeetFly adds a virtual microphone (Windows asks for permission and a restart)." },
   { topic: "setup", q: "Does it connect to my calendar?", a: "Yes. Paste your calendar’s private link from Google Calendar, Outlook or iCloud, and today’s and tomorrow’s meetings show up with Join and Prepare." },
-  { topic: "setup", q: "Can I keep an eye on how much it uses?", a: "Yes. Settings show your usage, and you can set monthly limits on transcription minutes and AI requests." },
+  { topic: "setup", q: "Can I keep an eye on how much it uses?", a: "Yes. Settings → Usage shows this month’s transcription minutes, accent voice and AI requests, and you can set your own monthly limit on each." },
 ];
 
 // The close of the FAQ page: the bookend to the hero (shared styles with the other closes).

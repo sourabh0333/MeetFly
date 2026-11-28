@@ -383,3 +383,16 @@ export const pricingClose = {
     { href: "#pricing-faq", label: "Quick answers", count: 10 },
   ],
 };
+
+// Shared plan facts for the other pages' text (homepage, Features, Use cases, FAQ, Download), so
+// prices, hours and the trial line follow the plans above instead of being typed in each file.
+export const planById = Object.fromEntries([...plans, pass].map((p) => [p.id, p]));
+export const priceText = (id) => `$${planById[id].usd} (₹${planById[id].inr.toLocaleString("en-IN")})`;
+export const hoursText = (min) => (min >= 60 ? `${+(min / 60).toFixed(1)} hours` : `${min} minutes`);
+// The one-line trial offer under the download buttons on several pages (the app's own offer:
+// 7 days of Pro + Voice, no card; src/shared/trial.ts).
+export const trialLine = {
+  tag: "7 days free",
+  text: "Every account starts with Pro + Voice. No card needed.",
+  link: { label: "See plans", href: "/pricing" },
+};

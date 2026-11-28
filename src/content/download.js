@@ -1,3 +1,5 @@
+import { hoursText, planById, trialLine } from "./pricing";
+
 // The Download page. Facts from the app (MeetFly-App/MeetFly, checked 2026-11-24): version 1.4.0
 // (package.json); the Mac build is one universal app for Apple silicon and Intel, as .dmg and .pkg;
 // the Windows build is a one-click installer for x64 and ARM64 that installs for you without admin
@@ -22,7 +24,7 @@ export const downloadPage = {
       line: "One universal app for every Mac.",
       specs: [
         ["Runs on", "Apple silicon and Intel"],
-        ["Installer", ".dmg or .pkg"],
+        ["Installer", ".dmg, or .pkg with MeetFly Microphone"],
         ["Installs to", "Applications"],
         ["Needs", "macOS 12 or later"],
       ],
@@ -43,10 +45,13 @@ export const downloadPage = {
   facts: ["Works with any call app", "No bot joins your call", "Notes stay on your computer"],
 };
 
-// "From download to your first call": the app's own first-run setup (renderer/features/onboarding,
-// electron/permissions.ts), with the installer step from the build settings. Mac and Windows
-// differ in steps 1 and 3. The accent step in the app's onboarding is left out (voice features
-// are not on the site). "About a minute" and the headphones tip are the app's own words.
+// "From download to your first call": the app's own first run (2026-11-28 re-check): the installer
+// (build settings), the sign-in screen with its trial offer (features/auth/SignInScreen.tsx,
+// shared/trial.ts; sign-in is required by default), then the setup guide (features/onboarding:
+// mic, meeting sound, the optional accent step, how a meeting works; electron/permissions.ts).
+// Mac and Windows differ in the install, sound and accent steps. The accent step leaves out the
+// app's mention of cloned voices. "About a minute", the headphones tip, "No password to remember"
+// and "any time from Accent in the sidebar" are the app's own words.
 export const setup = {
   eyebrow: "Setup",
   title: "From download to your first call",
@@ -63,13 +68,31 @@ export const setup = {
       short: "Install",
       title: "Install MeetFly",
       text: {
-        mac: "Open the .dmg and drag MeetFly into Applications, or run the .pkg installer.",
+        mac: "Open the .dmg and drag MeetFly into Applications, or run the .pkg, which also installs MeetFly Microphone for accent voice.",
         windows: "Run the installer. It sets MeetFly up for you in one click and opens it when it’s done.",
       },
       tip: { mac: "One app for Apple silicon and Intel.", windows: "No admin rights needed." },
       mock: {
         mac: { app: "MeetFly", folder: "Applications", hint: "Drag to install" },
         windows: { title: "Installing MeetFly", done: "Open MeetFly when finished" },
+      },
+    },
+    {
+      id: "signin",
+      short: "Sign in",
+      title: "Sign in and start your trial",
+      text: {
+        mac: "Continue with Google, or get a sign-in link by email. The same link creates your account, and your 7 days of Pro + Voice start. No card needed.",
+        windows: "Continue with Google, or get a sign-in link by email. The same link creates your account, and your 7 days of Pro + Voice start. No card needed.",
+      },
+      tip: { mac: "No password to remember.", windows: "No password to remember." },
+      mock: {
+        title: "Start your 7-day free trial",
+        lead: "Everything in MeetFly, free for 7 days. No card needed.",
+        google: "Continue with Google",
+        or: "or",
+        email: "you@company.com",
+        button: "Email me a sign-in link",
       },
     },
     {
@@ -95,6 +118,28 @@ export const setup = {
       mock: { permission: "Screen & System Audio Recording", playing: "Playing a video", button: "Test", done: "MeetFly can hear it." },
     },
     {
+      id: "accent",
+      short: "Accent",
+      optional: "Optional",
+      title: "Set up your accent",
+      text: {
+        mac: "Pick an accent and a voice, then choose MeetFly Microphone as the microphone in Meet, Zoom or Teams. The .pkg installs it with MeetFly; with the .dmg, MeetFly offers to add it.",
+        windows: "Pick an accent and a voice. Meetings that open inside MeetFly hear it straight away. For Google Meet and the Zoom or Teams desktop apps, MeetFly adds a virtual microphone; Windows asks for permission and a restart.",
+      },
+      tip: {
+        mac: "Skip it if you like. You can set it up any time from Accent in the sidebar.",
+        windows: "Skip it if you like. You can set it up any time from Accent in the sidebar.",
+      },
+      mock: {
+        label: "People hear you as",
+        accent: "British",
+        voice: "Female voice · Warm",
+        power: "Accent on",
+        key: "V",
+        done: { mac: "MeetFly Microphone is ready.", windows: "Ready in meetings that open in MeetFly." },
+      },
+    },
+    {
       id: "meet",
       short: "First meeting",
       title: "Start your first meeting",
@@ -112,24 +157,28 @@ export const setup = {
   ],
 };
 
-// The page's close: a big "ready" ring that fills as you scroll to it, the download buttons for
-// both systems (yours first), and four quick answers taken from the FAQ and the build settings.
+// The page's close: a big "ready" ring that fills as you scroll to it, the free-trial line, the
+// download buttons for both systems (yours first), and four quick answers taken from the FAQ, the
+// pricing page and the build settings. Trial and plan facts: keep in step with content/pricing.js
+// (the app's sign-in screen offers the same 7 days, no card).
 export const downloadClose = {
   eyebrow: "Ready when you are",
   title: { top: "Your next call", mark: "starts here." },
   lead: "Download MeetFly, take about a minute to set it up, and walk into your next call with help on screen.",
   ring: { busy: "Downloading", done: "Ready to install", name: "MeetFly" },
   needs: "macOS 12+ · Windows 10+",
+  trial: trialLine,
   faq: { label: "Read all FAQs", href: "/faq" },
   answersTitle: "Quick answers before you install",
   answers: [
     {
-      q: "Do I need admin rights?",
-      a: "Not on Windows: the installer sets MeetFly up just for you. On a Mac, drag it into Applications or run the .pkg.",
+      q: "Is it free to try?",
+      a: `Yes. Sign up and you get 7 days of Pro + Voice, no card needed. After that you’re on the Free plan, with every feature and ${hoursText(planById.free.minutes)} a month, unless you choose a plan.`,
+      link: { label: "See plans", href: "/pricing" },
     },
     {
-      q: "Does a bot join my call?",
-      a: "No. MeetFly listens on your own computer, so nobody sees an extra guest in the meeting.",
+      q: "Do I need admin rights?",
+      a: "Not on Windows: the installer sets MeetFly up just for you. On a Mac, drag it into Applications or run the .pkg.",
     },
     {
       q: "Which call apps does it work with?",

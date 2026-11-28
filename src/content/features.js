@@ -1,3 +1,5 @@
+import { hoursText, planById, trialLine } from "./pricing";
+
 // The Features page. Every feature and label here was checked against the app's code (its screens,
 // not only the README) on 2026-11-17, e.g. answer lengths and call types use the app's own words.
 // Voice changer, voice cloning and stealth mode are deliberately left out for now.
@@ -50,7 +52,7 @@ export const featureGroups = [
       { id: "profiles", icon: "user", name: "Context profiles", text: "Save what you reuse, like your resume, product facts or pricing, and add it to any call." },
       { id: "practice", icon: "mic", name: "Practice mode", text: "Your mic plays the other person, so you can rehearse before the real thing." },
       { id: "reminders", icon: "bell", name: "Meeting reminders", text: "A reminder a minute before each meeting and when it starts, with Join and Take notes. MeetFly can take notes on its own for all meetings, or all but one-on-ones." },
-      { id: "join", icon: "link", name: "Join from MeetFly", text: "Paste a Meet, Zoom, Teams, Webex, Whereby or Slack huddle link and the meeting opens inside MeetFly. Sign in once to Google, Microsoft or Zoom." },
+      { id: "join", icon: "link", name: "Join from MeetFly", text: "Paste a Zoom, Teams, Webex, Whereby or Slack huddle link and the meeting opens inside MeetFly; Google Meet opens in your browser, with MeetFly over it. Sign in once to Microsoft or Zoom." },
     ],
   },
   {
@@ -281,7 +283,7 @@ export const beforeCall = {
       demo: {
         label: "Paste a meeting link",
         link: "https://zoom.us/j/8412 5530 917",
-        apps: ["Meet", "Zoom", "Teams", "Webex", "Whereby"],
+        apps: ["Zoom", "Teams", "Webex", "Whereby", "Slack"],
         people: ["Client", "You"],
       },
     },
@@ -401,7 +403,7 @@ export const featuresEnd = {
   windows: "Download for Windows",
   soon: "Coming soon",
   // Keep in step with the trial in src/content/pricing.js.
-  trial: { tag: "7 days free", text: "Every account starts with Pro + Voice. No card needed.", link: { label: "See plans", href: "/pricing" } },
+  trial: trialLine,
   watch: { label: "Watch it work", href: "/#demo" },
   jumpLabel: "Jump back to",
   jumps: [
@@ -533,11 +535,11 @@ export const accentVoice = {
     },
     {
       title: "Set up once",
-      text: "On Mac, MeetFly Microphone installs with one password. On Windows it works straight away in meetings you join from MeetFly; for the desktop apps, MeetFly adds a virtual microphone.",
+      text: "On Mac, MeetFly Microphone installs with one password. On Windows it works straight away in meetings that open inside MeetFly; for Google Meet and the desktop apps, MeetFly adds a virtual microphone.",
     },
     {
       title: "Included in Pro + Voice",
-      text: "8 hours a month on Pro + Voice, 8 hours in the Interview Pass’s 7 days. Free has 10 minutes to try it.",
+      text: `${hoursText(planById.pro_voice.voice)} a month on Pro + Voice, ${hoursText(planById.interview_pass.voice)} in the Interview Pass’s 7 days. Free has ${hoursText(planById.free.voice)} to try it.`,
       link: { label: "See plans", href: "/pricing" },
     },
   ],
@@ -577,7 +579,7 @@ export const worksWith = {
         kind: "Meeting links",
         title: "Paste a link, join from MeetFly",
         names: ["Google Meet", "Zoom", "Microsoft Teams", "Webex", "Whereby", "Slack huddle"],
-        note: "Sign in once to Google, Microsoft or Zoom for meetings you open in MeetFly.",
+        note: "Sign in once to Microsoft or Zoom for meetings that open in MeetFly. Google Meet opens in your browser, with MeetFly over it.",
       },
       out: {
         kind: "Files",
@@ -631,7 +633,7 @@ export const featuresFaq = {
     },
     {
       q: "Which call apps does it work with?",
-      a: "Any call that plays on your computer. Paste a Google Meet, Zoom, Teams, Webex, Whereby or Slack huddle link and it opens from MeetFly; desktop and browser calls work as they are.",
+      a: "Any call that plays on your computer. Paste a Zoom, Teams, Webex, Whereby or Slack huddle link and it opens inside MeetFly; Google Meet opens in your browser, with MeetFly floating over it. Desktop and browser calls work as they are.",
       key: "Any call that plays on your computer",
       links: [
         { label: "Join from MeetFly", href: "#before-join" },

@@ -1,3 +1,5 @@
+import { hoursText, planById, trialLine } from "./pricing";
+
 // The Use cases page. Each role shows one moment from its kind of call as video: the other person
 // (a Mixkit stock clip, free licence, none from the homepage's shoots, with a voice made by the app's own speech service) and
 // MeetFly's floating panel, a real, unedited recording of the app answering that line in a
@@ -212,7 +214,7 @@ export const setup = {
 
 // "From your calendar to wherever your notes go": a switchboard. Every source and destination the
 // app really supports is a port (checked 2026-11-17/20 against its code): calendars by private link
-// (Google, Outlook, iCloud); joining Meet, Zoom, Teams, Webex, Whereby and Slack huddles inside MeetFly, or a
+// (Google, Outlook, iCloud); joining Zoom, Teams, Webex, Whereby and Slack huddles inside MeetFly (Google Meet in the browser), or a
 // pasted link, or Practice mode; export as PDF, Word, Markdown, rich text, copy for Slack, "Open in
 // mail app" for the follow-up email, and a webhook to Zapier, Make or n8n. Each role lights a
 // typical set of ports; `makes` are sections from that call type's real notes template (or a live
@@ -225,7 +227,7 @@ export const tools = {
   destsTitle: "Notes go to",
   sources: [
     { group: "Calendars", note: "by private link", items: ["Google Calendar", "Outlook", "iCloud"] },
-    { group: "Call apps", note: "joined inside MeetFly", items: ["Meet", "Zoom", "Teams", "Webex", "Whereby", "Slack huddle"] },
+    { group: "Call apps", note: "joined from MeetFly", items: ["Meet", "Zoom", "Teams", "Webex", "Whereby", "Slack huddle"] },
     { group: "On your own", note: "", items: ["Pasted link", "Practice mode"] },
   ],
   dests: [
@@ -244,7 +246,7 @@ export const tools = {
   },
   facts: [
     "Calendars connect with a private link",
-    "Sign in once to Google, Microsoft or Zoom",
+    "Sign in once to Microsoft or Zoom",
     "Webhooks only send when you ask",
   ],
   note: "Typical setups. Every role can use every tool.",
@@ -319,13 +321,13 @@ export const planByRole = {
   why: "Why",
   more: { label: "Compare every plan", href: "/pricing" },
   roles: [
-    { id: "sales", plan: "pro", why: "You’re on calls most days. 20 hours a month is about an hour of calls every working day." },
-    { id: "support", plan: "pro", why: "Every feature for your own calls. If the whole support team uses it, Team gives each person their own 20 hours." },
-    { id: "founders", plan: "pro", why: "Pitches, investor updates and customer calls, all searchable later, with 20 hours a month." },
-    { id: "hiring", plan: "team", why: "Everyone on the hiring panel gets their own 20 hours a month, billed per person." },
-    { id: "job-seekers", plan: "interview_pass", why: "A week of interview practice ahead? 20 hours over 7 days with accent voice included. One payment, no subscription." },
-    { id: "multilingual-teams", plan: "pro_voice", why: "Live translation is on every plan. Pro + Voice adds 8 hours of accent voice a month, so people hear you in the accent you pick." },
-    { id: "trying", label: "Just trying it", plan: "free", why: "3 hours of listening and 10 minutes of accent voice every month, with every feature. Free for good." },
+    { id: "sales", plan: "pro", why: `You’re on calls most days. ${hoursText(planById.pro.minutes)} a month is about an hour of calls every working day.` },
+    { id: "support", plan: "pro", why: `Every feature for your own calls. If the whole support team uses it, Team gives each person their own ${hoursText(planById.team.minutes)}.` },
+    { id: "founders", plan: "pro", why: `Pitches, investor updates and customer calls, all searchable later, with ${hoursText(planById.pro.minutes)} a month.` },
+    { id: "hiring", plan: "team", why: `Everyone on the hiring panel gets their own ${hoursText(planById.team.minutes)} a month, billed per person.` },
+    { id: "job-seekers", plan: "interview_pass", why: `A week of interview practice ahead? ${hoursText(planById.interview_pass.minutes)} over 7 days with accent voice included. One payment, no subscription.` },
+    { id: "multilingual-teams", plan: "pro_voice", why: `Live translation is on every plan. Pro + Voice adds ${hoursText(planById.pro_voice.voice)} of accent voice a month, so people hear you in the accent you pick.` },
+    { id: "trying", label: "Just trying it", plan: "free", why: `${hoursText(planById.free.minutes)} of listening and ${hoursText(planById.free.voice)} of accent voice every month, with every feature. Free for good.` },
   ],
 };
 
@@ -340,6 +342,6 @@ export const ucClose = {
   soon: "Coming soon",
   features: { label: "See every feature", href: "/features" },
   // Keep in step with the trial in src/content/pricing.js.
-  trial: { tag: "7 days free", text: "Every account starts with Pro + Voice. No card needed.", link: { label: "See plans", href: "#plans" } },
+  trial: { ...trialLine, link: { ...trialLine.link, href: "#plans" } },
   jumpLabel: "Jump back to a role",
 };

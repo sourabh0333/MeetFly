@@ -116,6 +116,18 @@ export function DownloadClose() {
               <span className={styles.mark}>{c.title.mark}</span>
             </h2>
             <p className={styles.lead}>{c.lead}</p>
+            {c.trial && (
+              <p className={styles.trial}>
+                <b>{c.trial.tag}</b>
+                <span>{c.trial.text}</span>
+                <Link href={c.trial.link.href}>
+                  {c.trial.link.label}
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5" />
+                  </svg>
+                </Link>
+              </p>
+            )}
             <div className={styles.buttons}>
               {order.map((p) => (
                 <Button key={p.id} p={p} mine={mine === p.id} />
@@ -177,6 +189,11 @@ export function DownloadClose() {
                 <span className={styles.n}>{String(i + 1).padStart(2, "0")}</span>
                 <h4>{x.q}</h4>
                 <p>{x.a}</p>
+                {x.link && (
+                  <Link href={x.link.href} className={styles.aLink}>
+                    {x.link.label} →
+                  </Link>
+                )}
               </li>
             ))}
           </ol>

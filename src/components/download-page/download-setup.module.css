@@ -802,7 +802,8 @@
 /* ---------- Track ---------- */
 .track {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  --lw: 100px;
+  grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr));
   margin: 0;
   padding: 26px 0 0;
   border-top: 1px solid var(--color-line);
@@ -1088,6 +1089,168 @@
   }
 
   .dmgGhost {
+    display: none;
+  }
+}
+
+/* ---------- Sign in: the app's sign-in screen with its trial offer ---------- */
+.signin {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  max-width: 340px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.signinTitle {
+  font: 700 1.2rem / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.signinLead {
+  margin: 0 0 6px;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+}
+
+.google,
+.email {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font: 600 0.9rem / 1 var(--font-display);
+}
+
+.google {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+}
+
+.google svg {
+  width: 18px;
+  height: 18px;
+}
+
+.or {
+  font: 500 0.68rem / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.email {
+  justify-content: flex-start;
+  background: #f6f6fa;
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+/* The email types itself in. */
+.typed {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--violet);
+  max-width: 0;
+  animation: typeIn 0.9s steps(15) 0.4s forwards;
+}
+
+@keyframes typeIn {
+  to {
+    max-width: 16ch;
+  }
+}
+
+.pressBtn[data-wide] {
+  width: 100%;
+  padding: 12px 18px;
+  text-align: center;
+}
+
+/* ---------- Accent (optional) ---------- */
+.optional {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  vertical-align: 0.25em;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  font: 500 0.62rem / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.accentMock .field > span:first-child {
+  margin-right: auto;
+}
+
+.keyCap {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 7px;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow:
+    inset 0 -2px 0 rgba(11, 10, 20, 0.14),
+    0 0 0 1px var(--color-line);
+  font: 600 0.78rem / 1 var(--font-mono);
+}
+
+.hearAs {
+  display: grid;
+  gap: 4px;
+  margin-top: 18px;
+  animation: pop 0.5s var(--pop) 1.3s both;
+}
+
+.hearAs span {
+  font: 500 0.68rem / 1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.hearAs b {
+  font: 700 2.1rem / 1.05 var(--font-display);
+  letter-spacing: -0.04em;
+  background: linear-gradient(100deg, var(--violet), #8f74ff 60%, #9dc61f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hearAs small {
+  font-size: 0.86rem;
+  color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typed {
+    max-width: none;
+    animation: none;
+  }
+
+  .hearAs {
+    animation: none;
+  }
+}
+
+/* Phones with six steps: the track in two rows of three, so every label fits. */
+@media (max-width: 760px) {
+  .track {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 18px;
+  }
+
+  .track li:nth-child(3n) .line {
     display: none;
   }
 }
